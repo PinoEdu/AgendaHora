@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: agendahora-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: agendahora
+      POSTGRES_PASSWORD: agendahora
+      POSTGRES_DB: agendahora
+    ports:
+      - "5432:5432"
+    volumes:
+      - agendahora_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  agendahora_postgres_data:
