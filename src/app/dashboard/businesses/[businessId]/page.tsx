@@ -23,12 +23,37 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
     notFound()
   }
 
-  const nextSections = [
-    { label: "Servicios", description: "Define lo que se puede reservar.", href: "services" },
-    { label: "Recursos", description: "Crea barberos, canchas, boxes o espacios.", href: "resources" },
-    { label: "Disponibilidad", description: "Configura horarios semanales.", href: "availability" },
-    { label: "Bloqueos", description: "Bloquea feriados, vacaciones o mantenciones.", href: "blocked-times" },
-    { label: "Reservas", description: "Revisa reservas recibidas.", href: "bookings" },
+  const managementSections = [
+    {
+      label: "Servicios",
+      description: "Define lo que se puede reservar.",
+      href: `/dashboard/businesses/${business.id}/services`,
+      enabled: true,
+    },
+    {
+      label: "Recursos",
+      description: "Crea barberos, canchas, boxes o espacios.",
+      href: `/dashboard/businesses/${business.id}/resources`,
+      enabled: true,
+    },
+    {
+      label: "Disponibilidad",
+      description: "Configura horarios semanales.",
+      href: "availability",
+      enabled: false,
+    },
+    {
+      label: "Bloqueos",
+      description: "Bloquea feriados, vacaciones o mantenciones.",
+      href: "blocked-times",
+      enabled: false,
+    },
+    {
+      label: "Reservas",
+      description: "Revisa reservas recibidas.",
+      href: "bookings",
+      enabled: false,
+    },
   ]
 
   return (
@@ -89,11 +114,20 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {nextSections.map((section) => (
-          <article key={section.href} className="rounded-2xl border bg-card p-5 shadow-sm">
+        {managementSections.map((section) => (
+          <article key={section.label} className="rounded-2xl border bg-card p-5 shadow-sm">
             <h3 className="font-semibold">{section.label}</h3>
             <p className="mt-2 text-sm text-muted-foreground">{section.description}</p>
-            <p className="mt-4 text-xs font-medium text-muted-foreground">Proxima fase</p>
+            {section.enabled ? (
+              <Link
+                className="mt-4 inline-block text-xs font-medium text-foreground underline-offset-4 hover:underline"
+                href={section.href}
+              >
+                Administrar
+              </Link>
+            ) : (
+              <p className="mt-4 text-xs font-medium text-muted-foreground">Proxima fase</p>
+            )}
           </article>
         ))}
       </section>
