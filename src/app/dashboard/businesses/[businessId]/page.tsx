@@ -39,14 +39,14 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
     {
       label: "Disponibilidad",
       description: "Configura horarios semanales.",
-      href: "availability",
-      enabled: false,
+      href: `/dashboard/businesses/${business.id}/availability`,
+      enabled: true,
     },
     {
       label: "Bloqueos",
       description: "Bloquea feriados, vacaciones o mantenciones.",
-      href: "blocked-times",
-      enabled: false,
+      href: `/dashboard/businesses/${business.id}/blocked-times`,
+      enabled: true,
     },
     {
       label: "Reservas",
