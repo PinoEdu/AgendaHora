@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -10,4 +5,263 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+enum UserRole {
+  CUSTOMER
+  BUSINESS_OWNER
+}
+
+enum BusinessStatus {
+  DRAFT
+  ACTIVE
+  INACTIVE
+}
+
+enum ResourceType {
+  PROFESSIONAL
+  COURT
+  ROOM
+  CHAIR
+  BOX
+  MACHINE
+  SPACE
+  OTHER
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED_BY_CUSTOMER
+  CANCELLED_BY_BUSINESS
+  COMPLETED
+  NO_SHOW
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String?
+  role          UserRole  @default(CUSTOMER)
+
+  businesses Business[]
+  bookings   Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BusinessCategory {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  slug        String  @unique
+  description String?
+
+  businesses Business[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Business {
+  id String @id @default(cuid())
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  categoryId String
+  category   BusinessCategory @relation(fields: [categoryId], references: [id])
+
+  name        String
+  slug        String         @unique
+  description String?
+  phone       String?
+  email       String?
+  address     String?
+  city        String?
+  country     String?        @default("CL")
+  timezone    String         @default("America/Santiago")
+  status      BusinessStatus @default(DRAFT)
+
+  services     Service[]
+  resources    BookableResource[]
+  images       BusinessImage[]
+  bookings     Booking[]
+  blockedTimes BlockedTime[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ownerId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([city])
+}
+
+model BusinessImage {
+  id String @id @default(cuid())
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  url       String
+  key       String?
+  altText   String?
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([businessId])
+}
+
+model Service {
+  id String @id @default(cuid())
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  name            String
+  description     String?
+  durationMinutes Int
+  price           Decimal @db.Decimal(10, 2)
+  isActive        Boolean @default(true)
+
+  resources ResourceService[]
+  bookings  Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([businessId])
+  @@index([isActive])
+}
+
+model BookableResource {
+  id String @id @default(cuid())
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  name        String
+  type        ResourceType @default(OTHER)
+  description String?
+  isActive    Boolean      @default(true)
+
+  services          ResourceService[]
+  availabilityRules AvailabilityRule[]
+  blockedTimes      BlockedTime[]
+  bookings          Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([businessId])
+  @@index([isActive])
+}
+
+model ResourceService {
+  id String @id @default(cuid())
+
+  resourceId String
+  resource   BookableResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([resourceId, serviceId])
+  @@index([serviceId])
+}
+
+model AvailabilityRule {
+  id String @id @default(cuid())
+
+  resourceId String
+  resource   BookableResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  dayOfWeek   DayOfWeek
+  startMinute Int
+  endMinute   Int
+  isActive    Boolean   @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([resourceId])
+  @@index([dayOfWeek])
+}
+
+model BlockedTime {
+  id String @id @default(cuid())
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  resourceId String?
+  resource   BookableResource? @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  startsAt DateTime
+  endsAt   DateTime
+  reason   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([businessId])
+  @@index([resourceId])
+  @@index([startsAt])
+  @@index([endsAt])
+}
+
+model Booking {
+  id String @id @default(cuid())
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  customerId String
+  customer   User   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  resourceId String
+  resource   BookableResource @relation(fields: [resourceId], references: [id])
+
+  startsAt DateTime
+  endsAt   DateTime
+  status   BookingStatus @default(CONFIRMED)
+
+  customerName  String?
+  customerEmail String?
+  customerPhone String?
+  notes         String?
+
+  cancelledAt        DateTime?
+  cancellationReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([businessId])
+  @@index([customerId])
+  @@index([serviceId])
+  @@index([resourceId])
+  @@index([startsAt])
+  @@index([endsAt])
+  @@index([status])
 }
