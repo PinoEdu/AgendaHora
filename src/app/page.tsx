@@ -29,16 +29,21 @@ export default async function Home() {
 
           <div className="flex flex-col gap-3 sm:flex-row">
             {session?.user ? (
-              <Button asChild size="lg">
-                <Link href={dashboardHref}>Ir a mi cuenta</Link>
-              </Button>
+              <>
+                <Button asChild size="lg">
+                  <Link href="/businesses">Explorar negocios</Link>
+                </Button>
+                <Button asChild size="lg" variant="outline">
+                  <Link href={dashboardHref}>Ir a mi cuenta</Link>
+                </Button>
+              </>
             ) : (
               <>
                 <Button asChild size="lg">
-                  <Link href="/register">Crear cuenta</Link>
+                  <Link href="/businesses">Explorar negocios</Link>
                 </Button>
                 <Button asChild size="lg" variant="outline">
-                  <Link href="/login">Ingresar</Link>
+                  <Link href="/register">Crear cuenta</Link>
                 </Button>
               </>
             )}

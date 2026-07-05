@@ -53,6 +53,10 @@ export function formatUtcTimeInTimezone(date: Date, timezone: string) {
   return formatInTimeZone(date, timezone, "HH:mm")
 }
 
+export function formatUtcDateTimeInTimezone(date: Date, timezone: string) {
+  return formatInTimeZone(date, timezone, "yyyy-MM-dd HH:mm")
+}
+
 export function formatUtcDateInTimezone(date: Date, timezone: string) {
   return formatInTimeZone(date, timezone, "yyyy-MM-dd")
 }
