@@ -41,3 +41,12 @@ export const availabilityRuleSchema = z
   })
 
 export type AvailabilityRuleInput = z.infer<typeof availabilityRuleSchema>
+
+export const getAvailableSlotsSchema = z.object({
+  businessId: z.string().min(1, "businessId es requerido."),
+  serviceId: z.string().min(1, "serviceId es requerido."),
+  resourceId: z.string().min(1, "resourceId es requerido."),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "date debe tener formato yyyy-MM-dd."),
+})
+
+export type GetAvailableSlotsQuery = z.infer<typeof getAvailableSlotsSchema>

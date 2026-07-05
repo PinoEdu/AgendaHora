@@ -22,3 +22,27 @@ export type AvailabilityRuleListItem = {
     type: ResourceType
   }
 }
+
+export type GetAvailableSlotsInput = {
+  businessId: string
+  serviceId: string
+  resourceId: string
+  date: string
+}
+
+export type AvailableSlot = {
+  startsAt: string
+  endsAt: string
+  localStartTime: string
+  localEndTime: string
+}
+
+export type GetAvailableSlotsOutput = {
+  timezone: string
+  slots: AvailableSlot[]
+}
+
+export type TimeRange = {
+  startsAt: Date
+  endsAt: Date
+}
