@@ -51,8 +51,8 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
     {
       label: "Reservas",
       description: "Revisa reservas recibidas.",
-      href: "bookings",
-      enabled: false,
+      href: `/dashboard/businesses/${business.id}/bookings`,
+      enabled: true,
     },
   ]
 

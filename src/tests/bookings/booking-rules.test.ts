@@ -2,7 +2,14 @@ import { describe, expect, it } from "vitest"
 
 import { BookingStatus } from "@/generated/prisma/enums"
 import { BOOKING_CONFLICT_STATUSES } from "@/features/bookings/booking.constants"
-import { hasRangeConflict, isWithinAvailabilityWindow } from "@/features/bookings/booking-rules"
+import {
+  canBusinessCancelBooking,
+  canCustomerCancelBooking,
+  canMarkBookingCompleted,
+  canMarkBookingNoShow,
+  hasRangeConflict,
+  isWithinAvailabilityWindow,
+} from "@/features/bookings/booking-rules"
 
 describe("isWithinAvailabilityWindow", () => {
   it("allows bookings fully inside an availability window", () => {
@@ -60,5 +67,32 @@ describe("BOOKING_CONFLICT_STATUSES", () => {
     expect(BOOKING_CONFLICT_STATUSES).toContain(BookingStatus.CONFIRMED)
     expect(BOOKING_CONFLICT_STATUSES).not.toContain(BookingStatus.CANCELLED_BY_CUSTOMER)
     expect(BOOKING_CONFLICT_STATUSES).not.toContain(BookingStatus.CANCELLED_BY_BUSINESS)
+  })
+})
+
+describe("booking state transitions", () => {
+  it("allows customers to cancel pending and confirmed bookings", () => {
+    expect(canCustomerCancelBooking(BookingStatus.PENDING)).toBe(true)
+    expect(canCustomerCancelBooking(BookingStatus.CONFIRMED)).toBe(true)
+  })
+
+  it("does not allow customers to cancel final bookings", () => {
+    expect(canCustomerCancelBooking(BookingStatus.COMPLETED)).toBe(false)
+    expect(canCustomerCancelBooking(BookingStatus.NO_SHOW)).toBe(false)
+    expect(canCustomerCancelBooking(BookingStatus.CANCELLED_BY_CUSTOMER)).toBe(false)
+    expect(canCustomerCancelBooking(BookingStatus.CANCELLED_BY_BUSINESS)).toBe(false)
+  })
+
+  it("allows businesses to complete or mark no-show only confirmed bookings", () => {
+    expect(canMarkBookingCompleted(BookingStatus.CONFIRMED)).toBe(true)
+    expect(canMarkBookingNoShow(BookingStatus.CONFIRMED)).toBe(true)
+    expect(canMarkBookingCompleted(BookingStatus.CANCELLED_BY_CUSTOMER)).toBe(false)
+    expect(canMarkBookingNoShow(BookingStatus.COMPLETED)).toBe(false)
+  })
+
+  it("allows businesses to cancel pending and confirmed bookings", () => {
+    expect(canBusinessCancelBooking(BookingStatus.PENDING)).toBe(true)
+    expect(canBusinessCancelBooking(BookingStatus.CONFIRMED)).toBe(true)
+    expect(canBusinessCancelBooking(BookingStatus.NO_SHOW)).toBe(false)
   })
 })

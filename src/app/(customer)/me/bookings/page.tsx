@@ -3,7 +3,10 @@ import { redirect } from "next/navigation"
 
 import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
+import { cancelBookingByCustomerAction } from "@/features/bookings/booking.actions"
+import { formatBookingStatus } from "@/features/bookings/booking-format"
 import { getBookingsForCustomer } from "@/features/bookings/booking.queries"
+import { canCustomerCancelBooking } from "@/features/bookings/booking-rules"
 import { formatUtcDateTimeInTimezone } from "@/lib/dates"
 
 export default async function MyBookingsPage() {
@@ -51,7 +54,7 @@ export default async function MyBookingsPage() {
                   <div className="flex flex-wrap items-center gap-2">
                     <h2 className="text-xl font-semibold">{booking.business.name}</h2>
                     <span className="rounded-full border px-2.5 py-1 text-xs text-muted-foreground">
-                      {booking.status}
+                      {formatBookingStatus(booking.status)}
                     </span>
                   </div>
                   <p className="text-sm text-muted-foreground">
@@ -61,7 +64,20 @@ export default async function MyBookingsPage() {
                     {formatUtcDateTimeInTimezone(booking.startsAt, booking.business.timezone)} -{" "}
                     {formatUtcDateTimeInTimezone(booking.endsAt, booking.business.timezone)}
                   </p>
+                  {booking.cancelledAt ? (
+                    <p className="text-xs text-muted-foreground">
+                      Cancelada: {booking.cancellationReason || "Sin motivo"}
+                    </p>
+                  ) : null}
                 </div>
+                {canCustomerCancelBooking(booking.status) ? (
+                  <form action={cancelBookingByCustomerAction}>
+                    <input name="bookingId" type="hidden" value={booking.id} />
+                    <Button size="sm" type="submit" variant="outline">
+                      Cancelar
+                    </Button>
+                  </form>
+                ) : null}
               </div>
             </article>
           ))}
