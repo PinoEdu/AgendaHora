@@ -52,3 +52,17 @@ export function getUtcRangeForLocalDate(date: string, timezone: string) {
 export function formatUtcTimeInTimezone(date: Date, timezone: string) {
   return formatInTimeZone(date, timezone, "HH:mm")
 }
+
+export function formatUtcDateInTimezone(date: Date, timezone: string) {
+  return formatInTimeZone(date, timezone, "yyyy-MM-dd")
+}
+
+export function getMinuteOfDayInTimezone(date: Date, timezone: string) {
+  const [hours = "0", minutes = "0"] = formatUtcTimeInTimezone(date, timezone).split(":")
+
+  return Number(hours) * 60 + Number(minutes)
+}
+
+export function addMinutes(date: Date, minutes: number) {
+  return new Date(date.getTime() + minutes * 60_000)
+}
