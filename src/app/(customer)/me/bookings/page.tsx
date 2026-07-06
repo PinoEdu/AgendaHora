@@ -3,6 +3,7 @@ import { redirect } from "next/navigation"
 
 import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
+import { LogoutButton } from "@/features/auth/logout-button"
 import { cancelBookingByCustomerAction } from "@/features/bookings/booking.actions"
 import { formatBookingStatus } from "@/features/bookings/booking-format"
 import { getBookingsForCustomer } from "@/features/bookings/booking.queries"
@@ -32,6 +33,7 @@ export default async function MyBookingsPage() {
           <Button asChild>
             <Link href="/businesses">Explorar negocios</Link>
           </Button>
+          <LogoutButton />
         </div>
       </div>
 

@@ -2,6 +2,7 @@ import Link from "next/link"
 
 import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
+import { LogoutButton } from "@/features/auth/logout-button"
 import { UserRole } from "@/generated/prisma/enums"
 
 export default async function Home() {
@@ -36,6 +37,7 @@ export default async function Home() {
                 <Button asChild size="lg" variant="outline">
                   <Link href={dashboardHref}>Ir a mi cuenta</Link>
                 </Button>
+                <LogoutButton />
               </>
             ) : (
               <>

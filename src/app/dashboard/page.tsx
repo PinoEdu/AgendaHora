@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
+import { LogoutButton } from "@/features/auth/logout-button"
 import {
   getBusinessesForOwner,
   requireBusinessOwnerSession,
@@ -27,6 +28,7 @@ export default async function DashboardPage() {
           <Button asChild>
             <Link href="/dashboard/businesses/new">Crear negocio</Link>
           </Button>
+          <LogoutButton />
         </div>
       </div>
 

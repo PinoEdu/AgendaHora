@@ -3,7 +3,7 @@
 import { AuthError } from "next-auth"
 import { redirect } from "next/navigation"
 
-import { signIn } from "@/auth"
+import { signIn, signOut } from "@/auth"
 import { UserRole } from "@/generated/prisma/enums"
 
 import { registerUser, validateUserCredentials } from "./auth.service"
@@ -73,4 +73,8 @@ export async function loginAction(
   }
 
   return { success: "Sesion iniciada." }
+}
+
+export async function logoutAction() {
+  await signOut({ redirectTo: "/" })
 }
