@@ -6,6 +6,7 @@ import { redirect } from "next/navigation"
 import { signIn, signOut } from "@/auth"
 import { UserRole } from "@/generated/prisma/enums"
 
+import { getSafeCallbackUrl } from "./auth-redirects"
 import { registerUser, validateUserCredentials } from "./auth.service"
 import type { AuthActionState } from "./auth.types"
 import { loginSchema, registerSchema } from "./auth.validators"
@@ -24,6 +25,7 @@ export async function registerAction(
     email: formData.get("email"),
     password: formData.get("password"),
     role: formData.get("role"),
+    callbackUrl: formData.get("callbackUrl"),
   })
 
   if (!parsedInput.success) {
@@ -36,7 +38,14 @@ export async function registerAction(
     return { error: result.error }
   }
 
-  redirect("/login?registered=1")
+  const params = new URLSearchParams({ registered: "1" })
+  const callbackUrl = getSafeCallbackUrl(parsedInput.data.callbackUrl)
+
+  if (callbackUrl) {
+    params.set("callbackUrl", callbackUrl)
+  }
+
+  redirect(`/login?${params.toString()}`)
 }
 
 export async function loginAction(
@@ -46,6 +55,7 @@ export async function loginAction(
   const parsedInput = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
+    callbackUrl: formData.get("callbackUrl"),
   })
 
   if (!parsedInput.success) {
@@ -59,10 +69,12 @@ export async function loginAction(
   }
 
   try {
+    const callbackUrl = getSafeCallbackUrl(parsedInput.data.callbackUrl)
+
     await signIn("credentials", {
       email: parsedInput.data.email,
       password: parsedInput.data.password,
-      redirectTo: defaultLoginRedirectByRole[user.role],
+      redirectTo: callbackUrl ?? defaultLoginRedirectByRole[user.role],
     })
   } catch (error) {
     if (error instanceof AuthError) {

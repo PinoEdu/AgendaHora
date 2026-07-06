@@ -1,15 +1,18 @@
 import Link from "next/link"
 
+import { getSafeCallbackUrl } from "@/features/auth/auth-redirects"
 import { LoginForm } from "@/features/auth/login-form"
 
 type LoginPageProps = {
   searchParams: Promise<{
+    callbackUrl?: string
     registered?: string
   }>
 }
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const { registered } = await searchParams
+  const { callbackUrl, registered } = await searchParams
+  const safeCallbackUrl = getSafeCallbackUrl(callbackUrl)
 
   return (
     <main className="flex min-h-svh items-center justify-center bg-muted/30 px-4 py-10">
@@ -23,7 +26,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             Administra reservas o agenda servicios en negocios locales.
           </p>
         </div>
-        <LoginForm registered={registered === "1"} />
+        <LoginForm callbackUrl={safeCallbackUrl} registered={registered === "1"} />
       </div>
     </main>
   )

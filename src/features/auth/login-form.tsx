@@ -5,20 +5,25 @@ import { useActionState } from "react"
 
 import { Button } from "@/components/ui/button"
 
+import { withCallbackUrl } from "./auth-redirects"
 import { loginAction } from "./auth.actions"
 import type { AuthActionState } from "./auth.types"
 
 const initialState: AuthActionState = {}
 
 type LoginFormProps = {
+  callbackUrl?: string | null
   registered?: boolean
 }
 
-export function LoginForm({ registered = false }: LoginFormProps) {
+export function LoginForm({ callbackUrl, registered = false }: LoginFormProps) {
   const [state, formAction, isPending] = useActionState(loginAction, initialState)
+  const registerHref = withCallbackUrl("/register", callbackUrl)
 
   return (
     <form action={formAction} className="space-y-5 rounded-2xl border bg-card p-6 shadow-sm">
+      {callbackUrl ? <input name="callbackUrl" type="hidden" value={callbackUrl} /> : null}
+
       {registered ? (
         <p className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
           Cuenta creada. Inicia sesion para continuar.
@@ -65,7 +70,7 @@ export function LoginForm({ registered = false }: LoginFormProps) {
 
       <p className="text-center text-sm text-muted-foreground">
         No tienes cuenta?{" "}
-        <Link className="font-medium text-foreground underline-offset-4 hover:underline" href="/register">
+        <Link className="font-medium text-foreground underline-offset-4 hover:underline" href={registerHref}>
           Registrate
         </Link>
       </p>

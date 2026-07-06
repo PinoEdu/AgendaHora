@@ -19,6 +19,8 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
     notFound()
   }
 
+  const canBook = business.services.length > 0 && business.resources.length > 0
+
   return (
     <main className="mx-auto flex min-h-svh w-full max-w-6xl flex-col gap-8 px-6 py-10">
       <div className="flex flex-col gap-6 rounded-3xl border bg-card p-6 shadow-sm md:p-8">
@@ -30,9 +32,15 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
               {business.description || "Reserva servicios de este negocio online."}
             </p>
           </div>
-          <Button asChild size="lg">
-            <Link href={`/businesses/${business.slug}/book`}>Reservar ahora</Link>
-          </Button>
+          {canBook ? (
+            <Button asChild size="lg">
+              <Link href={`/businesses/${business.slug}/book`}>Reservar ahora</Link>
+            </Button>
+          ) : (
+            <p className="rounded-xl border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+              Este negocio aun esta configurando sus reservas.
+            </p>
+          )}
         </div>
 
         <dl className="grid gap-4 text-sm md:grid-cols-4">
@@ -72,6 +80,11 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
                 <p className="mt-4 text-sm font-medium">
                   {service.durationMinutes} min · ${service.price} CLP
                 </p>
+                {canBook ? (
+                  <Button asChild className="mt-5" variant="outline">
+                    <Link href={`/businesses/${business.slug}/book`}>Reservar este servicio</Link>
+                  </Button>
+                ) : null}
               </article>
             ))}
           </div>

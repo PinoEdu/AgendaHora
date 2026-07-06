@@ -39,21 +39,55 @@ type PublicBookingFlowProps = {
   resources: PublicBookingResource[]
 }
 
+type AvailabilityPayload = {
+  slots?: AvailableSlot[]
+  error?: string
+}
+
+type BookingPayload = {
+  error?: string
+  code?: string
+}
+
+const bookingErrorMessages: Record<string, string> = {
+  BLOCKED_TIME_CONFLICT: "Ese horario fue bloqueado por el negocio. Elige otro horario.",
+  BOOKING_CONFLICT: "Ese horario acaba de ser reservado. Elige otro horario disponible.",
+  BOOKING_IN_PAST: "No se puede reservar un horario que ya paso. Elige otra fecha u hora.",
+  BUSINESS_NOT_ACTIVE: "Este negocio no esta recibiendo reservas por ahora.",
+  OUTSIDE_AVAILABILITY: "Ese horario esta fuera de la disponibilidad del negocio.",
+  RESOURCE_NOT_ACTIVE: "Este recurso ya no esta disponible para reservas.",
+  RESOURCE_SERVICE_MISMATCH: "Este recurso no puede prestar el servicio seleccionado.",
+  SERVICE_NOT_ACTIVE: "Este servicio ya no esta disponible para reservas.",
+  UNAUTHORIZED: "Debes iniciar sesion para confirmar la reserva.",
+}
+
 function getTodayDateValue() {
   return new Date().toISOString().slice(0, 10)
+}
+
+function formatDateLabel(value: string) {
+  if (!value) {
+    return "Selecciona una fecha"
+  }
+
+  return new Intl.DateTimeFormat("es-CL", {
+    dateStyle: "full",
+    timeZone: "UTC",
+  }).format(new Date(`${value}T00:00:00.000Z`))
+}
+
+function getBookingErrorMessage(payload: BookingPayload) {
+  if (payload.code && bookingErrorMessages[payload.code]) {
+    return bookingErrorMessages[payload.code]
+  }
+
+  return payload.error ?? "No se pudo crear la reserva."
 }
 
 export function PublicBookingFlow({ business, services, resources }: PublicBookingFlowProps) {
   const router = useRouter()
   const [selectedServiceId, setSelectedServiceId] = useState(services[0]?.id ?? "")
-  const compatibleResources = useMemo(
-    () => resources.filter((resource) => resource.serviceIds.includes(selectedServiceId)),
-    [resources, selectedServiceId],
-  )
-  const [selectedResourceId, setSelectedResourceId] = useState(compatibleResources[0]?.id ?? "")
-  const effectiveResourceId = compatibleResources.some((resource) => resource.id === selectedResourceId)
-    ? selectedResourceId
-    : (compatibleResources[0]?.id ?? "")
+  const [selectedResourceId, setSelectedResourceId] = useState("")
   const [selectedDate, setSelectedDate] = useState(getTodayDateValue())
   const [slots, setSlots] = useState<AvailableSlot[]>([])
   const [selectedSlotStartsAt, setSelectedSlotStartsAt] = useState("")
@@ -61,8 +95,18 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState("")
 
+  const selectedService = services.find((service) => service.id === selectedServiceId)
+  const compatibleResources = useMemo(
+    () => resources.filter((resource) => resource.serviceIds.includes(selectedServiceId)),
+    [resources, selectedServiceId],
+  )
+  const selectedResource = compatibleResources.find((resource) => resource.id === selectedResourceId)
+  const effectiveResource = selectedResource ?? (compatibleResources.length === 1 ? compatibleResources[0] : null)
+  const selectedSlot = slots.find((slot) => slot.startsAt === selectedSlotStartsAt)
+  const needsResourceSelection = compatibleResources.length > 1
+
   useEffect(() => {
-    if (!selectedServiceId || !effectiveResourceId || !selectedDate) {
+    if (!selectedServiceId || !effectiveResource?.id || !selectedDate) {
       return
     }
 
@@ -70,7 +114,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
     const params = new URLSearchParams({
       businessId: business.id,
       serviceId: selectedServiceId,
-      resourceId: effectiveResourceId,
+      resourceId: effectiveResource.id,
       date: selectedDate,
     })
 
@@ -83,7 +127,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
         const response = await fetch(`/api/availability?${params.toString()}`, {
           signal: controller.signal,
         })
-        const payload: { slots?: AvailableSlot[]; error?: string } = await response.json()
+        const payload: AvailabilityPayload = await response.json()
 
         if (!response.ok) {
           setSlots([])
@@ -107,12 +151,29 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
     void loadSlots()
 
     return () => controller.abort()
-  }, [business.id, effectiveResourceId, selectedDate, selectedServiceId])
+  }, [business.id, effectiveResource?.id, selectedDate, selectedServiceId])
 
-  const selectedService = services.find((service) => service.id === selectedServiceId)
-  const selectedSlot = slots.find((slot) => slot.startsAt === selectedSlotStartsAt)
+  function handleServiceSelect(serviceId: string) {
+    setSelectedServiceId(serviceId)
+    setSelectedResourceId("")
+    setSelectedSlotStartsAt("")
+    setSlots([])
+    setError("")
+  }
+
+  function handleResourceSelect(resourceId: string) {
+    setSelectedResourceId(resourceId)
+    setSelectedSlotStartsAt("")
+    setSlots([])
+    setError("")
+  }
 
   async function handleSubmit() {
+    if (!effectiveResource) {
+      setError("Selecciona con quien o donde quieres reservar.")
+      return
+    }
+
     if (!selectedSlot) {
       setError("Selecciona un horario disponible.")
       return
@@ -128,23 +189,23 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
         body: JSON.stringify({
           businessId: business.id,
           serviceId: selectedServiceId,
-          resourceId: effectiveResourceId,
+          resourceId: effectiveResource.id,
           startsAt: selectedSlot.startsAt,
         }),
       })
-      const payload: { error?: string } = await response.json()
+      const payload: BookingPayload = await response.json()
 
       if (response.status === 401) {
-        router.push("/login")
+        router.push(`/login?callbackUrl=${encodeURIComponent(`/businesses/${business.slug}/book`)}`)
         return
       }
 
       if (!response.ok) {
-        setError(payload.error ?? "No se pudo crear la reserva.")
+        setError(getBookingErrorMessage(payload))
         return
       }
 
-      router.push("/me/bookings")
+      router.push("/me/bookings?created=1")
       router.refresh()
     } catch {
       setError("No se pudo crear la reserva.")
@@ -154,67 +215,111 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+    <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
       <section className="space-y-6 rounded-2xl border bg-card p-6 shadow-sm">
-        <div className="space-y-2">
-          <label className="text-sm font-medium" htmlFor="serviceId">
-            Servicio
-          </label>
-          <select
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
-            id="serviceId"
-            onChange={(event) => setSelectedServiceId(event.target.value)}
-            value={selectedServiceId}
-          >
-            {services.map((service) => (
-              <option key={service.id} value={service.id}>
-                {service.name} · {service.durationMinutes} min · ${service.price} CLP
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium" htmlFor="resourceId">
-            Recurso
-          </label>
-          <select
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
-            disabled={compatibleResources.length === 0}
-            id="resourceId"
-            onChange={(event) => setSelectedResourceId(event.target.value)}
-            value={effectiveResourceId}
-          >
-            {compatibleResources.map((resource) => (
-              <option key={resource.id} value={resource.id}>
-                {resource.name} · {formatResourceType(resource.type)}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium" htmlFor="date">
-            Fecha
-          </label>
-          <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
-            id="date"
-            min={getTodayDateValue()}
-            onChange={(event) => setSelectedDate(event.target.value)}
-            type="date"
-            value={selectedDate}
-          />
+        <div className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-4">
+          <span className="rounded-full border bg-background px-3 py-1 font-medium text-foreground">1. Servicio</span>
+          <span className="rounded-full border bg-background px-3 py-1 font-medium text-foreground">2. Recurso</span>
+          <span className="rounded-full border bg-background px-3 py-1 font-medium text-foreground">3. Fecha</span>
+          <span className="rounded-full border bg-background px-3 py-1 font-medium text-foreground">4. Confirmar</span>
         </div>
 
         <div className="space-y-3">
-          <h2 className="font-semibold">Horarios disponibles</h2>
-          {isLoadingSlots ? <p className="text-sm text-muted-foreground">Cargando horarios...</p> : null}
-          {!isLoadingSlots && slots.length === 0 ? (
+          <div>
+            <h2 className="text-xl font-semibold">Elige un servicio</h2>
+            <p className="text-sm text-muted-foreground">Selecciona que quieres reservar.</p>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2">
+            {services.map((service) => (
+              <button
+                className="rounded-2xl border p-4 text-left transition-colors hover:bg-muted/50 data-[selected=true]:border-foreground data-[selected=true]:bg-foreground data-[selected=true]:text-background"
+                data-selected={selectedServiceId === service.id}
+                key={service.id}
+                onClick={() => handleServiceSelect(service.id)}
+                type="button"
+              >
+                <span className="block font-semibold">{service.name}</span>
+                <span className="mt-2 block text-sm opacity-80">
+                  {service.durationMinutes} min · ${service.price} CLP
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <div>
+            <h2 className="text-xl font-semibold">Elige con quien o donde</h2>
+            <p className="text-sm text-muted-foreground">
+              {compatibleResources.length === 1
+                ? "Asignamos automaticamente el unico recurso disponible para este servicio."
+                : "Selecciona el recurso que prestara el servicio."}
+            </p>
+          </div>
+
+          {compatibleResources.length === 0 ? (
             <p className="rounded-xl border bg-muted/40 p-4 text-sm text-muted-foreground">
-              No hay horarios disponibles para esta seleccion.
+              Este servicio aun no tiene recursos disponibles para reservar.
+            </p>
+          ) : needsResourceSelection ? (
+            <div className="grid gap-3 md:grid-cols-2">
+              {compatibleResources.map((resource) => (
+                <button
+                  className="rounded-2xl border p-4 text-left transition-colors hover:bg-muted/50 data-[selected=true]:border-foreground data-[selected=true]:bg-foreground data-[selected=true]:text-background"
+                  data-selected={effectiveResource?.id === resource.id}
+                  key={resource.id}
+                  onClick={() => handleResourceSelect(resource.id)}
+                  type="button"
+                >
+                  <span className="block font-semibold">{resource.name}</span>
+                  <span className="mt-2 block text-sm opacity-80">{formatResourceType(resource.type)}</span>
+                </button>
+              ))}
+            </div>
+          ) : effectiveResource ? (
+            <div className="rounded-2xl border bg-muted/40 p-4">
+              <p className="font-medium">{effectiveResource.name}</p>
+              <p className="text-sm text-muted-foreground">{formatResourceType(effectiveResource.type)}</p>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="space-y-3">
+          <div>
+            <h2 className="text-xl font-semibold">Fecha y horario</h2>
+            <p className="text-sm text-muted-foreground">Horarios en {business.timezone}.</p>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium" htmlFor="date">
+              Fecha
+            </label>
+            <input
+              className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20 md:w-64"
+              id="date"
+              min={getTodayDateValue()}
+              onChange={(event) => {
+                setSelectedDate(event.target.value)
+                setSelectedSlotStartsAt("")
+                setSlots([])
+                setError("")
+              }}
+              type="date"
+              value={selectedDate}
+            />
+          </div>
+
+          {isLoadingSlots ? <p className="text-sm text-muted-foreground">Cargando horarios...</p> : null}
+          {!isLoadingSlots && effectiveResource && slots.length === 0 ? (
+            <p className="rounded-xl border bg-muted/40 p-4 text-sm text-muted-foreground">
+              No hay horarios disponibles para esta fecha. Prueba otro dia.
             </p>
           ) : null}
+          {!isLoadingSlots && !effectiveResource && compatibleResources.length > 0 ? (
+            <p className="rounded-xl border bg-muted/40 p-4 text-sm text-muted-foreground">
+              Elige un recurso para ver horarios disponibles.
+            </p>
+          ) : null}
+
           <div className="grid gap-2 sm:grid-cols-3">
             {slots.map((slot) => (
               <button
@@ -246,8 +351,18 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
             <dd className="font-medium">{selectedService?.name ?? "Selecciona un servicio"}</dd>
           </div>
           <div>
+            <dt className="text-muted-foreground">Duracion y precio</dt>
+            <dd className="font-medium">
+              {selectedService ? `${selectedService.durationMinutes} min · $${selectedService.price} CLP` : "Pendiente"}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-muted-foreground">Recurso</dt>
+            <dd className="font-medium">{effectiveResource?.name ?? "Pendiente"}</dd>
+          </div>
+          <div>
             <dt className="text-muted-foreground">Fecha</dt>
-            <dd className="font-medium">{selectedDate}</dd>
+            <dd className="font-medium">{formatDateLabel(selectedDate)}</dd>
           </div>
           <div>
             <dt className="text-muted-foreground">Horario</dt>
@@ -263,7 +378,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
 
         <Button
           className="mt-6 w-full"
-          disabled={!selectedSlot || isSubmitting}
+          disabled={!selectedSlot || !effectiveResource || isSubmitting}
           onClick={handleSubmit}
           size="lg"
           type="button"

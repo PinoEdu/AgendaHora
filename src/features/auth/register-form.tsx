@@ -6,16 +6,24 @@ import { useActionState } from "react"
 import { Button } from "@/components/ui/button"
 import { UserRole } from "@/generated/prisma/enums"
 
+import { withCallbackUrl } from "./auth-redirects"
 import { registerAction } from "./auth.actions"
 import type { AuthActionState } from "./auth.types"
 
 const initialState: AuthActionState = {}
 
-export function RegisterForm() {
+type RegisterFormProps = {
+  callbackUrl?: string | null
+}
+
+export function RegisterForm({ callbackUrl }: RegisterFormProps) {
   const [state, formAction, isPending] = useActionState(registerAction, initialState)
+  const loginHref = withCallbackUrl("/login", callbackUrl)
 
   return (
     <form action={formAction} className="space-y-5 rounded-2xl border bg-card p-6 shadow-sm">
+      {callbackUrl ? <input name="callbackUrl" type="hidden" value={callbackUrl} /> : null}
+
       {state.error ? (
         <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {state.error}
@@ -95,7 +103,7 @@ export function RegisterForm() {
 
       <p className="text-center text-sm text-muted-foreground">
         Ya tienes cuenta?{" "}
-        <Link className="font-medium text-foreground underline-offset-4 hover:underline" href="/login">
+        <Link className="font-medium text-foreground underline-offset-4 hover:underline" href={loginHref}>
           Ingresa
         </Link>
       </p>

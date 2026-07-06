@@ -1,8 +1,18 @@
 import Link from "next/link"
 
+import { getSafeCallbackUrl } from "@/features/auth/auth-redirects"
 import { RegisterForm } from "@/features/auth/register-form"
 
-export default function RegisterPage() {
+type RegisterPageProps = {
+  searchParams: Promise<{
+    callbackUrl?: string
+  }>
+}
+
+export default async function RegisterPage({ searchParams }: RegisterPageProps) {
+  const { callbackUrl } = await searchParams
+  const safeCallbackUrl = getSafeCallbackUrl(callbackUrl)
+
   return (
     <main className="flex min-h-svh items-center justify-center bg-muted/30 px-4 py-10">
       <div className="w-full max-w-md space-y-6">
@@ -15,7 +25,7 @@ export default function RegisterPage() {
             Parte como cliente o publica tu negocio para recibir reservas.
           </p>
         </div>
-        <RegisterForm />
+        <RegisterForm callbackUrl={safeCallbackUrl} />
       </div>
     </main>
   )

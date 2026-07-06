@@ -15,11 +15,12 @@ type PublicBookingPageProps = {
 export default async function PublicBookingPage({ params }: PublicBookingPageProps) {
   const session = await auth()
 
+  const { slug } = await params
+
   if (!session?.user) {
-    redirect("/login")
+    redirect(`/login?callbackUrl=${encodeURIComponent(`/businesses/${slug}/book`)}`)
   }
 
-  const { slug } = await params
   const business = await getPublicBusinessBySlug(slug)
 
   if (!business) {
