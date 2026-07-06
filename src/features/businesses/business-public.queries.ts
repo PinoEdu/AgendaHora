@@ -7,7 +7,12 @@ export async function getPublicBusinesses() {
     orderBy: { createdAt: "desc" },
     include: {
       category: { select: { name: true } },
-      _count: { select: { services: true, resources: true } },
+      _count: {
+        select: {
+          services: { where: { isActive: true } },
+          resources: { where: { isActive: true } },
+        },
+      },
     },
   })
 
@@ -21,6 +26,7 @@ export async function getPublicBusinesses() {
     categoryName: business.category.name,
     servicesCount: business._count.services,
     resourcesCount: business._count.resources,
+    canBook: business._count.services > 0 && business._count.resources > 0,
   }))
 }
 
