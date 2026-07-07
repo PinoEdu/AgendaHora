@@ -1,5 +1,6 @@
 import type { HTMLAttributes } from "react"
 
+import { CalendarGrid } from "@/components/ui/calendar-grid"
 import { cn } from "@/lib/utils"
 
 type TicketCardProps = HTMLAttributes<HTMLElement> & {
@@ -15,6 +16,7 @@ export function TicketCard({ children, className, contentClassName, ...props }: 
       )}
       {...props}
     >
+      <CalendarGrid className="opacity-60 [mask-image:linear-gradient(to_right,black,transparent_86%)]" />
       <span
         aria-hidden="true"
         className="absolute -left-3 top-1/2 h-6 w-6 -translate-y-1/2 rounded-full border border-[#e6d8c5] bg-[#f8f5ef]"

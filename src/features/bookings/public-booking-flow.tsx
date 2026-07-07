@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { CalendarGrid } from "@/components/ui/calendar-grid"
 import { formatResourceType } from "@/features/resources/resource-format"
 
 type PublicBookingService = {
@@ -216,15 +217,16 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
-      <section className="space-y-6 rounded-2xl border bg-card p-6 shadow-sm">
-        <div className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-4">
+      <section className="relative space-y-6 overflow-hidden rounded-2xl border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm">
+        <CalendarGrid className="opacity-55" />
+        <div className="relative grid gap-2 text-sm text-muted-foreground sm:grid-cols-4">
           <span className="rounded-full border bg-background px-3 py-1 font-medium text-foreground">1. Servicio</span>
           <span className="rounded-full border bg-background px-3 py-1 font-medium text-foreground">2. Recurso</span>
           <span className="rounded-full border bg-background px-3 py-1 font-medium text-foreground">3. Fecha</span>
           <span className="rounded-full border bg-background px-3 py-1 font-medium text-foreground">4. Confirmar</span>
         </div>
 
-        <div className="space-y-3">
+        <div className="relative space-y-3">
           <div>
             <h2 className="text-xl font-semibold">Elige un servicio</h2>
             <p className="text-sm text-muted-foreground">Selecciona que quieres reservar.</p>
@@ -247,7 +249,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="relative space-y-3">
           <div>
             <h2 className="text-xl font-semibold">Elige con quien o donde</h2>
             <p className="text-sm text-muted-foreground">
@@ -258,7 +260,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
           </div>
 
           {compatibleResources.length === 0 ? (
-            <p className="rounded-xl border bg-muted/40 p-4 text-sm text-muted-foreground">
+            <p className="rounded-xl border border-[#e6d8c5] bg-[#fff8eb]/90 p-4 text-sm text-[#655b4f]">
               Este servicio aun no tiene recursos disponibles para reservar.
             </p>
           ) : needsResourceSelection ? (
@@ -277,14 +279,14 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
               ))}
             </div>
           ) : effectiveResource ? (
-            <div className="rounded-2xl border bg-muted/40 p-4">
+            <div className="rounded-2xl border border-[#e6d8c5] bg-[#fff8eb]/90 p-4">
               <p className="font-medium">{effectiveResource.name}</p>
               <p className="text-sm text-muted-foreground">{formatResourceType(effectiveResource.type)}</p>
             </div>
           ) : null}
         </div>
 
-        <div className="space-y-3">
+        <div className="relative space-y-3">
           <div>
             <h2 className="text-xl font-semibold">Fecha y horario</h2>
             <p className="text-sm text-muted-foreground">Horarios en {business.timezone}.</p>
@@ -310,12 +312,12 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
 
           {isLoadingSlots ? <p className="text-sm text-muted-foreground">Cargando horarios...</p> : null}
           {!isLoadingSlots && effectiveResource && slots.length === 0 ? (
-            <p className="rounded-xl border bg-muted/40 p-4 text-sm text-muted-foreground">
+            <p className="rounded-xl border border-[#e6d8c5] bg-[#fff8eb]/90 p-4 text-sm text-[#655b4f]">
               No hay horarios disponibles para esta fecha. Prueba otro dia.
             </p>
           ) : null}
           {!isLoadingSlots && !effectiveResource && compatibleResources.length > 0 ? (
-            <p className="rounded-xl border bg-muted/40 p-4 text-sm text-muted-foreground">
+            <p className="rounded-xl border border-[#e6d8c5] bg-[#fff8eb]/90 p-4 text-sm text-[#655b4f]">
               Elige un recurso para ver horarios disponibles.
             </p>
           ) : null}
@@ -342,10 +344,12 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
         ) : null}
       </section>
 
-      <aside className="h-fit rounded-2xl border bg-card p-6 shadow-sm">
-        <p className="text-sm text-muted-foreground">Resumen</p>
-        <h2 className="mt-1 text-2xl font-semibold">{business.name}</h2>
-        <dl className="mt-5 space-y-4 text-sm">
+      <aside className="relative h-fit overflow-hidden rounded-2xl border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm">
+        <CalendarGrid className="opacity-50 [mask-image:linear-gradient(to_bottom,black,transparent_80%)]" />
+        <div className="relative">
+          <p className="text-sm text-muted-foreground">Resumen</p>
+          <h2 className="mt-1 text-2xl font-semibold">{business.name}</h2>
+          <dl className="mt-5 space-y-4 text-sm">
           <div>
             <dt className="text-muted-foreground">Servicio</dt>
             <dd className="font-medium">{selectedService?.name ?? "Selecciona un servicio"}</dd>
@@ -374,17 +378,18 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
             <dt className="text-muted-foreground">Zona horaria</dt>
             <dd className="font-medium">{business.timezone}</dd>
           </div>
-        </dl>
+          </dl>
 
-        <Button
-          className="mt-6 w-full"
-          disabled={!selectedSlot || !effectiveResource || isSubmitting}
-          onClick={handleSubmit}
-          size="lg"
-          type="button"
-        >
-          {isSubmitting ? "Confirmando..." : "Confirmar reserva"}
-        </Button>
+          <Button
+            className="mt-6 w-full"
+            disabled={!selectedSlot || !effectiveResource || isSubmitting}
+            onClick={handleSubmit}
+            size="lg"
+            type="button"
+          >
+            {isSubmitting ? "Confirmando..." : "Confirmar reserva"}
+          </Button>
+        </div>
       </aside>
     </div>
   )

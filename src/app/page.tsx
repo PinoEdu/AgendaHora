@@ -2,6 +2,7 @@ import Link from "next/link"
 
 import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
+import { CalendarGrid } from "@/components/ui/calendar-grid"
 import { LogoutButton } from "@/features/auth/logout-button"
 import { UserRole } from "@/generated/prisma/enums"
 
@@ -11,8 +12,9 @@ export default async function Home() {
     session?.user.role === UserRole.BUSINESS_OWNER ? "/dashboard" : "/me/bookings"
 
   return (
-    <main className="min-h-svh bg-[#f8f5ef] text-[#1e1b16]">
-      <section className="mx-auto flex min-h-svh w-full max-w-6xl flex-col justify-center gap-14 px-6 py-10 lg:py-16">
+    <main className="relative min-h-svh overflow-hidden bg-[#f8f5ef] text-[#1e1b16]">
+      <CalendarGrid className="opacity-45 [mask-image:radial-gradient(circle_at_top_right,black,transparent_58%)]" />
+      <section className="relative mx-auto flex min-h-svh w-full max-w-6xl flex-col justify-center gap-14 px-6 py-10 lg:py-16">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Link className="text-sm font-semibold tracking-[0.28em] uppercase" href="/">
             AgendaHora
@@ -66,8 +68,8 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="relative rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-5 shadow-[0_24px_80px_rgba(66,48,28,0.12)]">
-            <div className="absolute inset-0 rounded-[2rem] bg-[linear-gradient(to_right,rgba(200,90,46,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(200,90,46,0.08)_1px,transparent_1px)] bg-[size:42px_42px]" />
+          <div className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-5 shadow-[0_24px_80px_rgba(66,48,28,0.12)]">
+            <CalendarGrid />
             <div className="relative space-y-4">
               <div className="flex items-start justify-between gap-4 rounded-3xl bg-[#1e1b16] p-5 text-[#fffcf6]">
                 <div>

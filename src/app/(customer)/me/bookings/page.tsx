@@ -3,6 +3,7 @@ import { redirect } from "next/navigation"
 
 import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
+import { CalendarGrid } from "@/components/ui/calendar-grid"
 import { TicketCard } from "@/components/ui/ticket-card"
 import { LogoutButton } from "@/features/auth/logout-button"
 import { cancelBookingByCustomerAction } from "@/features/bookings/booking.actions"
@@ -117,19 +118,21 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
       </div>
 
       {created === "1" ? (
-        <section className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-800">
-          <h2 className="font-semibold">Reserva confirmada</h2>
-          <p className="mt-1 text-sm">Tu horario quedo reservado. Puedes revisarlo o cancelarlo desde aqui.</p>
+        <section className="relative overflow-hidden rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-800">
+          <CalendarGrid className="opacity-35" />
+          <h2 className="relative font-semibold">Reserva confirmada</h2>
+          <p className="relative mt-1 text-sm">Tu horario quedo reservado. Puedes revisarlo o cancelarlo desde aqui.</p>
         </section>
       ) : null}
 
       {bookings.length === 0 ? (
-        <section className="rounded-2xl border bg-card p-8 text-center shadow-sm">
-          <h2 className="text-xl font-semibold">Aun no hay reservas</h2>
-          <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
+        <section className="relative overflow-hidden rounded-2xl border bg-card p-8 text-center shadow-sm">
+          <CalendarGrid className="opacity-40" />
+          <h2 className="relative text-xl font-semibold">Aun no hay reservas</h2>
+          <p className="relative mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
             Explora negocios locales y reserva un horario disponible.
           </p>
-          <Button asChild className="mt-6">
+          <Button asChild className="relative mt-6">
             <Link href="/businesses">Buscar negocios</Link>
           </Button>
         </section>
@@ -141,9 +144,10 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
               <p className="text-sm text-muted-foreground">Horarios pendientes o confirmados.</p>
             </div>
             {upcomingBookings.length === 0 ? (
-              <p className="rounded-2xl border bg-card p-5 text-sm text-muted-foreground">
-                No tienes proximas reservas activas.
-              </p>
+              <div className="relative overflow-hidden rounded-2xl border bg-card p-5 text-sm text-muted-foreground">
+                <CalendarGrid className="opacity-35" />
+                <p className="relative">No tienes proximas reservas activas.</p>
+              </div>
             ) : (
               <div className="grid gap-4">
                 {upcomingBookings.map((booking) => (
@@ -159,9 +163,10 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
               <p className="text-sm text-muted-foreground">Reservas pasadas, completadas o canceladas.</p>
             </div>
             {historyBookings.length === 0 ? (
-              <p className="rounded-2xl border bg-card p-5 text-sm text-muted-foreground">
-                Aun no hay reservas en el historial.
-              </p>
+              <div className="relative overflow-hidden rounded-2xl border bg-card p-5 text-sm text-muted-foreground">
+                <CalendarGrid className="opacity-35" />
+                <p className="relative">Aun no hay reservas en el historial.</p>
+              </div>
             ) : (
               <div className="grid gap-4">
                 {historyBookings.map((booking) => (

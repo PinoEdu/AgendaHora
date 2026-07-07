@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
+import { CalendarGrid } from "@/components/ui/calendar-grid"
 import { TicketCard } from "@/components/ui/ticket-card"
 import { getPublicBusinesses } from "@/features/businesses/business-public.queries"
 
@@ -9,10 +10,12 @@ export default async function BusinessesPage() {
   const bookableBusinessesCount = businesses.filter((business) => business.canBook).length
 
   return (
-    <main className="min-h-svh bg-[#f8f5ef] text-[#1e1b16]">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
-        <div className="flex flex-col gap-6 rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm md:p-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <main className="relative min-h-svh overflow-hidden bg-[#f8f5ef] text-[#1e1b16]">
+      <CalendarGrid className="opacity-40 [mask-image:radial-gradient(circle_at_top_left,black,transparent_54%)]" />
+      <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
+        <div className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm md:p-8">
+          <CalendarGrid className="opacity-70" />
+          <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="space-y-3">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#8a7058]">
                 Explorar
@@ -29,7 +32,7 @@ export default async function BusinessesPage() {
             </Button>
           </div>
 
-          <div className="grid gap-3 text-sm sm:grid-cols-3">
+          <div className="relative mt-6 grid gap-3 text-sm sm:grid-cols-3">
             <div className="rounded-2xl border border-[#e6d8c5] bg-[#fff8eb] p-4">
               <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Activos</p>
               <p className="mt-2 text-2xl font-semibold">{businesses.length}</p>
@@ -46,12 +49,13 @@ export default async function BusinessesPage() {
         </div>
 
         {businesses.length === 0 ? (
-          <section className="rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-8 text-center shadow-sm">
-            <h2 className="text-2xl font-semibold">Aun no hay negocios activos</h2>
-            <p className="mx-auto mt-2 max-w-xl text-sm text-[#655b4f]">
+          <section className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-8 text-center shadow-sm">
+            <CalendarGrid className="opacity-60" />
+            <h2 className="relative text-2xl font-semibold">Aun no hay negocios activos</h2>
+            <p className="relative mx-auto mt-2 max-w-xl text-sm text-[#655b4f]">
               Cuando un dueno active su negocio, aparecera en este catalogo publico.
             </p>
-            <Button asChild className="mt-6 bg-[#c85a2e] text-white hover:bg-[#a94722]">
+            <Button asChild className="relative mt-6 bg-[#c85a2e] text-white hover:bg-[#a94722]">
               <Link href="/register">Publicar mi negocio</Link>
             </Button>
           </section>

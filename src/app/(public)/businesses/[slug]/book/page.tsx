@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation"
 
 import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
+import { CalendarGrid } from "@/components/ui/calendar-grid"
 import { getPublicBusinessBySlug } from "@/features/businesses/business-public.queries"
 import { PublicBookingFlow } from "@/features/bookings/public-booking-flow"
 
@@ -28,10 +29,12 @@ export default async function PublicBookingPage({ params }: PublicBookingPagePro
   }
 
   return (
-    <main className="min-h-svh bg-[#f8f5ef] text-[#1e1b16]">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
-        <div className="rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm md:p-8">
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+    <main className="relative min-h-svh overflow-hidden bg-[#f8f5ef] text-[#1e1b16]">
+      <CalendarGrid className="opacity-40 [mask-image:radial-gradient(circle_at_top_left,black,transparent_56%)]" />
+      <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
+        <div className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm md:p-8">
+          <CalendarGrid className="opacity-75" />
+          <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
             <div className="space-y-3">
               <p className="text-sm font-medium text-[#8a7058]">
                 <Link className="underline-offset-4 hover:underline" href="/businesses">
@@ -60,12 +63,13 @@ export default async function PublicBookingPage({ params }: PublicBookingPagePro
         </div>
 
         {business.services.length === 0 || business.resources.length === 0 ? (
-          <section className="rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-8 text-center shadow-sm">
-            <h2 className="text-2xl font-semibold">Este negocio aun no acepta reservas</h2>
-            <p className="mx-auto mt-2 max-w-xl text-sm text-[#655b4f]">
+          <section className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-8 text-center shadow-sm">
+            <CalendarGrid className="opacity-60" />
+            <h2 className="relative text-2xl font-semibold">Este negocio aun no acepta reservas</h2>
+            <p className="relative mx-auto mt-2 max-w-xl text-sm text-[#655b4f]">
               Faltan servicios o recursos activos para completar el flujo de reserva.
             </p>
-            <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+            <div className="relative mt-6 flex flex-col justify-center gap-3 sm:flex-row">
               <Button asChild className="bg-[#1e1b16] text-[#fffcf6] hover:bg-[#2d271f]">
                 <Link href={`/businesses/${business.slug}`}>Volver al perfil</Link>
               </Button>

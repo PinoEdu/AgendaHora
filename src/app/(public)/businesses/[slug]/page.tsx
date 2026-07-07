@@ -2,6 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
+import { CalendarGrid } from "@/components/ui/calendar-grid"
 import { TicketCard } from "@/components/ui/ticket-card"
 import { getPublicBusinessBySlug } from "@/features/businesses/business-public.queries"
 import { formatResourceType } from "@/features/resources/resource-format"
@@ -23,8 +24,9 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
   const canBook = business.services.length > 0 && business.resources.length > 0
 
   return (
-    <main className="min-h-svh bg-[#f8f5ef] text-[#1e1b16]">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
+    <main className="relative min-h-svh overflow-hidden bg-[#f8f5ef] text-[#1e1b16]">
+      <CalendarGrid className="opacity-40 [mask-image:radial-gradient(circle_at_top_right,black,transparent_56%)]" />
+      <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
         <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
           <Button asChild className="border-[#d6c7b5] bg-[#fffcf6]" variant="outline">
             <Link href="/businesses">Volver a negocios</Link>
@@ -37,7 +39,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
         </div>
 
         <section className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm md:p-8">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(200,90,46,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(200,90,46,0.08)_1px,transparent_1px)] bg-[size:44px_44px]" />
+          <CalendarGrid className="bg-[size:44px_44px] opacity-80" />
           <div className="relative grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
             <div className="space-y-5">
               <p className="w-fit rounded-full bg-[#fff0d2] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[#7b5d43]">
@@ -93,9 +95,10 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
           </div>
 
           {business.services.length === 0 ? (
-            <p className="rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 text-sm text-[#655b4f]">
-              Este negocio aun no tiene servicios activos.
-            </p>
+            <div className="relative overflow-hidden rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 text-sm text-[#655b4f]">
+              <CalendarGrid className="opacity-60" />
+              <p className="relative">Este negocio aun no tiene servicios activos.</p>
+            </div>
           ) : (
             <div className="grid gap-4 md:grid-cols-2">
               {business.services.map((service) => (
@@ -134,9 +137,10 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
             <h2 className="mt-2 text-3xl font-semibold tracking-tight">Profesionales y espacios</h2>
           </div>
           {business.resources.length === 0 ? (
-            <p className="rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 text-sm text-[#655b4f]">
-              Este negocio aun no tiene recursos activos.
-            </p>
+            <div className="relative overflow-hidden rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 text-sm text-[#655b4f]">
+              <CalendarGrid className="opacity-60" />
+              <p className="relative">Este negocio aun no tiene recursos activos.</p>
+            </div>
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {business.resources.map((resource) => (
