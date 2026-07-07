@@ -3,13 +3,14 @@ import { redirect } from "next/navigation"
 
 import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
+import { TicketCard } from "@/components/ui/ticket-card"
 import { LogoutButton } from "@/features/auth/logout-button"
 import { cancelBookingByCustomerAction } from "@/features/bookings/booking.actions"
 import { formatBookingStatus } from "@/features/bookings/booking-format"
 import { getBookingsForCustomer } from "@/features/bookings/booking.queries"
 import { canCustomerCancelBooking } from "@/features/bookings/booking-rules"
 import { BookingStatus } from "@/generated/prisma/enums"
-import { formatUtcDateTimeInTimezone } from "@/lib/dates"
+import { formatUtcDateTimeInTimezone, formatUtcTimeInTimezone } from "@/lib/dates"
 
 type MyBookingsPageProps = {
   searchParams: Promise<{
@@ -21,14 +22,32 @@ type CustomerBooking = Awaited<ReturnType<typeof getBookingsForCustomer>>[number
 
 const upcomingStatuses = new Set<BookingStatus>([BookingStatus.PENDING, BookingStatus.CONFIRMED])
 
+const bookingStatusClasses: Record<BookingStatus, string> = {
+  [BookingStatus.PENDING]: "border-amber-200 bg-amber-50 text-amber-800",
+  [BookingStatus.CONFIRMED]: "border-emerald-200 bg-emerald-50 text-emerald-800",
+  [BookingStatus.CANCELLED_BY_CUSTOMER]: "border-stone-200 bg-stone-50 text-stone-600",
+  [BookingStatus.CANCELLED_BY_BUSINESS]: "border-stone-200 bg-stone-50 text-stone-600",
+  [BookingStatus.COMPLETED]: "border-sky-200 bg-sky-50 text-sky-800",
+  [BookingStatus.NO_SHOW]: "border-red-200 bg-red-50 text-red-800",
+}
+
 function CustomerBookingCard({ booking }: { booking: CustomerBooking }) {
+  const startsAtTime = formatUtcTimeInTimezone(booking.startsAt, booking.business.timezone)
+  const endsAtTime = formatUtcTimeInTimezone(booking.endsAt, booking.business.timezone)
+
   return (
-    <article className="rounded-2xl border bg-card p-5 shadow-sm">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <TicketCard className="bg-[#fffcf6]" contentClassName="grid gap-4 md:grid-cols-[8rem_1fr_auto] md:items-center">
+      <div className="rounded-2xl bg-[#1e1b16] p-4 text-[#fffcf6]">
+        <p className="text-xs uppercase tracking-[0.18em] text-[#f2c66d]">Hora</p>
+        <p className="mt-2 text-3xl font-semibold leading-none">{startsAtTime}</p>
+        <p className="mt-1 text-xs text-[#d8cfc1]">hasta {endsAtTime}</p>
+      </div>
+
+      <div className="space-y-2">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="text-xl font-semibold">{booking.business.name}</h3>
-            <span className="rounded-full border px-2.5 py-1 text-xs text-muted-foreground">
+            <span className={`rounded-full border px-2.5 py-1 text-xs font-medium ${bookingStatusClasses[booking.status]}`}>
               {formatBookingStatus(booking.status)}
             </span>
           </div>
@@ -48,16 +67,17 @@ function CustomerBookingCard({ booking }: { booking: CustomerBooking }) {
             </p>
           ) : null}
         </div>
-        {canCustomerCancelBooking(booking.status) ? (
-          <form action={cancelBookingByCustomerAction}>
-            <input name="bookingId" type="hidden" value={booking.id} />
-            <Button size="sm" type="submit" variant="outline">
-              Cancelar
-            </Button>
-          </form>
-        ) : null}
       </div>
-    </article>
+
+      {canCustomerCancelBooking(booking.status) ? (
+        <form action={cancelBookingByCustomerAction} className="md:justify-self-end">
+          <input name="bookingId" type="hidden" value={booking.id} />
+          <Button size="sm" type="submit" variant="outline">
+            Cancelar
+          </Button>
+        </form>
+      ) : null}
+    </TicketCard>
   )
 }
 

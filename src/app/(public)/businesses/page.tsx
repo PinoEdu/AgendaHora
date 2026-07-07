@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
+import { TicketCard } from "@/components/ui/ticket-card"
 import { getPublicBusinesses } from "@/features/businesses/business-public.queries"
 
 export default async function BusinessesPage() {
@@ -57,9 +58,10 @@ export default async function BusinessesPage() {
         ) : (
           <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {businesses.map((business) => (
-              <article
+              <TicketCard
                 key={business.id}
-                className="flex min-h-72 flex-col rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-5 shadow-sm transition-transform hover:-translate-y-0.5"
+                className="min-h-72 transition-transform hover:-translate-y-0.5"
+                contentClassName="flex h-full flex-col"
               >
                 <div className="flex-1 space-y-4">
                   <div className="flex items-start justify-between gap-3">
@@ -109,7 +111,7 @@ export default async function BusinessesPage() {
                     {business.canBook ? "Ver horarios" : "Ver negocio"}
                   </Link>
                 </Button>
-              </article>
+              </TicketCard>
             ))}
           </section>
         )}

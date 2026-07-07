@@ -2,6 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
+import { TicketCard } from "@/components/ui/ticket-card"
 import { getPublicBusinessBySlug } from "@/features/businesses/business-public.queries"
 import { formatResourceType } from "@/features/resources/resource-format"
 
@@ -98,9 +99,9 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
           ) : (
             <div className="grid gap-4 md:grid-cols-2">
               {business.services.map((service) => (
-                <article
+                <TicketCard
                   key={service.id}
-                  className="rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-5 shadow-sm"
+                  contentClassName="space-y-5"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
@@ -121,7 +122,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
                       </Button>
                     ) : null}
                   </div>
-                </article>
+                </TicketCard>
               ))}
             </div>
           )}
@@ -139,7 +140,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {business.resources.map((resource) => (
-                <article key={resource.id} className="rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-5 shadow-sm">
+                <TicketCard key={resource.id}>
                   <span className="rounded-full bg-[#fff0d2] px-3 py-1 text-xs font-semibold text-[#7b5d43]">
                     {formatResourceType(resource.type)}
                   </span>
@@ -147,7 +148,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
                   <p className="mt-2 text-sm leading-6 text-[#655b4f]">
                     {resource.description || "Disponible para servicios compatibles."}
                   </p>
-                </article>
+                </TicketCard>
               ))}
             </div>
           )}
