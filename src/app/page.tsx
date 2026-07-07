@@ -4,6 +4,7 @@ import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
 import { CalendarGrid } from "@/components/ui/calendar-grid"
 import { LogoutButton } from "@/features/auth/logout-button"
+import { InteractiveBookingPreview } from "@/features/home/interactive-booking-preview"
 import { UserRole } from "@/generated/prisma/enums"
 
 export default async function Home() {
@@ -68,53 +69,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-5 shadow-[0_24px_80px_rgba(66,48,28,0.12)]">
-            <CalendarGrid />
-            <div className="relative space-y-4">
-              <div className="flex items-start justify-between gap-4 rounded-3xl bg-[#1e1b16] p-5 text-[#fffcf6]">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.22em] text-[#f2c66d]">Proxima reserva</p>
-                  <h2 className="mt-3 text-2xl font-semibold">Corte clasico</h2>
-                  <p className="mt-1 text-sm text-[#d8cfc1]">Barberia Norte Demo</p>
-                </div>
-                <span className="rounded-full bg-[#f2c66d] px-3 py-1 text-xs font-semibold text-[#1e1b16]">
-                  Confirmada
-                </span>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-[#e6d8c5] bg-[#fffcf6]/90 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Hora</p>
-                  <p className="mt-2 text-2xl font-semibold">10:00</p>
-                </div>
-                <div className="rounded-2xl border border-[#e6d8c5] bg-[#fffcf6]/90 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Duracion</p>
-                  <p className="mt-2 text-2xl font-semibold">30 min</p>
-                </div>
-                <div className="rounded-2xl border border-[#e6d8c5] bg-[#fffcf6]/90 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Lugar</p>
-                  <p className="mt-2 text-lg font-semibold">Santiago</p>
-                </div>
-              </div>
-
-              <div className="rounded-3xl border border-[#e6d8c5] bg-[#fff8eb] p-5">
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <p className="font-semibold">Disponibilidad de hoy</p>
-                    <p className="text-sm text-[#655b4f]">Horarios visibles antes de reservar.</p>
-                  </div>
-                  <span className="rounded-full bg-[#c85a2e] px-3 py-1 text-xs font-semibold text-white">
-                    Online
-                  </span>
-                </div>
-                <div className="mt-4 grid grid-cols-3 gap-2 text-center text-sm font-medium">
-                  <span className="rounded-xl bg-white px-3 py-2">09:30</span>
-                  <span className="rounded-xl bg-[#1e1b16] px-3 py-2 text-white">10:00</span>
-                  <span className="rounded-xl bg-white px-3 py-2">10:30</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <InteractiveBookingPreview />
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">
