@@ -2,6 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
+import { EmptyState } from "@/components/ui/empty-state"
 import {
   getBusinessForOwner,
   requireBusinessOwnerSession,
@@ -45,15 +46,14 @@ export default async function ResourcesPage({ params }: ResourcesPageProps) {
       </div>
 
       {resources.length === 0 ? (
-        <section className="rounded-2xl border bg-card p-8 text-center shadow-sm">
-          <h2 className="text-xl font-semibold">Todavia no hay recursos</h2>
-          <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
-            Crea barberos, canchas, boxes, salas o cualquier recurso que reciba reservas.
-          </p>
-          <Button asChild className="mt-6">
-            <Link href={`/dashboard/businesses/${business.id}/resources/new`}>Crear recurso</Link>
-          </Button>
-        </section>
+        <EmptyState
+          actionHref={`/dashboard/businesses/${business.id}/resources/new`}
+          actionLabel="Crear recurso"
+          description="Crea profesionales, canchas, boxes, salas o equipos. Cada recurso debe asociarse a servicios y tener disponibilidad para recibir reservas."
+          eyebrow="Recursos"
+          marker="0"
+          title="Todavia no hay recursos"
+        />
       ) : (
         <section className="grid gap-4">
           {resources.map((resource) => (

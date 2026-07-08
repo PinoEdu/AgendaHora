@@ -1,6 +1,9 @@
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
+import { CalendarGrid } from "@/components/ui/calendar-grid"
+import { EmptyState } from "@/components/ui/empty-state"
+import { TicketCard } from "@/components/ui/ticket-card"
 import {
   getBusinessesForOwner,
   requireBusinessOwnerSession,
@@ -10,34 +13,54 @@ import { formatBusinessStatus } from "@/features/businesses/business-format"
 export default async function DashboardBusinessesPage() {
   const session = await requireBusinessOwnerSession()
   const businesses = await getBusinessesForOwner(session.user.id)
+  const activeBusinesses = businesses.filter((business) => business.status === "ACTIVE").length
 
   return (
     <main className="mx-auto flex min-h-svh w-full max-w-6xl flex-col gap-8 px-6 py-10">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">Dashboard</p>
-          <h1 className="text-3xl font-semibold tracking-tight">Mis negocios</h1>
+      <section className="relative overflow-hidden rounded-[2rem] border bg-[#111827] p-6 text-white shadow-sm md:p-8">
+        <CalendarGrid className="opacity-20" />
+        <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Operacion</p>
+            <h1 className="mt-2 text-4xl font-semibold tracking-tight">Mis negocios</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
+              Revisa que locales estan publicados y que configuracion falta para recibir reservas.
+            </p>
+          </div>
+          <Button asChild className="bg-amber-300 text-slate-950 hover:bg-amber-200">
+            <Link href="/dashboard/businesses/new">Crear negocio</Link>
+          </Button>
         </div>
-        <Button asChild>
-          <Link href="/dashboard/businesses/new">Crear negocio</Link>
-        </Button>
-      </div>
+
+        <div className="relative mt-6 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Total</p>
+            <p className="mt-2 text-3xl font-semibold">{businesses.length}</p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Activos</p>
+            <p className="mt-2 text-3xl font-semibold">{activeBusinesses}</p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Pendientes</p>
+            <p className="mt-2 text-3xl font-semibold">{businesses.length - activeBusinesses}</p>
+          </div>
+        </div>
+      </section>
 
       {businesses.length === 0 ? (
-        <section className="rounded-2xl border bg-card p-8 text-center shadow-sm">
-          <h2 className="text-xl font-semibold">Todavia no tienes negocios</h2>
-          <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
-            Crea tu primer negocio para configurar servicios, recursos y horarios de reserva.
-          </p>
-          <Button asChild className="mt-6">
-            <Link href="/dashboard/businesses/new">Crear mi primer negocio</Link>
-          </Button>
-        </section>
+        <EmptyState
+          actionHref="/dashboard/businesses/new"
+          actionLabel="Crear mi primer negocio"
+          description="Crea un negocio para configurar servicios, recursos, disponibilidad semanal y comenzar a recibir reservas."
+          eyebrow="Mis negocios"
+          marker="0"
+          title="Todavia no tienes negocios"
+        />
       ) : (
         <section className="grid gap-4">
           {businesses.map((business) => (
-            <article key={business.id} className="rounded-2xl border bg-card p-5 shadow-sm">
-              <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+            <TicketCard key={business.id} contentClassName="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
                 <div className="space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
                     <h2 className="text-xl font-semibold">{business.name}</h2>
@@ -62,8 +85,7 @@ export default async function DashboardBusinessesPage() {
                     <Link href={`/dashboard/businesses/${business.id}`}>Administrar</Link>
                   </Button>
                 </div>
-              </div>
-            </article>
+            </TicketCard>
           ))}
         </section>
       )}

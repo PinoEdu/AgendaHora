@@ -2,6 +2,9 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
+import { CalendarGrid } from "@/components/ui/calendar-grid"
+import { EmptyState } from "@/components/ui/empty-state"
+import { TicketCard } from "@/components/ui/ticket-card"
 import {
   getBusinessForOwner,
   requireBusinessOwnerSession,
@@ -18,12 +21,22 @@ import {
   canMarkBookingCompleted,
   canMarkBookingNoShow,
 } from "@/features/bookings/booking-rules"
-import { formatUtcDateTimeInTimezone } from "@/lib/dates"
+import { BookingStatus } from "@/generated/prisma/enums"
+import { formatUtcDateTimeInTimezone, formatUtcTimeInTimezone } from "@/lib/dates"
 
 type BusinessBookingsPageProps = {
   params: Promise<{
     businessId: string
   }>
+}
+
+const bookingStatusClasses: Record<BookingStatus, string> = {
+  [BookingStatus.PENDING]: "border-amber-200 bg-amber-50 text-amber-800",
+  [BookingStatus.CONFIRMED]: "border-emerald-200 bg-emerald-50 text-emerald-800",
+  [BookingStatus.CANCELLED_BY_CUSTOMER]: "border-stone-200 bg-stone-50 text-stone-600",
+  [BookingStatus.CANCELLED_BY_BUSINESS]: "border-stone-200 bg-stone-50 text-stone-600",
+  [BookingStatus.COMPLETED]: "border-sky-200 bg-sky-50 text-sky-800",
+  [BookingStatus.NO_SHOW]: "border-red-200 bg-red-50 text-red-800",
 }
 
 export default async function BusinessBookingsPage({ params }: BusinessBookingsPageProps) {
@@ -38,34 +51,70 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
     notFound()
   }
 
+  const pendingBookings = bookings.filter((booking) => booking.status === BookingStatus.PENDING).length
+  const confirmedBookings = bookings.filter((booking) => booking.status === BookingStatus.CONFIRMED).length
+  const closedBookings = bookings.length - pendingBookings - confirmedBookings
+
   return (
     <main className="mx-auto flex min-h-svh w-full max-w-6xl flex-col gap-8 px-6 py-10">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">{business.name}</p>
-          <h1 className="text-3xl font-semibold tracking-tight">Reservas recibidas</h1>
+      <section className="relative overflow-hidden rounded-[2rem] border bg-[#111827] p-6 text-white shadow-sm md:p-8">
+        <CalendarGrid className="opacity-20" />
+        <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Agenda operativa</p>
+            <h1 className="mt-2 text-4xl font-semibold tracking-tight">Reservas recibidas</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
+              {business.name}. Revisa atenciones pendientes, confirma cierres y marca ausencias.
+            </p>
+          </div>
+          <Button asChild className="border-white/20 bg-white/10 text-white hover:bg-white/20" variant="outline">
+            <Link href={`/dashboard/businesses/${business.id}`}>Volver</Link>
+          </Button>
         </div>
-        <Button asChild variant="outline">
-          <Link href={`/dashboard/businesses/${business.id}`}>Volver</Link>
-        </Button>
-      </div>
+
+        <div className="relative mt-6 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Pendientes</p>
+            <p className="mt-2 text-3xl font-semibold">{pendingBookings}</p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Confirmadas</p>
+            <p className="mt-2 text-3xl font-semibold">{confirmedBookings}</p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Cerradas</p>
+            <p className="mt-2 text-3xl font-semibold">{closedBookings}</p>
+          </div>
+        </div>
+      </section>
 
       {bookings.length === 0 ? (
-        <section className="rounded-2xl border bg-card p-8 text-center shadow-sm">
-          <h2 className="text-xl font-semibold">Aun no hay reservas</h2>
-          <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
-            Cuando un cliente reserve online, aparecera en esta vista.
-          </p>
-        </section>
+        <EmptyState
+          actionHref={`/businesses/${business.slug}`}
+          actionLabel="Ver perfil publico"
+          description="Cuando un cliente reserve online, aparecera aqui con hora, servicio, recurso y acciones operativas."
+          eyebrow="Agenda operativa"
+          marker="0"
+          title="Aun no hay reservas"
+        />
       ) : (
         <section className="grid gap-4">
-          {bookings.map((booking) => (
-            <article key={booking.id} className="rounded-2xl border bg-card p-5 shadow-sm">
-              <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          {bookings.map((booking) => {
+            const startsAtTime = formatUtcTimeInTimezone(booking.startsAt, booking.business.timezone)
+            const endsAtTime = formatUtcTimeInTimezone(booking.endsAt, booking.business.timezone)
+
+            return (
+              <TicketCard key={booking.id} contentClassName="grid gap-5 lg:grid-cols-[8rem_1fr_auto] lg:items-center">
+                <div className="rounded-2xl bg-[#111827] p-4 text-white">
+                  <p className="text-xs uppercase tracking-[0.18em] text-amber-200">Hora</p>
+                  <p className="mt-2 text-3xl font-semibold leading-none">{startsAtTime}</p>
+                  <p className="mt-1 text-xs text-slate-300">hasta {endsAtTime}</p>
+                </div>
+
                 <div className="space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
                     <h2 className="text-xl font-semibold">{booking.service.name}</h2>
-                    <span className="rounded-full border px-2.5 py-1 text-xs text-muted-foreground">
+                    <span className={`rounded-full border px-2.5 py-1 text-xs font-medium ${bookingStatusClasses[booking.status]}`}>
                       {formatBookingStatus(booking.status)}
                     </span>
                   </div>
@@ -85,7 +134,7 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
                   ) : null}
                 </div>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 lg:justify-end">
                   {canMarkBookingCompleted(booking.status) ? (
                     <form action={markBookingCompletedAction}>
                       <input name="businessId" type="hidden" value={business.id} />
@@ -116,9 +165,9 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
                     </form>
                   ) : null}
                 </div>
-              </div>
-            </article>
-          ))}
+              </TicketCard>
+            )
+          })}
         </section>
       )}
     </main>

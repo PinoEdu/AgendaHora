@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { CalendarGrid } from "@/components/ui/calendar-grid"
+import { EmptyState } from "@/components/ui/empty-state"
 import { formatResourceType } from "@/features/resources/resource-format"
 import { cn } from "@/lib/utils"
 
@@ -348,9 +349,13 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
           </div>
 
           {compatibleResources.length === 0 ? (
-            <p className="rounded-xl border border-[#e6d8c5] bg-[#fff8eb]/90 p-4 text-sm text-[#655b4f]">
-              Este servicio aun no tiene recursos disponibles para reservar.
-            </p>
+            <EmptyState
+              className="rounded-xl border-[#e6d8c5] bg-[#fff8eb]/90 p-4 text-left"
+              description="El negocio debe asociar este servicio a un profesional, sala, cancha o recurso activo antes de recibir reservas."
+              eyebrow="Servicio sin recurso"
+              marker="0"
+              title="Este servicio aun no tiene recursos disponibles"
+            />
           ) : needsResourceSelection ? (
             <div className="grid gap-3 md:grid-cols-2">
               {compatibleResources.map((resource) => (
@@ -410,14 +415,22 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
 
           {isLoadingSlots ? <p className="text-sm text-muted-foreground">Cargando horarios...</p> : null}
           {!isLoadingSlots && effectiveResource && slots.length === 0 ? (
-            <p className="rounded-xl border border-[#e6d8c5] bg-[#fff8eb]/90 p-4 text-sm text-[#655b4f]">
-              No hay horarios disponibles para esta fecha. Prueba otro dia.
-            </p>
+            <EmptyState
+              className="rounded-xl border-[#e6d8c5] bg-[#fff8eb]/90 p-4 text-left"
+              description="No encontramos slots para esta combinacion. Prueba otra fecha o cambia el servicio/recurso seleccionado."
+              eyebrow="Sin disponibilidad"
+              marker="--:--"
+              title="No hay horarios para esta fecha"
+            />
           ) : null}
           {!isLoadingSlots && !effectiveResource && compatibleResources.length > 0 ? (
-            <p className="rounded-xl border border-[#e6d8c5] bg-[#fff8eb]/90 p-4 text-sm text-[#655b4f]">
-              Elige un recurso para ver horarios disponibles.
-            </p>
+            <EmptyState
+              className="rounded-xl border-[#e6d8c5] bg-[#fff8eb]/90 p-4 text-left"
+              description="Selecciona quien o donde se prestara el servicio para cargar horarios disponibles."
+              eyebrow="Falta recurso"
+              marker="--:--"
+              title="Elige un recurso para ver horarios"
+            />
           ) : null}
 
           <div className="space-y-4">

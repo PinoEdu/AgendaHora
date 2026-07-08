@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
 import { CalendarGrid } from "@/components/ui/calendar-grid"
+import { EmptyState } from "@/components/ui/empty-state"
 import { getPublicBusinessBySlug } from "@/features/businesses/business-public.queries"
 import { PublicBookingFlow } from "@/features/bookings/public-booking-flow"
 
@@ -63,21 +64,17 @@ export default async function PublicBookingPage({ params }: PublicBookingPagePro
         </div>
 
         {business.services.length === 0 || business.resources.length === 0 ? (
-          <section className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-8 text-center shadow-sm">
-            <CalendarGrid className="opacity-60" />
-            <h2 className="relative text-2xl font-semibold">Este negocio aun no acepta reservas</h2>
-            <p className="relative mx-auto mt-2 max-w-xl text-sm text-[#655b4f]">
-              Faltan servicios o recursos activos para completar el flujo de reserva.
-            </p>
-            <div className="relative mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-              <Button asChild className="bg-[#1e1b16] text-[#fffcf6] hover:bg-[#2d271f]">
-                <Link href={`/businesses/${business.slug}`}>Volver al perfil</Link>
-              </Button>
-              <Button asChild className="border-[#d6c7b5] bg-white" variant="outline">
-                <Link href="/businesses">Explorar otros negocios</Link>
-              </Button>
-            </div>
-          </section>
+          <EmptyState
+            actionHref={`/businesses/${business.slug}`}
+            actionLabel="Volver al perfil"
+            className="rounded-[2rem] border-[#e6d8c5] bg-[#fffcf6]"
+            description="Faltan servicios o recursos activos para completar una reserva. Puedes revisar el perfil o buscar otro negocio disponible."
+            eyebrow="Reservas pausadas"
+            marker="--:--"
+            secondaryHref="/businesses"
+            secondaryLabel="Explorar otros negocios"
+            title="Este negocio aun no acepta reservas"
+          />
         ) : (
           <PublicBookingFlow
             business={{

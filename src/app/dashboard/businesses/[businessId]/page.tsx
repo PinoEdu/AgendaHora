@@ -2,6 +2,8 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
+import { CalendarGrid } from "@/components/ui/calendar-grid"
+import { TicketCard } from "@/components/ui/ticket-card"
 import {
   getBusinessForOwner,
   requireBusinessOwnerSession,
@@ -27,30 +29,35 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
     {
       label: "Servicios",
       description: "Define lo que se puede reservar.",
+      metric: business._count.services,
       href: `/dashboard/businesses/${business.id}/services`,
       enabled: true,
     },
     {
       label: "Recursos",
       description: "Crea barberos, canchas, boxes o espacios.",
+      metric: business._count.resources,
       href: `/dashboard/businesses/${business.id}/resources`,
       enabled: true,
     },
     {
       label: "Disponibilidad",
       description: "Configura horarios semanales.",
+      metric: "Semanal",
       href: `/dashboard/businesses/${business.id}/availability`,
       enabled: true,
     },
     {
       label: "Bloqueos",
       description: "Bloquea feriados, vacaciones o mantenciones.",
+      metric: "Manual",
       href: `/dashboard/businesses/${business.id}/blocked-times`,
       enabled: true,
     },
     {
       label: "Reservas",
       description: "Revisa reservas recibidas.",
+      metric: business._count.bookings,
       href: `/dashboard/businesses/${business.id}/bookings`,
       enabled: true,
     },
@@ -58,39 +65,57 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
 
   return (
     <main className="mx-auto flex min-h-svh w-full max-w-6xl flex-col gap-8 px-6 py-10">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">Administracion del negocio</p>
-          <h1 className="text-3xl font-semibold tracking-tight">{business.name}</h1>
+      <section className="relative overflow-hidden rounded-[2rem] border bg-[#111827] p-6 text-white shadow-sm md:p-8">
+        <CalendarGrid className="opacity-20" />
+        <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Operacion del negocio</p>
+            <h1 className="mt-2 text-4xl font-semibold tracking-tight">{business.name}</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
+              Mantiene servicios, recursos, disponibilidad y reservas listos para operar online.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild className="border-white/20 bg-white/10 text-white hover:bg-white/20" variant="outline">
+              <Link href="/dashboard/businesses">Volver</Link>
+            </Button>
+            <Button asChild className="bg-amber-300 text-slate-950 hover:bg-amber-200">
+              <Link href={`/dashboard/businesses/${business.id}/edit`}>Editar</Link>
+            </Button>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button asChild variant="outline">
-            <Link href="/dashboard/businesses">Volver</Link>
-          </Button>
-          <Button asChild>
-            <Link href={`/dashboard/businesses/${business.id}/edit`}>Editar</Link>
-          </Button>
-        </div>
-      </div>
 
-      <section className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-2xl border bg-card p-5 shadow-sm">
-          <p className="text-sm text-muted-foreground">Estado</p>
-          <p className="mt-2 text-2xl font-semibold">{formatBusinessStatus(business.status)}</p>
-        </div>
-        <div className="rounded-2xl border bg-card p-5 shadow-sm">
-          <p className="text-sm text-muted-foreground">Categoria</p>
-          <p className="mt-2 text-2xl font-semibold">{business.category.name}</p>
-        </div>
-        <div className="rounded-2xl border bg-card p-5 shadow-sm">
-          <p className="text-sm text-muted-foreground">Zona horaria</p>
-          <p className="mt-2 text-2xl font-semibold">{business.timezone}</p>
+        <div className="relative mt-6 grid gap-3 md:grid-cols-4">
+          <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Estado</p>
+            <p className="mt-2 text-2xl font-semibold">{formatBusinessStatus(business.status)}</p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Servicios</p>
+            <p className="mt-2 text-2xl font-semibold">{business._count.services}</p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Recursos</p>
+            <p className="mt-2 text-2xl font-semibold">{business._count.resources}</p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Reservas</p>
+            <p className="mt-2 text-2xl font-semibold">{business._count.bookings}</p>
+          </div>
         </div>
       </section>
 
       <section className="rounded-2xl border bg-card p-6 shadow-sm">
         <h2 className="text-xl font-semibold">Informacion publica</h2>
         <dl className="mt-4 grid gap-4 text-sm md:grid-cols-2">
+          <div>
+            <dt className="text-muted-foreground">Categoria</dt>
+            <dd className="font-medium">{business.category.name}</dd>
+          </div>
+          <div>
+            <dt className="text-muted-foreground">Zona horaria</dt>
+            <dd className="font-medium">{business.timezone}</dd>
+          </div>
           <div>
             <dt className="text-muted-foreground">Ciudad</dt>
             <dd className="font-medium">{business.city || "Sin ciudad"}</dd>
@@ -115,20 +140,22 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {managementSections.map((section) => (
-          <article key={section.label} className="rounded-2xl border bg-card p-5 shadow-sm">
-            <h3 className="font-semibold">{section.label}</h3>
+          <TicketCard key={section.label} contentClassName="space-y-4">
+            <div className="flex items-start justify-between gap-4">
+              <h3 className="font-semibold">{section.label}</h3>
+              <span className="rounded-full border bg-background px-2.5 py-1 text-xs font-medium text-muted-foreground">
+                {section.metric}
+              </span>
+            </div>
             <p className="mt-2 text-sm text-muted-foreground">{section.description}</p>
             {section.enabled ? (
-              <Link
-                className="mt-4 inline-block text-xs font-medium text-foreground underline-offset-4 hover:underline"
-                href={section.href}
-              >
-                Administrar
-              </Link>
+              <Button asChild className="w-full" variant="outline">
+                <Link href={section.href}>Administrar</Link>
+              </Button>
             ) : (
               <p className="mt-4 text-xs font-medium text-muted-foreground">Proxima fase</p>
             )}
-          </article>
+          </TicketCard>
         ))}
       </section>
     </main>

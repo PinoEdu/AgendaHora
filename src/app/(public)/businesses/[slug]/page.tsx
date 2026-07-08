@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { CalendarGrid } from "@/components/ui/calendar-grid"
+import { EmptyState } from "@/components/ui/empty-state"
 import { TicketCard } from "@/components/ui/ticket-card"
 import { getPublicBusinessBySlug } from "@/features/businesses/business-public.queries"
 import { formatResourceType } from "@/features/resources/resource-format"
@@ -173,10 +174,13 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
           </div>
 
           {business.services.length === 0 ? (
-            <div className="relative overflow-hidden rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 text-sm text-[#655b4f]">
-              <CalendarGrid className="opacity-60" />
-              <p className="relative">Este negocio aun no tiene servicios activos.</p>
-            </div>
+            <EmptyState
+              className="rounded-[1.75rem] border-[#e6d8c5] bg-[#fffcf6]"
+              description="El negocio debe publicar al menos un servicio activo para que los clientes puedan iniciar una reserva."
+              eyebrow="Servicios"
+              marker="0"
+              title="Este negocio aun no tiene servicios activos"
+            />
           ) : (
             <div className="grid gap-4">
               {business.services.map((service, index) => (
@@ -227,10 +231,13 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
             <p className="text-sm text-[#655b4f]">Cada recurso atiende solo servicios compatibles.</p>
           </div>
           {business.resources.length === 0 ? (
-            <div className="relative overflow-hidden rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 text-sm text-[#655b4f]">
-              <CalendarGrid className="opacity-60" />
-              <p className="relative">Este negocio aun no tiene recursos activos.</p>
-            </div>
+            <EmptyState
+              className="rounded-[1.75rem] border-[#e6d8c5] bg-[#fffcf6]"
+              description="Falta configurar quien o donde se prestan los servicios. Sin recursos activos no se pueden mostrar horarios."
+              eyebrow="Equipo"
+              marker="0"
+              title="Este negocio aun no tiene recursos activos"
+            />
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {business.resources.map((resource) => {

@@ -2,6 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
+import { EmptyState } from "@/components/ui/empty-state"
 import { AvailabilityForm } from "@/features/availability/availability-form"
 import {
   formatDayOfWeek,
@@ -50,15 +51,15 @@ export default async function AvailabilityPage({ params }: AvailabilityPageProps
       </div>
 
       {resources.length === 0 ? (
-        <section className="rounded-2xl border bg-card p-5 shadow-sm">
-          <h2 className="font-semibold">Necesitas recursos activos</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Crea al menos un recurso activo antes de configurar horarios.
-          </p>
-          <Button asChild className="mt-4" variant="outline">
-            <Link href={`/dashboard/businesses/${business.id}/resources/new`}>Crear recurso</Link>
-          </Button>
-        </section>
+        <EmptyState
+          actionHref={`/dashboard/businesses/${business.id}/resources/new`}
+          actionLabel="Crear recurso"
+          className="p-5 text-left"
+          description="La disponibilidad se configura por recurso. Crea al menos un recurso activo antes de definir horarios semanales."
+          eyebrow="Requisito"
+          marker="--:--"
+          title="Necesitas recursos activos"
+        />
       ) : null}
 
       <AvailabilityForm businessId={business.id} resources={resources} />
@@ -66,12 +67,12 @@ export default async function AvailabilityPage({ params }: AvailabilityPageProps
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">Horarios configurados</h2>
         {rules.length === 0 ? (
-          <div className="rounded-2xl border bg-card p-8 text-center shadow-sm">
-            <h3 className="font-semibold">Todavia no hay horarios</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Agrega reglas semanales para que luego el motor pueda generar slots disponibles.
-            </p>
-          </div>
+          <EmptyState
+            description="Agrega reglas semanales para que el motor genere slots disponibles en el flujo publico de reserva."
+            eyebrow="Disponibilidad"
+            marker="0"
+            title="Todavia no hay horarios"
+          />
         ) : (
           <div className="grid gap-4">
             {rules.map((rule) => (

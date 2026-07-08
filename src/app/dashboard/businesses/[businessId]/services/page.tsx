@@ -2,6 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
+import { EmptyState } from "@/components/ui/empty-state"
 import {
   getBusinessForOwner,
   requireBusinessOwnerSession,
@@ -44,15 +45,14 @@ export default async function ServicesPage({ params }: ServicesPageProps) {
       </div>
 
       {services.length === 0 ? (
-        <section className="rounded-2xl border bg-card p-8 text-center shadow-sm">
-          <h2 className="text-xl font-semibold">Todavia no hay servicios</h2>
-          <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
-            Crea servicios reservables como corte de pelo, consulta dental o arriendo de cancha.
-          </p>
-          <Button asChild className="mt-6">
-            <Link href={`/dashboard/businesses/${business.id}/services/new`}>Crear servicio</Link>
-          </Button>
-        </section>
+        <EmptyState
+          actionHref={`/dashboard/businesses/${business.id}/services/new`}
+          actionLabel="Crear servicio"
+          description="Agrega servicios reservables como corte de pelo, consulta dental o arriendo de cancha. Luego asocialos a recursos para habilitar horarios."
+          eyebrow="Servicios"
+          marker="0"
+          title="Todavia no hay servicios"
+        />
       ) : (
         <section className="grid gap-4">
           {services.map((service) => (

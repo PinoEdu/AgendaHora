@@ -2,6 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
+import { EmptyState } from "@/components/ui/empty-state"
 import { BlockedTimeForm } from "@/features/blocked-times/blocked-time-form"
 import { formatDateTime } from "@/features/blocked-times/blocked-time-format"
 import {
@@ -53,12 +54,12 @@ export default async function BlockedTimesPage({ params }: BlockedTimesPageProps
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">Bloqueos proximos</h2>
         {blockedTimes.length === 0 ? (
-          <div className="rounded-2xl border bg-card p-8 text-center shadow-sm">
-            <h3 className="font-semibold">No hay bloqueos proximos</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Los bloqueos impediran reservas en feriados, vacaciones o mantenciones.
-            </p>
-          </div>
+          <EmptyState
+            description="Usa el formulario superior para bloquear feriados, vacaciones, mantenciones o pausas de un recurso especifico."
+            eyebrow="Bloqueos"
+            marker="0"
+            title="No hay bloqueos proximos"
+          />
         ) : (
           <div className="grid gap-4">
             {blockedTimes.map((blockedTime) => (

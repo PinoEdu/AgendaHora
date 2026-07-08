@@ -2,6 +2,7 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { CalendarGrid } from "@/components/ui/calendar-grid"
+import { EmptyState } from "@/components/ui/empty-state"
 import { TicketCard } from "@/components/ui/ticket-card"
 import { getPublicBusinesses } from "@/features/businesses/business-public.queries"
 
@@ -49,16 +50,15 @@ export default async function BusinessesPage() {
         </div>
 
         {businesses.length === 0 ? (
-          <section className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-8 text-center shadow-sm">
-            <CalendarGrid className="opacity-60" />
-            <h2 className="relative text-2xl font-semibold">Aun no hay negocios activos</h2>
-            <p className="relative mx-auto mt-2 max-w-xl text-sm text-[#655b4f]">
-              Cuando un dueno active su negocio, aparecera en este catalogo publico.
-            </p>
-            <Button asChild className="relative mt-6 bg-[#c85a2e] text-white hover:bg-[#a94722]">
-              <Link href="/register">Publicar mi negocio</Link>
-            </Button>
-          </section>
+          <EmptyState
+            actionHref="/register"
+            actionLabel="Publicar mi negocio"
+            className="rounded-[2rem] border-[#e6d8c5] bg-[#fffcf6]"
+            description="Cuando un dueno active su negocio, aparecera en este catalogo publico con servicios, recursos y horarios disponibles."
+            eyebrow="Catalogo publico"
+            marker="0"
+            title="Aun no hay negocios activos"
+          />
         ) : (
           <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {businesses.map((business) => (
