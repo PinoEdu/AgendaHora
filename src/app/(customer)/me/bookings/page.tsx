@@ -101,10 +101,11 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
   const historyBookings = bookings.filter((booking) => !upcomingBookings.includes(booking))
 
   return (
-    <main className="mx-auto flex min-h-svh w-full max-w-5xl flex-col gap-8 px-6 py-10">
+    <main className="min-h-svh bg-[radial-gradient(circle_at_top_left,#fff7ed,transparent_34%),linear-gradient(180deg,#fffaf2,#f7efe3)] px-6 py-10 text-[#2d241b]">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-muted-foreground">Mis reservas</p>
+          <p className="text-sm font-medium text-[#8a6240]">Mis reservas</p>
           <h1 className="font-display text-3xl font-semibold tracking-[-0.04em]">Hola, {session.user.name}</h1>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -119,7 +120,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
       </div>
 
       {created === "1" ? (
-        <section className="relative overflow-hidden rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-800">
+        <section className="relative overflow-hidden rounded-2xl border border-emerald-200 bg-emerald-50/90 p-5 text-emerald-800 shadow-sm">
           <CalendarGrid className="opacity-35" />
           <h2 className="relative font-semibold">Reserva confirmada</h2>
           <p className="relative mt-1 text-sm">Tu horario quedo reservado. Puedes revisarlo o cancelarlo desde aqui.</p>
@@ -130,6 +131,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
         <EmptyState
           actionHref="/businesses"
           actionLabel="Buscar negocios"
+          className="border-[#e6d8c5] bg-[#fffcf6]"
           description="Explora negocios locales, elige un servicio y confirma un horario disponible para crear tu primera reserva."
           eyebrow="Agenda personal"
           marker="0"
@@ -146,7 +148,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
               <EmptyState
                 actionHref="/businesses"
                 actionLabel="Reservar un horario"
-                className="p-5"
+                className="border-[#e6d8c5] bg-[#fffcf6] p-5"
                 description="No hay horarios pendientes o confirmados. Reserva un servicio para verlo en esta seccion."
                 eyebrow="Proximas reservas"
                 marker="0"
@@ -168,7 +170,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
             </div>
             {historyBookings.length === 0 ? (
               <EmptyState
-                className="p-5"
+                className="border-[#e6d8c5] bg-[#fffcf6] p-5"
                 description="Cuando completes o canceles una reserva, quedara registrada aqui para referencia futura."
                 eyebrow="Historial"
                 marker="0"
@@ -184,6 +186,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
           </section>
         </div>
       )}
+      </div>
     </main>
   )
 }

@@ -16,8 +16,9 @@ export default async function DashboardBusinessesPage() {
   const activeBusinesses = businesses.filter((business) => business.status === "ACTIVE").length
 
   return (
-    <main className="mx-auto flex min-h-svh w-full max-w-6xl flex-col gap-8 px-6 py-10">
-      <section className="relative overflow-hidden rounded-[2rem] border bg-[#111827] p-6 text-white shadow-sm md:p-8">
+    <main className="min-h-svh bg-[radial-gradient(circle_at_top_right,#fde68a55,transparent_28%),linear-gradient(180deg,#f8fafc,#e2e8f0)] px-6 py-10 text-slate-950">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
+      <section className="relative overflow-hidden rounded-[2rem] border border-slate-800 bg-[#111827] p-6 text-white shadow-sm md:p-8">
         <CalendarGrid className="opacity-20" />
         <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -52,6 +53,7 @@ export default async function DashboardBusinessesPage() {
         <EmptyState
           actionHref="/dashboard/businesses/new"
           actionLabel="Crear mi primer negocio"
+          className="border-slate-200 bg-white"
           description="Crea un negocio para configurar servicios, recursos, disponibilidad semanal y comenzar a recibir reservas."
           eyebrow="Mis negocios"
           marker="0"
@@ -60,7 +62,7 @@ export default async function DashboardBusinessesPage() {
       ) : (
         <section className="grid gap-4">
           {businesses.map((business) => (
-            <TicketCard key={business.id} contentClassName="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+            <TicketCard className="border-slate-200 bg-white" key={business.id} contentClassName="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
                 <div className="space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
                     <h2 className="font-display text-xl font-semibold tracking-[-0.025em]">{business.name}</h2>
@@ -89,6 +91,7 @@ export default async function DashboardBusinessesPage() {
           ))}
         </section>
       )}
+      </div>
     </main>
   )
 }

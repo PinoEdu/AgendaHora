@@ -56,8 +56,9 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
   const closedBookings = bookings.length - pendingBookings - confirmedBookings
 
   return (
-    <main className="mx-auto flex min-h-svh w-full max-w-6xl flex-col gap-8 px-6 py-10">
-      <section className="relative overflow-hidden rounded-[2rem] border bg-[#111827] p-6 text-white shadow-sm md:p-8">
+    <main className="min-h-svh bg-[radial-gradient(circle_at_top_right,#fde68a55,transparent_28%),linear-gradient(180deg,#f8fafc,#e2e8f0)] px-6 py-10 text-slate-950">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
+      <section className="relative overflow-hidden rounded-[2rem] border border-slate-800 bg-[#111827] p-6 text-white shadow-sm md:p-8">
         <CalendarGrid className="opacity-20" />
         <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -92,6 +93,7 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
         <EmptyState
           actionHref={`/businesses/${business.slug}`}
           actionLabel="Ver perfil publico"
+          className="border-slate-200 bg-white"
           description="Cuando un cliente reserve online, aparecera aqui con hora, servicio, recurso y acciones operativas."
           eyebrow="Agenda operativa"
           marker="0"
@@ -104,7 +106,7 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
             const endsAtTime = formatUtcTimeInTimezone(booking.endsAt, booking.business.timezone)
 
             return (
-              <TicketCard key={booking.id} contentClassName="grid gap-5 lg:grid-cols-[8rem_1fr_auto] lg:items-center">
+              <TicketCard className="border-slate-200 bg-white" key={booking.id} contentClassName="grid gap-5 lg:grid-cols-[8rem_1fr_auto] lg:items-center">
                 <div className="rounded-2xl bg-[#111827] p-4 text-white">
                   <p className="text-xs uppercase tracking-[0.18em] text-amber-200">Hora</p>
                   <p className="font-display mt-2 text-3xl font-semibold leading-none tracking-tight">{startsAtTime}</p>
@@ -170,6 +172,7 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
           })}
         </section>
       )}
+      </div>
     </main>
   )
 }

@@ -64,8 +64,9 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
   ]
 
   return (
-    <main className="mx-auto flex min-h-svh w-full max-w-6xl flex-col gap-8 px-6 py-10">
-      <section className="relative overflow-hidden rounded-[2rem] border bg-[#111827] p-6 text-white shadow-sm md:p-8">
+    <main className="min-h-svh bg-[radial-gradient(circle_at_top_right,#fde68a55,transparent_28%),linear-gradient(180deg,#f8fafc,#e2e8f0)] px-6 py-10 text-slate-950">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
+      <section className="relative overflow-hidden rounded-[2rem] border border-slate-800 bg-[#111827] p-6 text-white shadow-sm md:p-8">
         <CalendarGrid className="opacity-20" />
         <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -105,7 +106,7 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-card p-6 shadow-sm">
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Informacion publica</h2>
         <dl className="mt-4 grid gap-4 text-sm md:grid-cols-2">
           <div>
@@ -140,7 +141,7 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {managementSections.map((section) => (
-          <TicketCard key={section.label} contentClassName="space-y-4">
+          <TicketCard className="border-slate-200 bg-white" key={section.label} contentClassName="space-y-4">
             <div className="flex items-start justify-between gap-4">
               <h3 className="font-semibold">{section.label}</h3>
               <span className="rounded-full border bg-background px-2.5 py-1 text-xs font-medium text-muted-foreground">
@@ -158,6 +159,7 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
           </TicketCard>
         ))}
       </section>
+      </div>
     </main>
   )
 }

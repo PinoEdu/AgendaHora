@@ -20,8 +20,9 @@ export default async function DashboardPage() {
   const activeBusinesses = businesses.filter((business) => business.status === "ACTIVE").length
 
   return (
-    <main className="mx-auto flex min-h-svh w-full max-w-6xl flex-col gap-8 px-6 py-10">
-      <section className="relative overflow-hidden rounded-[2rem] border bg-[#111827] p-6 text-white shadow-sm md:p-8">
+    <main className="min-h-svh bg-[radial-gradient(circle_at_top_right,#fde68a55,transparent_28%),linear-gradient(180deg,#f8fafc,#e2e8f0)] px-6 py-10 text-slate-950">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
+      <section className="relative overflow-hidden rounded-[2rem] border border-slate-800 bg-[#111827] p-6 text-white shadow-sm md:p-8">
         <CalendarGrid className="opacity-20" />
         <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-3">
@@ -58,17 +59,17 @@ export default async function DashboardPage() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">
-        <TicketCard>
+        <TicketCard className="border-slate-200 bg-white">
           <p className="text-sm text-muted-foreground">Recursos configurados</p>
           <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{totalResources}</p>
           <p className="mt-2 text-xs text-muted-foreground">Profesionales, espacios o equipos disponibles.</p>
         </TicketCard>
-        <TicketCard>
+        <TicketCard className="border-slate-200 bg-white">
           <p className="text-sm text-muted-foreground">Reservas recibidas</p>
           <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{totalBookings}</p>
           <p className="mt-2 text-xs text-muted-foreground">Historial operativo de todos tus negocios.</p>
         </TicketCard>
-        <TicketCard>
+        <TicketCard className="border-slate-200 bg-white">
           <p className="text-sm text-muted-foreground">Siguiente accion</p>
           <p className="font-display mt-2 text-xl font-semibold tracking-[-0.025em]">Mantener agenda al dia</p>
           <Button asChild className="mt-4" size="sm" variant="outline">
@@ -81,6 +82,7 @@ export default async function DashboardPage() {
         <EmptyState
           actionHref="/dashboard/businesses/new"
           actionLabel="Crear negocio"
+          className="border-slate-200 bg-white"
           description="El negocio partira como borrador. Despues agrega servicios, recursos y disponibilidad para publicarlo con reservas online."
           eyebrow="Operacion inicial"
           marker="0"
@@ -94,9 +96,9 @@ export default async function DashboardPage() {
               <Link href="/dashboard/businesses">Ver todos</Link>
             </Button>
           </div>
-          <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2">
             {businesses.slice(0, 4).map((business) => (
-              <TicketCard key={business.id} contentClassName="space-y-5">
+              <TicketCard className="border-slate-200 bg-white" key={business.id} contentClassName="space-y-5">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h3 className="text-lg font-semibold">{business.name}</h3>
@@ -121,6 +123,7 @@ export default async function DashboardPage() {
           </div>
         </section>
       )}
+      </div>
     </main>
   )
 }
