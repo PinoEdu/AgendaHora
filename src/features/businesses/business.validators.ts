@@ -14,7 +14,7 @@ export const createBusinessSchema = z.object({
   phone: optionalText,
   email: z.preprocess(
     (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
-    z.string().trim().email("Ingresa un email valido.").optional(),
+    z.string().trim().email("Ingresa un correo válido.").optional(),
   ),
   address: optionalText,
   city: optionalText,

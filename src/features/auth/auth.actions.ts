@@ -29,7 +29,7 @@ export async function registerAction(
   })
 
   if (!parsedInput.success) {
-    return { error: parsedInput.error.issues[0]?.message ?? "Datos invalidos." }
+    return { error: parsedInput.error.issues[0]?.message ?? "Datos inválidos." }
   }
 
   const result = await registerUser(parsedInput.data)
@@ -59,13 +59,13 @@ export async function loginAction(
   })
 
   if (!parsedInput.success) {
-    return { error: parsedInput.error.issues[0]?.message ?? "Datos invalidos." }
+    return { error: parsedInput.error.issues[0]?.message ?? "Datos inválidos." }
   }
 
   const user = await validateUserCredentials(parsedInput.data)
 
   if (!user) {
-    return { error: "Email o password incorrectos." }
+    return { error: "Correo o contraseña incorrectos." }
   }
 
   try {
@@ -78,13 +78,13 @@ export async function loginAction(
     })
   } catch (error) {
     if (error instanceof AuthError) {
-      return { error: "Email o password incorrectos." }
+      return { error: "Correo o contraseña incorrectos." }
     }
 
     throw error
   }
 
-  return { success: "Sesion iniciada." }
+  return { success: "Sesión iniciada." }
 }
 
 export async function logoutAction() {

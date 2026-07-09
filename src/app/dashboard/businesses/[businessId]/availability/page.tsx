@@ -68,7 +68,7 @@ export default async function AvailabilityPage({ params }: AvailabilityPageProps
         <h2 className="text-xl font-semibold">Horarios configurados</h2>
         {rules.length === 0 ? (
           <EmptyState
-            description="Agrega reglas semanales para que el motor genere slots disponibles en el flujo publico de reserva."
+            description="Agrega reglas semanales para que el motor genere slots disponibles en el flujo público de reserva."
             eyebrow="Disponibilidad"
             marker="0"
             title="Todavia no hay horarios"

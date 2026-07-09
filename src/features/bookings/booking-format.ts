@@ -14,7 +14,7 @@ const bookingStatusMeta: Record<string, BookingStatusMeta> = {
     badgeClassName: "border-amber-200 bg-amber-50 text-amber-900",
     businessDescription: "Requiere revision del negocio y bloquea la agenda.",
     businessLabel: "Por revisar",
-    customerDescription: "El negocio aun debe confirmar este horario.",
+    customerDescription: "El negocio aún debe confirmar este horario.",
     customerLabel: "Pendiente",
     dotClassName: "bg-amber-500",
   },
@@ -36,7 +36,7 @@ const bookingStatusMeta: Record<string, BookingStatusMeta> = {
   },
   CANCELLED_BY_BUSINESS: {
     badgeClassName: "border-stone-200 bg-stone-50 text-stone-700",
-    businessDescription: "Fue cancelada desde la operacion del negocio.",
+    businessDescription: "Fue cancelada desde la operación del negocio.",
     businessLabel: "Cancelada por negocio",
     customerDescription: "El negocio cancelo esta reserva.",
     customerLabel: "Cancelada por negocio",

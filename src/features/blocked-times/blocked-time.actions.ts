@@ -56,7 +56,7 @@ export async function createBlockedTimeAction(
   const parsedInput = parseBlockedTimeFormData(formData)
 
   if (!parsedInput.success) {
-    return { error: parsedInput.error.issues[0]?.message ?? "Datos invalidos." }
+    return { error: parsedInput.error.issues[0]?.message ?? "Datos inválidos." }
   }
 
   if (parsedInput.data.resourceId) {

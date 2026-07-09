@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
   if (!parsedQuery.success) {
     return Response.json(
       {
-        error: parsedQuery.error.issues[0]?.message ?? "Parametros invalidos.",
+        error: parsedQuery.error.issues[0]?.message ?? "Parámetros inválidos.",
         code: "INVALID_QUERY",
       },
       { status: 400 },

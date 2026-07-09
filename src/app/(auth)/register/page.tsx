@@ -22,7 +22,7 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
           </Link>
           <h1 className="text-3xl font-semibold tracking-tight">Crea tu cuenta</h1>
           <p className="text-sm text-muted-foreground">
-            Parte como cliente o publica tu negocio para recibir reservas.
+            Crea una cuenta para reservar servicios o administrar tu negocio desde AgendaHora.
           </p>
         </div>
         <RegisterForm callbackUrl={safeCallbackUrl} />

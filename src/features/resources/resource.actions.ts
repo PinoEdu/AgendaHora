@@ -78,7 +78,7 @@ export async function createResourceAction(
   const parsedInput = parseResourceFormData(formData)
 
   if (!parsedInput.success) {
-    return { error: parsedInput.error.issues[0]?.message ?? "Datos invalidos." }
+    return { error: parsedInput.error.issues[0]?.message ?? "Datos inválidos." }
   }
 
   const serviceValidation = await validateServicesBelongToBusiness(
@@ -121,7 +121,7 @@ export async function updateResourceAction(
   const parsedInput = parseResourceFormData(formData)
 
   if (!parsedInput.success) {
-    return { error: parsedInput.error.issues[0]?.message ?? "Datos invalidos." }
+    return { error: parsedInput.error.issues[0]?.message ?? "Datos inválidos." }
   }
 
   const resource = await prisma.bookableResource.findFirst({

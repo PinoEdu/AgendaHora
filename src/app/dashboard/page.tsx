@@ -26,7 +26,7 @@ export default async function DashboardPage() {
         <CalendarGrid className="opacity-20" />
         <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-3">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Centro de operacion</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Centro de operación</p>
             <h1 className="font-display text-4xl font-semibold tracking-[-0.045em]">Hola, {session.user.name}</h1>
             <p className="max-w-2xl text-sm leading-6 text-slate-300">
               Controla publicaciones, servicios, recursos y reservas desde un solo tablero.
@@ -84,7 +84,7 @@ export default async function DashboardPage() {
           actionLabel="Crear negocio"
           className="border-slate-200 bg-white"
           description="El negocio partira como borrador. Despues agrega servicios, recursos y disponibilidad para publicarlo con reservas online."
-          eyebrow="Operacion inicial"
+          eyebrow="Operación inicial"
           marker="0"
           title="Crea tu primer negocio"
         />
@@ -116,7 +116,7 @@ export default async function DashboardPage() {
                   <span className="rounded-xl border bg-background px-3 py-2">{business._count.bookings} reservas</span>
                 </div>
                 <Button asChild className="w-full" variant="outline">
-                  <Link href={`/dashboard/businesses/${business.id}`}>Abrir operacion</Link>
+                  <Link href={`/dashboard/businesses/${business.id}`}>Abrir operación</Link>
                 </Button>
               </TicketCard>
             ))}

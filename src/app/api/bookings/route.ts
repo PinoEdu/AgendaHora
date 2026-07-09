@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
 
   if (!session?.user) {
     return Response.json(
-      { error: "Debes iniciar sesion para crear una reserva.", code: "UNAUTHORIZED" },
+      { error: "Debes iniciar sesión para crear una reserva.", code: "UNAUTHORIZED" },
       { status: 401 },
     )
   }
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
   if (!parsedBody.success) {
     return Response.json(
       {
-        error: parsedBody.error.issues[0]?.message ?? "Datos invalidos.",
+        error: parsedBody.error.issues[0]?.message ?? "Datos inválidos.",
         code: "INVALID_BODY",
       },
       { status: 400 },

@@ -57,7 +57,7 @@ export async function createAvailabilityRuleAction(
   const parsedInput = parseAvailabilityFormData(formData)
 
   if (!parsedInput.success) {
-    return { error: parsedInput.error.issues[0]?.message ?? "Datos invalidos." }
+    return { error: parsedInput.error.issues[0]?.message ?? "Datos inválidos." }
   }
 
   const resource = await prisma.bookableResource.findFirst({

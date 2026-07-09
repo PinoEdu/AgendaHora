@@ -10,8 +10,8 @@ export const serviceSchema = z.object({
   description: optionalText,
   durationMinutes: z.coerce
     .number<number>()
-    .int("La duracion debe ser un numero entero.")
-    .positive("La duracion debe ser mayor a 0."),
+    .int("La duración debe ser un número entero.")
+    .positive("La duración debe ser mayor a 0."),
   price: z.coerce.number<number>().min(0, "El precio debe ser mayor o igual a 0."),
   isActive: z.coerce.boolean<boolean>().default(true),
 })

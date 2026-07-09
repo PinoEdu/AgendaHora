@@ -10,7 +10,7 @@ export function LogoutButton({ className }: LogoutButtonProps) {
   return (
     <form action={logoutAction}>
       <Button className={className} type="submit" variant="outline">
-        Cerrar sesion
+        Cerrar sesión
       </Button>
     </form>
   )

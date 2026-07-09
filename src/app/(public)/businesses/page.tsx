@@ -54,8 +54,8 @@ export default async function BusinessesPage() {
             actionHref="/register"
             actionLabel="Publicar mi negocio"
             className="rounded-[2rem] border-[#e6d8c5] bg-[#fffcf6]"
-            description="Cuando un dueno active su negocio, aparecera en este catalogo publico con servicios, recursos y horarios disponibles."
-            eyebrow="Catalogo publico"
+            description="Cuando un dueño active su negocio, aparecerá en este catálogo público con servicios, recursos y horarios disponibles."
+            eyebrow="Catálogo público"
             marker="0"
             title="Aun no hay negocios activos"
           />

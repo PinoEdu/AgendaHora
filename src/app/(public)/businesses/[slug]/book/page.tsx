@@ -73,7 +73,7 @@ export default async function PublicBookingPage({ params }: PublicBookingPagePro
             marker="--:--"
             secondaryHref="/businesses"
             secondaryLabel="Explorar otros negocios"
-            title="Este negocio aun no acepta reservas"
+            title="Este negocio aún no acepta reservas"
           />
         ) : (
           <PublicBookingFlow

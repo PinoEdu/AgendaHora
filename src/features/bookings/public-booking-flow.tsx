@@ -61,7 +61,7 @@ const bookingErrorMessages: Record<string, string> = {
   RESOURCE_NOT_ACTIVE: "Este recurso ya no esta disponible para reservas.",
   RESOURCE_SERVICE_MISMATCH: "Este recurso no puede prestar el servicio seleccionado.",
   SERVICE_NOT_ACTIVE: "Este servicio ya no esta disponible para reservas.",
-  UNAUTHORIZED: "Debes iniciar sesion para confirmar la reserva.",
+  UNAUTHORIZED: "Debes iniciar sesión para confirmar la reserva.",
 }
 
 function getTodayDateValue() {
@@ -229,7 +229,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
 
   async function handleSubmit() {
     if (!effectiveResource) {
-      setError("Selecciona con quien o donde quieres reservar.")
+      setError("Selecciona con quién o dónde quieres reservar.")
       return
     }
 
@@ -340,7 +340,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
 
         <div className="relative space-y-3">
           <div>
-            <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Elige con quien o donde</h2>
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Elige con quién o dónde</h2>
             <p className="text-sm text-muted-foreground">
               {compatibleResources.length === 1
                 ? "Asignamos automaticamente el unico recurso disponible para este servicio."
@@ -354,7 +354,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
               description="El negocio debe asociar este servicio a un profesional, sala, cancha o recurso activo antes de recibir reservas."
               eyebrow="Servicio sin recurso"
               marker="0"
-              title="Este servicio aun no tiene recursos disponibles"
+              title="Este servicio aún no tiene recursos disponibles"
             />
           ) : needsResourceSelection ? (
             <div className="grid gap-3 md:grid-cols-2">
@@ -426,7 +426,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
           {!isLoadingSlots && !effectiveResource && compatibleResources.length > 0 ? (
             <EmptyState
               className="rounded-xl border-[#e6d8c5] bg-[#fff8eb]/90 p-4 text-left"
-              description="Selecciona quien o donde se prestara el servicio para cargar horarios disponibles."
+              description="Selecciona quién o dónde se prestará el servicio para cargar horarios disponibles."
               eyebrow="Falta recurso"
               marker="--:--"
               title="Elige un recurso para ver horarios"

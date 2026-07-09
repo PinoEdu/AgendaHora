@@ -83,9 +83,9 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
       {bookings.length === 0 ? (
         <EmptyState
           actionHref={`/businesses/${business.slug}`}
-          actionLabel="Ver perfil publico"
+          actionLabel="Ver perfil público"
           className="border-slate-200 bg-white"
-          description="Cuando un cliente reserve online, aparecera aqui con hora, servicio, recurso y acciones operativas."
+          description="Cuando un cliente reserve online, aparecerá aquí con hora, servicio, recurso y acciones operativas."
           eyebrow="Agenda operativa"
           marker="0"
           title="Aun no hay reservas"

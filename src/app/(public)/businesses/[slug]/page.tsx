@@ -108,7 +108,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
                 </div>
               ) : (
                 <p className="rounded-2xl border border-[#e6d8c5] bg-[#fff8eb] px-4 py-3 text-sm text-[#655b4f]">
-                  Este negocio aun esta configurando sus reservas.
+                  Este negocio aún está configurando sus reservas.
                 </p>
               )}
             </div>
@@ -179,7 +179,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
               description="El negocio debe publicar al menos un servicio activo para que los clientes puedan iniciar una reserva."
               eyebrow="Servicios"
               marker="0"
-              title="Este negocio aun no tiene servicios activos"
+              title="Este negocio aún no tiene servicios activos"
             />
           ) : (
             <div className="grid gap-4">
@@ -233,10 +233,10 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
           {business.resources.length === 0 ? (
             <EmptyState
               className="rounded-[1.75rem] border-[#e6d8c5] bg-[#fffcf6]"
-              description="Falta configurar quien o donde se prestan los servicios. Sin recursos activos no se pueden mostrar horarios."
+              description="Falta configurar quién o dónde se prestan los servicios. Sin recursos activos no se pueden mostrar horarios."
               eyebrow="Equipo"
               marker="0"
-              title="Este negocio aun no tiene recursos activos"
+              title="Este negocio aún no tiene recursos activos"
             />
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

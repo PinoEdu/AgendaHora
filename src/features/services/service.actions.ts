@@ -56,7 +56,7 @@ export async function createServiceAction(
   const parsedInput = parseServiceFormData(formData)
 
   if (!parsedInput.success) {
-    return { error: parsedInput.error.issues[0]?.message ?? "Datos invalidos." }
+    return { error: parsedInput.error.issues[0]?.message ?? "Datos inválidos." }
   }
 
   await prisma.service.create({
@@ -88,7 +88,7 @@ export async function updateServiceAction(
   const parsedInput = parseServiceFormData(formData)
 
   if (!parsedInput.success) {
-    return { error: parsedInput.error.issues[0]?.message ?? "Datos invalidos." }
+    return { error: parsedInput.error.issues[0]?.message ?? "Datos inválidos." }
   }
 
   const service = await prisma.service.findFirst({

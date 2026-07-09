@@ -6,12 +6,12 @@ import { CalendarGrid } from "@/components/ui/calendar-grid"
 import { cn } from "@/lib/utils"
 
 const services = [
-  { id: "haircut", name: "Corte clasico", duration: "30 min", price: "$12.000" },
+  { id: "haircut", name: "Corte clásico", duration: "30 min", price: "$12.000" },
   { id: "combo", name: "Corte + barba", duration: "60 min", price: "$19.000" },
 ]
 
 const professionals = [
-  { id: "nico", name: "Nicolas", specialty: "Cortes clasicos" },
+  { id: "nico", name: "Nicolás", specialty: "Cortes clásicos" },
   { id: "vale", name: "Valentina", specialty: "Barba y perfilado" },
 ]
 

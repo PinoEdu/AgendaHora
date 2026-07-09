@@ -112,7 +112,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
         <section className="relative overflow-hidden rounded-2xl border border-emerald-200 bg-emerald-50/90 p-5 text-emerald-800 shadow-sm">
           <CalendarGrid className="opacity-35" />
           <h2 className="relative font-semibold">Reserva confirmada</h2>
-          <p className="relative mt-1 text-sm">Tu horario quedo reservado. Puedes revisarlo o cancelarlo desde aqui.</p>
+          <p className="relative mt-1 text-sm">Tu horario quedó reservado. Puedes revisarlo o cancelarlo desde aquí.</p>
         </section>
       ) : null}
 
@@ -141,7 +141,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
                 description="No hay horarios pendientes o confirmados. Reserva un servicio para verlo en esta seccion."
                 eyebrow="Proximas reservas"
                 marker="0"
-                title="No tienes proximas reservas activas"
+                title="No tienes próximas reservas activas"
               />
             ) : (
               <div className="grid gap-4">
@@ -160,7 +160,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
             {historyBookings.length === 0 ? (
               <EmptyState
                 className="border-[#e6d8c5] bg-[#fffcf6] p-5"
-                description="Cuando completes o canceles una reserva, quedara registrada aqui para referencia futura."
+                description="Cuando completes o canceles una reserva, quedará registrada aquí para referencia futura."
                 eyebrow="Historial"
                 marker="0"
                 title="Aun no hay reservas en el historial"

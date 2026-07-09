@@ -42,7 +42,7 @@ export async function createBusinessAction(
   })
 
   if (!parsedInput.success) {
-    return { error: parsedInput.error.issues[0]?.message ?? "Datos invalidos." }
+    return { error: parsedInput.error.issues[0]?.message ?? "Datos inválidos." }
   }
 
   const category = await prisma.businessCategory.findUnique({
@@ -87,7 +87,7 @@ export async function updateBusinessAction(
   })
 
   if (!parsedInput.success) {
-    return { error: parsedInput.error.issues[0]?.message ?? "Datos invalidos." }
+    return { error: parsedInput.error.issues[0]?.message ?? "Datos inválidos." }
   }
 
   const business = await prisma.business.findFirst({

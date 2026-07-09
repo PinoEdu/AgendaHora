@@ -70,7 +70,7 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
         <CalendarGrid className="opacity-20" />
         <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Operacion del negocio</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Operación del negocio</p>
             <h1 className="font-display mt-2 text-4xl font-semibold tracking-[-0.045em]">{business.name}</h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
               Mantiene servicios, recursos, disponibilidad y reservas listos para operar online.

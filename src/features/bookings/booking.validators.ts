@@ -16,7 +16,7 @@ export const createBookingSchema = z.object({
   customerName: optionalText,
   customerEmail: z.preprocess(
     (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
-    z.string().trim().email("Ingresa un email valido.").optional(),
+    z.string().trim().email("Ingresa un correo válido.").optional(),
   ),
   customerPhone: optionalText,
   notes: optionalText,

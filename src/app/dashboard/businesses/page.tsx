@@ -22,10 +22,10 @@ export default async function DashboardBusinessesPage() {
         <CalendarGrid className="opacity-20" />
         <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Operacion</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Operación</p>
             <h1 className="font-display mt-2 text-4xl font-semibold tracking-[-0.045em]">Mis negocios</h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
-              Revisa que locales estan publicados y que configuracion falta para recibir reservas.
+              Revisa qué locales están publicados y qué configuración falta para recibir reservas.
             </p>
           </div>
           <Button asChild className="bg-amber-300 text-slate-950 hover:bg-amber-200">

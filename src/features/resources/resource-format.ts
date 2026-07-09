@@ -5,7 +5,7 @@ export function formatResourceType(type: string) {
     ROOM: "Sala",
     CHAIR: "Silla",
     BOX: "Box",
-    MACHINE: "Maquina",
+    MACHINE: "Máquina",
     SPACE: "Espacio",
     OTHER: "Otro",
   }

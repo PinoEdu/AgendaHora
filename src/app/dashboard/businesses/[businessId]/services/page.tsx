@@ -48,7 +48,7 @@ export default async function ServicesPage({ params }: ServicesPageProps) {
         <EmptyState
           actionHref={`/dashboard/businesses/${business.id}/services/new`}
           actionLabel="Crear servicio"
-          description="Agrega servicios reservables como corte de pelo, consulta dental o arriendo de cancha. Luego asocialos a recursos para habilitar horarios."
+          description="Agrega servicios reservables como corte de pelo, consulta dental o arriendo de cancha. Luego asócialos a recursos para habilitar horarios."
           eyebrow="Servicios"
           marker="0"
           title="Todavia no hay servicios"

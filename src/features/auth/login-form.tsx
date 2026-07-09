@@ -26,7 +26,7 @@ export function LoginForm({ callbackUrl, registered = false }: LoginFormProps) {
 
       {registered ? (
         <p className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
-          Cuenta creada. Inicia sesion para continuar.
+          Cuenta creada. Inicia sesión para continuar.
         </p>
       ) : null}
 
@@ -38,11 +38,12 @@ export function LoginForm({ callbackUrl, registered = false }: LoginFormProps) {
 
       <div className="space-y-2">
         <label className="text-sm font-medium" htmlFor="email">
-          Email
+          Correo
         </label>
         <input
           id="email"
           name="email"
+          placeholder="correo@ejemplo.com"
           type="email"
           autoComplete="email"
           required
@@ -52,11 +53,12 @@ export function LoginForm({ callbackUrl, registered = false }: LoginFormProps) {
 
       <div className="space-y-2">
         <label className="text-sm font-medium" htmlFor="password">
-          Password
+          Contraseña
         </label>
         <input
           id="password"
           name="password"
+          placeholder="Tu contraseña"
           type="password"
           autoComplete="current-password"
           required
@@ -65,13 +67,13 @@ export function LoginForm({ callbackUrl, registered = false }: LoginFormProps) {
       </div>
 
       <Button className="w-full" disabled={isPending} size="lg" type="submit">
-        {isPending ? "Ingresando..." : "Ingresar"}
+        {isPending ? "Iniciando sesión..." : "Iniciar sesión"}
       </Button>
 
       <p className="text-center text-sm text-muted-foreground">
-        No tienes cuenta?{" "}
+        ¿No tienes cuenta?{" "}
         <Link className="font-medium text-foreground underline-offset-4 hover:underline" href={registerHref}>
-          Registrate
+          Crear cuenta
         </Link>
       </p>
     </form>

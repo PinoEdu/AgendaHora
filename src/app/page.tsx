@@ -33,7 +33,7 @@ export default async function Home() {
               </>
             ) : (
               <Button asChild className="bg-[#c85a2e] text-white hover:bg-[#a94722]">
-                <Link href="/register">Crear cuenta</Link>
+                <Link href="/login">Iniciar sesión</Link>
               </Button>
             )}
           </nav>
@@ -49,7 +49,7 @@ export default async function Home() {
                 Encuentra un horario, no solo un negocio.
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-[#655b4f]">
-                AgendaHora conecta clientes con barberias, canchas, dentistas y servicios locales que muestran disponibilidad real antes de confirmar una reserva.
+                AgendaHora conecta clientes con barberías, canchas, dentistas y servicios locales que muestran disponibilidad real antes de confirmar una reserva.
               </p>
             </div>
 
@@ -88,10 +88,10 @@ export default async function Home() {
         <section className="rounded-[2rem] border border-[#e6d8c5] bg-[#1e1b16] p-6 text-[#fffcf6] md:p-8">
           <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
             <div>
-              <p className="text-sm uppercase tracking-[0.22em] text-[#f2c66d]">Para duenos</p>
+              <p className="text-sm uppercase tracking-[0.22em] text-[#f2c66d]">Para dueños</p>
               <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.04em]">Publica servicios, recursos y disponibilidad.</h2>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-[#d8cfc1]">
-                Configura quien atiende, que servicios presta y que horarios estan disponibles para evitar reservas duplicadas.
+                Configura quién atiende, qué servicios presta y qué horarios están disponibles para evitar reservas duplicadas.
               </p>
             </div>
             <Button asChild className="bg-[#f2c66d] text-[#1e1b16] hover:bg-[#e7b84d]" size="lg">
