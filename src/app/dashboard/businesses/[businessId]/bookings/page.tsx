@@ -14,7 +14,7 @@ import {
   markBookingCompletedAction,
   markBookingNoShowAction,
 } from "@/features/bookings/booking.actions"
-import { formatBookingStatus } from "@/features/bookings/booking-format"
+import { BookingStatusBadge } from "@/features/bookings/booking-status-badge"
 import { getBookingsForBusinessOwner } from "@/features/bookings/booking.queries"
 import {
   canBusinessCancelBooking,
@@ -28,15 +28,6 @@ type BusinessBookingsPageProps = {
   params: Promise<{
     businessId: string
   }>
-}
-
-const bookingStatusClasses: Record<BookingStatus, string> = {
-  [BookingStatus.PENDING]: "border-amber-200 bg-amber-50 text-amber-800",
-  [BookingStatus.CONFIRMED]: "border-emerald-200 bg-emerald-50 text-emerald-800",
-  [BookingStatus.CANCELLED_BY_CUSTOMER]: "border-stone-200 bg-stone-50 text-stone-600",
-  [BookingStatus.CANCELLED_BY_BUSINESS]: "border-stone-200 bg-stone-50 text-stone-600",
-  [BookingStatus.COMPLETED]: "border-sky-200 bg-sky-50 text-sky-800",
-  [BookingStatus.NO_SHOW]: "border-red-200 bg-red-50 text-red-800",
 }
 
 export default async function BusinessBookingsPage({ params }: BusinessBookingsPageProps) {
@@ -116,9 +107,7 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
                 <div className="space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
                     <h2 className="font-display text-xl font-semibold tracking-[-0.025em]">{booking.service.name}</h2>
-                    <span className={`rounded-full border px-2.5 py-1 text-xs font-medium ${bookingStatusClasses[booking.status]}`}>
-                      {formatBookingStatus(booking.status)}
-                    </span>
+                    <BookingStatusBadge showDescription status={booking.status} />
                   </div>
                   <p className="text-sm text-muted-foreground">
                     Cliente: {booking.customer.name || booking.customerName || "Sin nombre"} ·{" "}

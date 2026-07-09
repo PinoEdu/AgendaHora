@@ -8,7 +8,7 @@ import { EmptyState } from "@/components/ui/empty-state"
 import { TicketCard } from "@/components/ui/ticket-card"
 import { LogoutButton } from "@/features/auth/logout-button"
 import { cancelBookingByCustomerAction } from "@/features/bookings/booking.actions"
-import { formatBookingStatus } from "@/features/bookings/booking-format"
+import { BookingStatusBadge } from "@/features/bookings/booking-status-badge"
 import { getBookingsForCustomer } from "@/features/bookings/booking.queries"
 import { canCustomerCancelBooking } from "@/features/bookings/booking-rules"
 import { BookingStatus } from "@/generated/prisma/enums"
@@ -23,15 +23,6 @@ type MyBookingsPageProps = {
 type CustomerBooking = Awaited<ReturnType<typeof getBookingsForCustomer>>[number]
 
 const upcomingStatuses = new Set<BookingStatus>([BookingStatus.PENDING, BookingStatus.CONFIRMED])
-
-const bookingStatusClasses: Record<BookingStatus, string> = {
-  [BookingStatus.PENDING]: "border-amber-200 bg-amber-50 text-amber-800",
-  [BookingStatus.CONFIRMED]: "border-emerald-200 bg-emerald-50 text-emerald-800",
-  [BookingStatus.CANCELLED_BY_CUSTOMER]: "border-stone-200 bg-stone-50 text-stone-600",
-  [BookingStatus.CANCELLED_BY_BUSINESS]: "border-stone-200 bg-stone-50 text-stone-600",
-  [BookingStatus.COMPLETED]: "border-sky-200 bg-sky-50 text-sky-800",
-  [BookingStatus.NO_SHOW]: "border-red-200 bg-red-50 text-red-800",
-}
 
 function CustomerBookingCard({ booking }: { booking: CustomerBooking }) {
   const startsAtTime = formatUtcTimeInTimezone(booking.startsAt, booking.business.timezone)
@@ -49,9 +40,7 @@ function CustomerBookingCard({ booking }: { booking: CustomerBooking }) {
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="font-display text-xl font-semibold tracking-[-0.025em]">{booking.business.name}</h3>
-            <span className={`rounded-full border px-2.5 py-1 text-xs font-medium ${bookingStatusClasses[booking.status]}`}>
-              {formatBookingStatus(booking.status)}
-            </span>
+            <BookingStatusBadge perspective="customer" showDescription status={booking.status} />
           </div>
           <p className="text-sm text-muted-foreground">
             {booking.service.name} con {booking.resource.name}
