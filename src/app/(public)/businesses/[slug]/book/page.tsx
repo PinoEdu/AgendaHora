@@ -51,7 +51,7 @@ export default async function PublicBookingPage({ params }: PublicBookingPagePro
                 <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#8a7058]">
                   {business.categoryName}
                 </p>
-                <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">Elige tu horario</h1>
+                <h1 className="font-display mt-2 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">Elige tu horario</h1>
                 <p className="mt-3 max-w-2xl text-[#655b4f]">
                   Reserva en {business.name}. Los horarios se muestran en {business.timezone} y se validan antes de confirmar.
                 </p>

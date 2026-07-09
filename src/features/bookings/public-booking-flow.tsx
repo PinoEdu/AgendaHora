@@ -309,7 +309,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
 
         <div className="relative space-y-3">
           <div>
-            <h2 className="text-xl font-semibold">Elige un servicio</h2>
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Elige un servicio</h2>
             <p className="text-sm text-muted-foreground">Selecciona que quieres reservar.</p>
           </div>
           <div className="grid gap-3 md:grid-cols-2">
@@ -340,7 +340,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
 
         <div className="relative space-y-3">
           <div>
-            <h2 className="text-xl font-semibold">Elige con quien o donde</h2>
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Elige con quien o donde</h2>
             <p className="text-sm text-muted-foreground">
               {compatibleResources.length === 1
                 ? "Asignamos automaticamente el unico recurso disponible para este servicio."
@@ -391,7 +391,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
 
         <div className="relative space-y-3">
           <div>
-            <h2 className="text-xl font-semibold">Fecha y horario</h2>
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Fecha y horario</h2>
             <p className="text-sm text-muted-foreground">Horarios en {business.timezone}.</p>
           </div>
           <div className="space-y-2">
@@ -477,7 +477,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a7058]">Comprobante</p>
-              <h2 className="mt-2 text-2xl font-semibold">{business.name}</h2>
+              <h2 className="font-display mt-2 text-2xl font-semibold tracking-[-0.035em]">{business.name}</h2>
             </div>
             <span
               className={cn(
@@ -491,7 +491,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
 
           <div className="mt-5 rounded-3xl bg-[#1e1b16] p-5 text-[#fffcf6]">
             <p className="text-xs uppercase tracking-[0.18em] text-[#f2c66d]">Horario elegido</p>
-            <p className="mt-2 text-4xl font-semibold leading-none">
+            <p className="font-display mt-2 text-4xl font-semibold leading-none tracking-tight">
               {selectedSlot ? selectedSlot.localStartTime : "--:--"}
             </p>
             <p className="mt-2 text-sm text-[#d8cfc1]">

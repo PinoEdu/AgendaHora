@@ -70,7 +70,7 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
         <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Operacion del negocio</p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight">{business.name}</h1>
+            <h1 className="font-display mt-2 text-4xl font-semibold tracking-[-0.045em]">{business.name}</h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
               Mantiene servicios, recursos, disponibilidad y reservas listos para operar online.
             </p>
@@ -88,25 +88,25 @@ export default async function BusinessAdminPage({ params }: BusinessAdminPagePro
         <div className="relative mt-6 grid gap-3 md:grid-cols-4">
           <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Estado</p>
-            <p className="mt-2 text-2xl font-semibold">{formatBusinessStatus(business.status)}</p>
+            <p className="font-display mt-2 text-2xl font-semibold tracking-tight">{formatBusinessStatus(business.status)}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Servicios</p>
-            <p className="mt-2 text-2xl font-semibold">{business._count.services}</p>
+            <p className="font-display mt-2 text-2xl font-semibold tracking-tight">{business._count.services}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Recursos</p>
-            <p className="mt-2 text-2xl font-semibold">{business._count.resources}</p>
+            <p className="font-display mt-2 text-2xl font-semibold tracking-tight">{business._count.resources}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Reservas</p>
-            <p className="mt-2 text-2xl font-semibold">{business._count.bookings}</p>
+            <p className="font-display mt-2 text-2xl font-semibold tracking-tight">{business._count.bookings}</p>
           </div>
         </div>
       </section>
 
       <section className="rounded-2xl border bg-card p-6 shadow-sm">
-        <h2 className="text-xl font-semibold">Informacion publica</h2>
+        <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Informacion publica</h2>
         <dl className="mt-4 grid gap-4 text-sm md:grid-cols-2">
           <div>
             <dt className="text-muted-foreground">Categoria</dt>

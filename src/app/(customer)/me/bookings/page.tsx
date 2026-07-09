@@ -41,14 +41,14 @@ function CustomerBookingCard({ booking }: { booking: CustomerBooking }) {
     <TicketCard className="bg-[#fffcf6]" contentClassName="grid gap-4 md:grid-cols-[8rem_1fr_auto] md:items-center">
       <div className="rounded-2xl bg-[#1e1b16] p-4 text-[#fffcf6]">
         <p className="text-xs uppercase tracking-[0.18em] text-[#f2c66d]">Hora</p>
-        <p className="mt-2 text-3xl font-semibold leading-none">{startsAtTime}</p>
+        <p className="font-display mt-2 text-3xl font-semibold leading-none tracking-tight">{startsAtTime}</p>
         <p className="mt-1 text-xs text-[#d8cfc1]">hasta {endsAtTime}</p>
       </div>
 
       <div className="space-y-2">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-xl font-semibold">{booking.business.name}</h3>
+            <h3 className="font-display text-xl font-semibold tracking-[-0.025em]">{booking.business.name}</h3>
             <span className={`rounded-full border px-2.5 py-1 text-xs font-medium ${bookingStatusClasses[booking.status]}`}>
               {formatBookingStatus(booking.status)}
             </span>
@@ -105,7 +105,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-muted-foreground">Mis reservas</p>
-          <h1 className="text-3xl font-semibold tracking-tight">Hola, {session.user.name}</h1>
+          <h1 className="font-display text-3xl font-semibold tracking-[-0.04em]">Hola, {session.user.name}</h1>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button asChild variant="outline">
@@ -139,7 +139,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
         <div className="space-y-8">
           <section className="space-y-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight">Proximas reservas</h2>
+              <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Proximas reservas</h2>
               <p className="text-sm text-muted-foreground">Horarios pendientes o confirmados.</p>
             </div>
             {upcomingBookings.length === 0 ? (
@@ -163,7 +163,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
 
           <section className="space-y-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight">Historial</h2>
+              <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Historial</h2>
               <p className="text-sm text-muted-foreground">Reservas pasadas, completadas o canceladas.</p>
             </div>
             {historyBookings.length === 0 ? (

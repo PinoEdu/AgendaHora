@@ -62,7 +62,7 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
         <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Agenda operativa</p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight">Reservas recibidas</h1>
+            <h1 className="font-display mt-2 text-4xl font-semibold tracking-[-0.045em]">Reservas recibidas</h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
               {business.name}. Revisa atenciones pendientes, confirma cierres y marca ausencias.
             </p>
@@ -75,15 +75,15 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
         <div className="relative mt-6 grid gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Pendientes</p>
-            <p className="mt-2 text-3xl font-semibold">{pendingBookings}</p>
+            <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{pendingBookings}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Confirmadas</p>
-            <p className="mt-2 text-3xl font-semibold">{confirmedBookings}</p>
+            <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{confirmedBookings}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Cerradas</p>
-            <p className="mt-2 text-3xl font-semibold">{closedBookings}</p>
+            <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{closedBookings}</p>
           </div>
         </div>
       </section>
@@ -107,13 +107,13 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
               <TicketCard key={booking.id} contentClassName="grid gap-5 lg:grid-cols-[8rem_1fr_auto] lg:items-center">
                 <div className="rounded-2xl bg-[#111827] p-4 text-white">
                   <p className="text-xs uppercase tracking-[0.18em] text-amber-200">Hora</p>
-                  <p className="mt-2 text-3xl font-semibold leading-none">{startsAtTime}</p>
+                  <p className="font-display mt-2 text-3xl font-semibold leading-none tracking-tight">{startsAtTime}</p>
                   <p className="mt-1 text-xs text-slate-300">hasta {endsAtTime}</p>
                 </div>
 
                 <div className="space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="text-xl font-semibold">{booking.service.name}</h2>
+                    <h2 className="font-display text-xl font-semibold tracking-[-0.025em]">{booking.service.name}</h2>
                     <span className={`rounded-full border px-2.5 py-1 text-xs font-medium ${bookingStatusClasses[booking.status]}`}>
                       {formatBookingStatus(booking.status)}
                     </span>

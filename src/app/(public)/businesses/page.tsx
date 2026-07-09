@@ -21,7 +21,7 @@ export default async function BusinessesPage() {
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#8a7058]">
                 Explorar
               </p>
-              <h1 className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
+              <h1 className="font-display max-w-3xl text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
                 Encuentra un horario, no solo un negocio.
               </h1>
               <p className="max-w-2xl text-[#655b4f]">
@@ -36,15 +36,15 @@ export default async function BusinessesPage() {
           <div className="relative mt-6 grid gap-3 text-sm sm:grid-cols-3">
             <div className="rounded-2xl border border-[#e6d8c5] bg-[#fff8eb] p-4">
               <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Activos</p>
-              <p className="mt-2 text-2xl font-semibold">{businesses.length}</p>
+              <p className="font-display mt-2 text-2xl font-semibold tracking-tight">{businesses.length}</p>
             </div>
             <div className="rounded-2xl border border-[#e6d8c5] bg-[#fff8eb] p-4">
               <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Con reserva online</p>
-              <p className="mt-2 text-2xl font-semibold">{bookableBusinessesCount}</p>
+              <p className="font-display mt-2 text-2xl font-semibold tracking-tight">{bookableBusinessesCount}</p>
             </div>
             <div className="rounded-2xl border border-[#e6d8c5] bg-[#fff8eb] p-4">
               <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Confirmacion</p>
-              <p className="mt-2 text-2xl font-semibold">En minutos</p>
+              <p className="font-display mt-2 text-2xl font-semibold tracking-tight">En minutos</p>
             </div>
           </div>
         </div>
@@ -83,7 +83,7 @@ export default async function BusinessesPage() {
                     )}
                   </div>
                   <div>
-                    <h2 className="text-2xl font-semibold tracking-tight">{business.name}</h2>
+                    <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">{business.name}</h2>
                     <p className="mt-1 text-sm text-[#8a7058]">
                       {business.city || "Ciudad no especificada"}
                     </p>

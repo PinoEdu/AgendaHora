@@ -45,7 +45,7 @@ export default async function Home() {
               <p className="w-fit rounded-full border border-[#e6d8c5] bg-[#fffcf6] px-4 py-2 text-xs font-semibold tracking-[0.22em] uppercase text-[#7b5d43]">
                 Reservas locales sin doble agenda
               </p>
-              <h1 className="max-w-3xl text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl">
+              <h1 className="font-display max-w-3xl text-5xl font-semibold leading-[0.92] tracking-[-0.055em] sm:text-7xl">
                 Encuentra un horario, no solo un negocio.
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-[#655b4f]">
@@ -79,7 +79,7 @@ export default async function Home() {
             ["Confirma", "La app revalida disponibilidad antes de crear la reserva."],
           ].map(([title, description]) => (
             <article key={title} className="rounded-3xl border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm">
-              <h2 className="text-xl font-semibold">{title}</h2>
+              <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">{title}</h2>
               <p className="mt-3 text-sm leading-6 text-[#655b4f]">{description}</p>
             </article>
           ))}
@@ -89,7 +89,7 @@ export default async function Home() {
           <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
             <div>
               <p className="text-sm uppercase tracking-[0.22em] text-[#f2c66d]">Para duenos</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight">Publica servicios, recursos y disponibilidad.</h2>
+              <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.04em]">Publica servicios, recursos y disponibilidad.</h2>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-[#d8cfc1]">
                 Configura quien atiende, que servicios presta y que horarios estan disponibles para evitar reservas duplicadas.
               </p>

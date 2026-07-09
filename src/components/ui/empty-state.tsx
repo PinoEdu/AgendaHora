@@ -40,9 +40,9 @@ export function EmptyState({
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
             {eyebrow}
           </p>
-          <p className="mt-1 text-2xl font-semibold tracking-tight">{marker}</p>
+          <p className="font-display mt-1 text-2xl font-semibold tracking-tight">{marker}</p>
         </div>
-        <h2 className="mt-5 text-xl font-semibold">{title}</h2>
+        <h2 className="font-display mt-5 text-2xl font-semibold tracking-[-0.035em]">{title}</h2>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
         {actionHref && actionLabel ? (
           <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">

@@ -26,7 +26,7 @@ export default async function DashboardPage() {
         <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Centro de operacion</p>
-            <h1 className="text-4xl font-semibold tracking-tight">Hola, {session.user.name}</h1>
+            <h1 className="font-display text-4xl font-semibold tracking-[-0.045em]">Hola, {session.user.name}</h1>
             <p className="max-w-2xl text-sm leading-6 text-slate-300">
               Controla publicaciones, servicios, recursos y reservas desde un solo tablero.
             </p>
@@ -51,7 +51,7 @@ export default async function DashboardPage() {
           ].map(([label, value]) => (
             <div className="rounded-2xl border border-white/10 bg-white/10 p-4" key={label}>
               <p className="text-xs uppercase tracking-[0.18em] text-slate-300">{label}</p>
-              <p className="mt-2 text-3xl font-semibold">{value}</p>
+              <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{value}</p>
             </div>
           ))}
         </div>
@@ -60,17 +60,17 @@ export default async function DashboardPage() {
       <section className="grid gap-4 md:grid-cols-3">
         <TicketCard>
           <p className="text-sm text-muted-foreground">Recursos configurados</p>
-          <p className="mt-2 text-3xl font-semibold">{totalResources}</p>
+          <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{totalResources}</p>
           <p className="mt-2 text-xs text-muted-foreground">Profesionales, espacios o equipos disponibles.</p>
         </TicketCard>
         <TicketCard>
           <p className="text-sm text-muted-foreground">Reservas recibidas</p>
-          <p className="mt-2 text-3xl font-semibold">{totalBookings}</p>
+          <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{totalBookings}</p>
           <p className="mt-2 text-xs text-muted-foreground">Historial operativo de todos tus negocios.</p>
         </TicketCard>
         <TicketCard>
           <p className="text-sm text-muted-foreground">Siguiente accion</p>
-          <p className="mt-2 text-xl font-semibold">Mantener agenda al dia</p>
+          <p className="font-display mt-2 text-xl font-semibold tracking-[-0.025em]">Mantener agenda al dia</p>
           <Button asChild className="mt-4" size="sm" variant="outline">
             <Link href="/dashboard/businesses">Revisar negocios</Link>
           </Button>
@@ -89,7 +89,7 @@ export default async function DashboardPage() {
       ) : (
         <section className="space-y-4">
           <div className="flex items-center justify-between gap-4">
-            <h2 className="text-xl font-semibold">Negocios recientes</h2>
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Negocios recientes</h2>
             <Button asChild size="sm" variant="outline">
               <Link href="/dashboard/businesses">Ver todos</Link>
             </Button>

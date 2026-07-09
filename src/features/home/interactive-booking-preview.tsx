@@ -34,7 +34,7 @@ export function InteractiveBookingPreview() {
         <div className="flex items-start justify-between gap-4 rounded-3xl bg-[#1e1b16] p-5 text-[#fffcf6]">
           <div>
             <p className="text-xs uppercase tracking-[0.22em] text-[#f2c66d]">Prueba el flujo</p>
-            <h2 className="mt-3 text-2xl font-semibold">Reserva en 3 pasos</h2>
+            <h2 className="font-display mt-3 text-2xl font-semibold tracking-[-0.035em]">Reserva en 3 pasos</h2>
             <p className="mt-1 text-sm text-[#d8cfc1]">Cambia las opciones y mira como queda el comprobante.</p>
           </div>
           <span className="rounded-full bg-[#f2c66d] px-3 py-1 text-xs font-semibold text-[#1e1b16]">

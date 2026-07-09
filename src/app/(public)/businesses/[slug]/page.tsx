@@ -90,7 +90,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
                 {business.categoryName}
               </p>
               <div className="space-y-3">
-                <h1 className="max-w-3xl text-5xl font-semibold leading-none tracking-tight sm:text-6xl">
+                <h1 className="font-display max-w-3xl text-5xl font-semibold leading-none tracking-[-0.055em] sm:text-6xl">
                   {business.name}
                 </h1>
                 <p className="max-w-2xl text-lg leading-8 text-[#655b4f]">
@@ -117,7 +117,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f2c66d]">Ficha de reserva</p>
-                  <h2 className="mt-3 text-2xl font-semibold">{business.name}</h2>
+                  <h2 className="font-display mt-3 text-2xl font-semibold tracking-[-0.035em]">{business.name}</h2>
                 </div>
                 <span className="rounded-full bg-[#f2c66d] px-3 py-1 text-xs font-semibold text-[#1e1b16]">
                   {canBook ? "Online" : "Pronto"}
@@ -127,23 +127,23 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-2xl bg-white/10 p-4">
                   <p className="text-xs uppercase tracking-[0.16em] text-[#d8cfc1]">Desde</p>
-                  <p className="mt-2 text-2xl font-semibold">
+                  <p className="font-display mt-2 text-2xl font-semibold tracking-tight">
                     {lowestServicePrice === null ? "Pendiente" : formatPrice(String(lowestServicePrice))}
                   </p>
                 </div>
                 <div className="rounded-2xl bg-white/10 p-4">
                   <p className="text-xs uppercase tracking-[0.16em] text-[#d8cfc1]">Duracion</p>
-                  <p className="mt-2 text-2xl font-semibold">
+                  <p className="font-display mt-2 text-2xl font-semibold tracking-tight">
                     {shortestDuration === null ? "Pendiente" : `${shortestDuration}+ min`}
                   </p>
                 </div>
                 <div className="rounded-2xl bg-white/10 p-4">
                   <p className="text-xs uppercase tracking-[0.16em] text-[#d8cfc1]">Servicios</p>
-                  <p className="mt-2 text-2xl font-semibold">{business.services.length}</p>
+                  <p className="font-display mt-2 text-2xl font-semibold tracking-tight">{business.services.length}</p>
                 </div>
                 <div className="rounded-2xl bg-white/10 p-4">
                   <p className="text-xs uppercase tracking-[0.16em] text-[#d8cfc1]">Equipo</p>
-                  <p className="mt-2 text-2xl font-semibold">{business.resources.length}</p>
+                  <p className="font-display mt-2 text-2xl font-semibold tracking-tight">{business.resources.length}</p>
                 </div>
               </div>
 
@@ -168,7 +168,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#8a7058]">Menu de servicios</p>
-              <h2 className="mt-2 text-3xl font-semibold tracking-tight">Precios claros antes de reservar</h2>
+              <h2 className="font-display mt-2 text-3xl font-semibold tracking-[-0.04em]">Precios claros antes de reservar</h2>
             </div>
             {canBook ? <p className="text-sm text-[#655b4f]">Elige un servicio y confirma el horario disponible.</p> : null}
           </div>
@@ -197,7 +197,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
                       ) : null}
                     </div>
                     <div>
-                      <h3 className="text-2xl font-semibold tracking-tight">{service.name}</h3>
+                      <h3 className="font-display text-2xl font-semibold tracking-[-0.035em]">{service.name}</h3>
                       <p className="mt-2 max-w-2xl text-sm leading-6 text-[#655b4f]">
                         {service.description || "Servicio disponible para reserva."}
                       </p>
@@ -209,7 +209,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
                   </div>
                   <div className="rounded-3xl border border-[#e6d8c5] bg-[#fff8eb] p-4 text-left md:min-w-48 md:text-right">
                     <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Precio</p>
-                    <p className="mt-2 text-3xl font-semibold">{formatPrice(service.price)}</p>
+                    <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{formatPrice(service.price)}</p>
                     {canBook ? (
                       <Button asChild className="mt-4 w-full bg-[#1e1b16] text-[#fffcf6] hover:bg-[#2d271f]">
                         <Link href={`/businesses/${business.slug}/book`}>Reservar este servicio</Link>
@@ -226,7 +226,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#8a7058]">Equipo disponible</p>
-              <h2 className="mt-2 text-3xl font-semibold tracking-tight">Profesionales y espacios</h2>
+              <h2 className="font-display mt-2 text-3xl font-semibold tracking-[-0.04em]">Profesionales y espacios</h2>
             </div>
             <p className="text-sm text-[#655b4f]">Cada recurso atiende solo servicios compatibles.</p>
           </div>
@@ -253,7 +253,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
                         <span className="rounded-full bg-[#fff0d2] px-3 py-1 text-xs font-semibold text-[#7b5d43]">
                           {formatResourceType(resource.type)}
                         </span>
-                        <h3 className="mt-3 text-xl font-semibold">{resource.name}</h3>
+                        <h3 className="font-display mt-3 text-xl font-semibold tracking-[-0.025em]">{resource.name}</h3>
                         <p className="mt-2 text-sm leading-6 text-[#655b4f]">
                           {resource.description || "Disponible para servicios compatibles."}
                         </p>

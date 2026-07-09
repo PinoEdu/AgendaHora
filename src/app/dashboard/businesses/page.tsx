@@ -22,7 +22,7 @@ export default async function DashboardBusinessesPage() {
         <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Operacion</p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight">Mis negocios</h1>
+            <h1 className="font-display mt-2 text-4xl font-semibold tracking-[-0.045em]">Mis negocios</h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
               Revisa que locales estan publicados y que configuracion falta para recibir reservas.
             </p>
@@ -35,15 +35,15 @@ export default async function DashboardBusinessesPage() {
         <div className="relative mt-6 grid gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Total</p>
-            <p className="mt-2 text-3xl font-semibold">{businesses.length}</p>
+            <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{businesses.length}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Activos</p>
-            <p className="mt-2 text-3xl font-semibold">{activeBusinesses}</p>
+            <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{activeBusinesses}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Pendientes</p>
-            <p className="mt-2 text-3xl font-semibold">{businesses.length - activeBusinesses}</p>
+            <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{businesses.length - activeBusinesses}</p>
           </div>
         </div>
       </section>
@@ -63,7 +63,7 @@ export default async function DashboardBusinessesPage() {
             <TicketCard key={business.id} contentClassName="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
                 <div className="space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="text-xl font-semibold">{business.name}</h2>
+                    <h2 className="font-display text-xl font-semibold tracking-[-0.025em]">{business.name}</h2>
                     <span className="rounded-full border px-2.5 py-1 text-xs font-medium text-muted-foreground">
                       {formatBusinessStatus(business.status)}
                     </span>
