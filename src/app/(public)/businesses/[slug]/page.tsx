@@ -13,8 +13,6 @@ type BusinessProfilePageProps = {
   }>
 }
 
-type PublicBusiness = NonNullable<Awaited<ReturnType<typeof getPublicBusinessBySlug>>>
-
 function formatPrice(price: string) {
   const amount = Number(price)
 
@@ -29,25 +27,6 @@ function formatPrice(price: string) {
   }).format(amount)
 }
 
-function getLowestServicePrice(services: PublicBusiness["services"]) {
-  if (services.length === 0) {
-    return null
-  }
-
-  return services.reduce((lowestPrice, service) => Math.min(lowestPrice, Number(service.price)), Number(services[0]?.price ?? 0))
-}
-
-function getShortestDuration(services: PublicBusiness["services"]) {
-  if (services.length === 0) {
-    return null
-  }
-
-  return services.reduce(
-    (shortestDuration, service) => Math.min(shortestDuration, service.durationMinutes),
-    services[0]?.durationMinutes ?? 0,
-  )
-}
-
 export default async function BusinessProfilePage({ params }: BusinessProfilePageProps) {
   const { slug } = await params
   const business = await getPublicBusinessBySlug(slug)
@@ -57,86 +36,47 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
   }
 
   const canBook = business.services.length > 0 && business.resources.length > 0
-  const lowestServicePrice = getLowestServicePrice(business.services)
-  const shortestDuration = getShortestDuration(business.services)
 
   return (
     <main className="relative min-h-svh overflow-hidden bg-[#f8f5ef] text-[#1e1b16]">
       <CalendarGrid className="opacity-40 [mask-image:radial-gradient(circle_at_top_right,black,transparent_56%)]" />
       <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
         <section className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm md:p-8">
-          <CalendarGrid className="bg-[size:44px_44px] opacity-80" />
-          <div className="relative grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
-            <div className="space-y-5">
-              <p className="w-fit rounded-full bg-[#fff0d2] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[#7b5d43]">
+          <CalendarGrid className="bg-[size:44px_44px] opacity-65" />
+          <div className="relative grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
+            <div className="space-y-4">
+              <p className="w-fit rounded-full bg-[#fff0d2] px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-[#7b5d43]">
                 {business.categoryName}
               </p>
-              <div className="space-y-3">
-                <h1 className="font-display max-w-3xl text-5xl font-semibold leading-none tracking-[-0.055em] sm:text-6xl">
+              <div className="space-y-2">
+                <h1 className="font-display max-w-3xl text-4xl font-semibold leading-none tracking-[-0.05em] sm:text-5xl">
                   {business.name}
                 </h1>
-                <p className="max-w-2xl text-lg leading-8 text-[#655b4f]">
+                <p className="max-w-2xl text-base leading-7 text-[#655b4f]">
                   {business.description || "Reserva servicios de este negocio online con disponibilidad real."}
                 </p>
               </div>
-              {canBook ? (
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <Button asChild className="bg-[#c85a2e] text-white hover:bg-[#a94722]" size="lg">
-                    <Link href={`/businesses/${business.slug}/book`}>Reservar ahora</Link>
-                  </Button>
-                  <Button asChild className="border-[#d6c7b5] bg-white" size="lg" variant="outline">
-                    <Link href="#servicios">Ver servicios</Link>
-                  </Button>
-                </div>
-              ) : (
+              {!canBook ? (
                 <p className="rounded-2xl border border-[#e6d8c5] bg-[#fff8eb] px-4 py-3 text-sm text-[#655b4f]">
                   Este negocio aún está configurando sus reservas.
                 </p>
-              )}
+              ) : null}
             </div>
 
             <aside className="rounded-[1.75rem] border border-[#e6d8c5] bg-[#1e1b16] p-5 text-[#fffcf6] shadow-sm">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f2c66d]">Ficha de reserva</p>
-                  <h2 className="font-display mt-3 text-2xl font-semibold tracking-[-0.035em]">{business.name}</h2>
-                </div>
-                <span className="rounded-full bg-[#f2c66d] px-3 py-1 text-xs font-semibold text-[#1e1b16]">
-                  {canBook ? "Online" : "Pronto"}
-                </span>
+              <div>
+                <p className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-[#f2c66d]">Datos del negocio</p>
+                <h2 className="font-display mt-2 text-2xl font-semibold tracking-[-0.035em]">Información</h2>
               </div>
 
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.16em] text-[#d8cfc1]">Desde</p>
-                  <p className="font-display mt-2 text-2xl font-semibold tracking-tight">
-                    {lowestServicePrice === null ? "Pendiente" : formatPrice(String(lowestServicePrice))}
-                  </p>
-                </div>
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.16em] text-[#d8cfc1]">Duración</p>
-                  <p className="font-display mt-2 text-2xl font-semibold tracking-tight">
-                    {shortestDuration === null ? "Pendiente" : `${shortestDuration}+ min`}
-                  </p>
-                </div>
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.16em] text-[#d8cfc1]">Servicios</p>
-                  <p className="font-display mt-2 text-2xl font-semibold tracking-tight">{business.services.length}</p>
-                </div>
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.16em] text-[#d8cfc1]">Equipo</p>
-                  <p className="font-display mt-2 text-2xl font-semibold tracking-tight">{business.resources.length}</p>
-                </div>
-              </div>
-
-              <dl className="mt-5 divide-y divide-white/15 rounded-2xl bg-white/10 text-sm">
+              <dl className="mt-4 divide-y divide-white/15 rounded-2xl bg-white/10 text-sm">
                 {[
                   ["Ciudad", business.city || "No especificada"],
                   ["Dirección", business.address || "No especificada"],
                   ["Teléfono", business.phone || "No especificado"],
                   ["Zona", business.timezone],
                 ].map(([label, value]) => (
-                  <div className="grid grid-cols-[5.5rem_1fr] gap-3 px-4 py-3" key={label}>
+                  <div className="grid grid-cols-[4.75rem_1fr] gap-3 px-4 py-3" key={label}>
                     <dt className="text-[#d8cfc1]">{label}</dt>
                     <dd className="text-right font-medium">{value}</dd>
                   </div>
