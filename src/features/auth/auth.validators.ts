@@ -4,14 +4,15 @@ import { UserRole } from "@/generated/prisma/enums"
 
 import { passwordRules } from "./password-rules"
 
+const optionalCallbackUrl = z.preprocess(
+  (value) => (typeof value === "string" && value.trim() !== "" ? value : undefined),
+  z.string().optional(),
+)
+
 export const loginSchema = z.object({
   email: z.string().trim().email("Ingresa un correo válido."),
   password: z.string().min(1, "Ingresa tu contraseña."),
-  callbackUrl: z
-    .preprocess(
-      (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
-      z.string().optional(),
-    ),
+  callbackUrl: optionalCallbackUrl,
 })
 
 export const registerSchema = z.object({
@@ -25,11 +26,7 @@ export const registerSchema = z.object({
     }
   }),
   role: z.enum([UserRole.CUSTOMER, UserRole.BUSINESS_OWNER]),
-  callbackUrl: z
-    .preprocess(
-      (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
-      z.string().optional(),
-    ),
+  callbackUrl: optionalCallbackUrl,
 })
 
 export type LoginInput = z.infer<typeof loginSchema>

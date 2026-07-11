@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
+import { DashboardHero, DashboardShell } from "@/components/dashboard/dashboard-shell"
 import { Button } from "@/components/ui/button"
 import {
   getBusinessForOwner,
@@ -28,18 +29,19 @@ export default async function NewResourcePage({ params }: NewResourcePageProps) 
   }
 
   return (
-    <main className="mx-auto flex min-h-svh w-full max-w-4xl flex-col gap-8 px-6 py-10">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">{business.name}</p>
-          <h1 className="text-3xl font-semibold tracking-tight">Crear recurso</h1>
-        </div>
-        <Button asChild variant="outline">
-          <Link href={`/dashboard/businesses/${business.id}/resources`}>Volver</Link>
-        </Button>
-      </div>
+    <DashboardShell size="md">
+      <DashboardHero
+        actions={(
+          <Button asChild className="border-white/20 bg-white/10 text-[#fffcf6] hover:bg-white/20" variant="outline">
+            <Link href={`/dashboard/businesses/${business.id}/resources`}>Volver</Link>
+          </Button>
+        )}
+        description="Crea quién atiende, qué espacio se reserva o qué equipo tendrá horarios propios."
+        eyebrow={business.name}
+        title="Crear recurso"
+      />
 
       <ResourceForm businessId={business.id} services={services} />
-    </main>
+    </DashboardShell>
   )
 }

@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server"
 
 import { auth } from "@/auth"
+import { sendBookingConfirmationEmails } from "@/features/bookings/booking-email.service"
 import {
   BookingAvailabilityError,
   createBooking,
@@ -35,6 +36,12 @@ export async function POST(request: NextRequest) {
       ...parsedBody.data,
       customerId: session.user.id,
     })
+
+    try {
+      await sendBookingConfirmationEmails(booking.id)
+    } catch (emailError) {
+      console.error("Reserva creada, pero no se pudo enviar la confirmación por email.", emailError)
+    }
 
     return Response.json(
       {

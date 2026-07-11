@@ -1,8 +1,15 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
+import {
+  DashboardHero,
+  DashboardShell,
+  dashboardCardClassName,
+  dashboardPillClassName,
+} from "@/components/dashboard/dashboard-shell"
 import { Button } from "@/components/ui/button"
 import { EmptyState } from "@/components/ui/empty-state"
+import { TicketCard } from "@/components/ui/ticket-card"
 import {
   getBusinessForOwner,
   requireBusinessOwnerSession,
@@ -29,62 +36,58 @@ export default async function ResourcesPage({ params }: ResourcesPageProps) {
   }
 
   return (
-    <main className="mx-auto flex min-h-svh w-full max-w-6xl flex-col gap-8 px-6 py-10">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">{business.name}</p>
-          <h1 className="text-3xl font-semibold tracking-tight">Recursos</h1>
-        </div>
-        <div className="flex gap-2">
-          <Button asChild variant="outline">
-            <Link href={`/dashboard/businesses/${business.id}`}>Volver</Link>
-          </Button>
-          <Button asChild>
-            <Link href={`/dashboard/businesses/${business.id}/resources/new`}>Crear recurso</Link>
-          </Button>
-        </div>
-      </div>
+    <DashboardShell>
+      <DashboardHero
+        actions={(
+          <>
+            <Button asChild className="border-white/20 bg-white/10 text-[#fffcf6] hover:bg-white/20" variant="outline">
+              <Link href={`/dashboard/businesses/${business.id}`}>Volver</Link>
+            </Button>
+            <Button asChild className="bg-[#f2c66d] text-[#1e1b16] hover:bg-[#e7b84d]">
+              <Link href={`/dashboard/businesses/${business.id}/resources/new`}>Crear recurso</Link>
+            </Button>
+          </>
+        )}
+        description="Organiza quién atiende, qué espacio se reserva o qué equipo bloquea disponibilidad."
+        eyebrow={business.name}
+        title="Recursos"
+      />
 
       {resources.length === 0 ? (
         <EmptyState
           actionHref={`/dashboard/businesses/${business.id}/resources/new`}
           actionLabel="Crear recurso"
+          className={dashboardCardClassName}
           description="Crea profesionales, canchas, boxes, salas o equipos. Cada recurso debe asociarse a servicios y tener disponibilidad para recibir reservas."
           eyebrow="Recursos"
           marker="0"
-          title="Todavia no hay recursos"
+          title="Todavía no hay recursos"
         />
       ) : (
         <section className="grid gap-4">
           {resources.map((resource) => (
-            <article key={resource.id} className="rounded-2xl border bg-card p-5 shadow-sm">
-              <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-                <div className="space-y-2">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="text-xl font-semibold">{resource.name}</h2>
-                    <span className="rounded-full border px-2.5 py-1 text-xs font-medium text-muted-foreground">
-                      {resource.isActive ? "Activo" : "Inactivo"}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{formatResourceType(resource.type)}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Servicios: {resource.services.map(({ service }) => service.name).join(", ") || "Sin servicios"}
-                  </p>
-                  <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-                    <span>{resource._count.availabilityRules} reglas de horario</span>
-                    <span>{resource._count.bookings} reservas</span>
-                  </div>
+            <TicketCard className={dashboardCardClassName} key={resource.id} contentClassName="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="font-display text-xl font-semibold tracking-[-0.025em]">{resource.name}</h2>
+                  <span className={dashboardPillClassName}>{resource.isActive ? "Activo" : "Inactivo"}</span>
+                  <span className={dashboardPillClassName}>{formatResourceType(resource.type)}</span>
                 </div>
-                <Button asChild variant="outline">
-                  <Link href={`/dashboard/businesses/${business.id}/resources/${resource.id}/edit`}>
-                    Editar
-                  </Link>
-                </Button>
+                <p className="text-xs text-muted-foreground">
+                  Servicios: {resource.services.map(({ service }) => service.name).join(", ") || "Sin servicios"}
+                </p>
+                <div className="flex flex-wrap gap-2 text-xs text-[#655b4f]">
+                  <span className="rounded-xl border border-[#e6d8c5] bg-[#fff8eb] px-3 py-2">{resource._count.availabilityRules} reglas de horario</span>
+                  <span className="rounded-xl border border-[#e6d8c5] bg-[#fff8eb] px-3 py-2">{resource._count.bookings} reservas</span>
+                </div>
               </div>
-            </article>
+              <Button asChild variant="outline">
+                <Link href={`/dashboard/businesses/${business.id}/resources/${resource.id}/edit`}>Editar</Link>
+              </Button>
+            </TicketCard>
           ))}
         </section>
       )}
-    </main>
+    </DashboardShell>
   )
 }

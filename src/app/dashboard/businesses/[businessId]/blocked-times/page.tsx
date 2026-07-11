@@ -1,13 +1,18 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
+import {
+  DashboardHero,
+  DashboardPanel,
+  DashboardShell,
+  dashboardCardClassName,
+  dashboardPillClassName,
+} from "@/components/dashboard/dashboard-shell"
 import { Button } from "@/components/ui/button"
 import { EmptyState } from "@/components/ui/empty-state"
 import { BlockedTimeForm } from "@/features/blocked-times/blocked-time-form"
 import { formatDateTime } from "@/features/blocked-times/blocked-time-format"
-import {
-  deleteBlockedTimeAction,
-} from "@/features/blocked-times/blocked-time.actions"
+import { deleteBlockedTimeAction } from "@/features/blocked-times/blocked-time.actions"
 import {
   getBlockedTimesForBusinessOwner,
   getResourcesForBlockedTimeForm,
@@ -38,43 +43,41 @@ export default async function BlockedTimesPage({ params }: BlockedTimesPageProps
   }
 
   return (
-    <main className="mx-auto flex min-h-svh w-full max-w-6xl flex-col gap-8 px-6 py-10">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">{business.name}</p>
-          <h1 className="text-3xl font-semibold tracking-tight">Bloqueos manuales</h1>
-        </div>
-        <Button asChild variant="outline">
-          <Link href={`/dashboard/businesses/${business.id}`}>Volver</Link>
-        </Button>
-      </div>
+    <DashboardShell>
+      <DashboardHero
+        actions={(
+          <Button asChild className="border-white/20 bg-white/10 text-[#fffcf6] hover:bg-white/20" variant="outline">
+            <Link href={`/dashboard/businesses/${business.id}`}>Volver</Link>
+          </Button>
+        )}
+        description="Bloquea feriados, vacaciones, mantenciones o pausas para evitar reservas en horarios no operativos."
+        eyebrow={business.name}
+        title="Bloqueos manuales"
+      />
 
       <BlockedTimeForm businessId={business.id} resources={resources} />
 
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Bloqueos proximos</h2>
+      <DashboardPanel className="space-y-4">
+        <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Bloqueos próximos</h2>
         {blockedTimes.length === 0 ? (
           <EmptyState
-            description="Usa el formulario superior para bloquear feriados, vacaciones, mantenciones o pausas de un recurso especifico."
+            className={dashboardCardClassName}
+            description="Usa el formulario superior para bloquear feriados, vacaciones, mantenciones o pausas de un recurso específico."
             eyebrow="Bloqueos"
             marker="0"
-            title="No hay bloqueos proximos"
+            title="No hay bloqueos próximos"
           />
         ) : (
           <div className="grid gap-4">
             {blockedTimes.map((blockedTime) => (
-              <article key={blockedTime.id} className="rounded-2xl border bg-card p-5 shadow-sm">
+              <article key={blockedTime.id} className="rounded-2xl border border-[#e6d8c5] bg-[#fff8eb] p-5 shadow-sm">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                   <div className="space-y-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="font-semibold">
                         {blockedTime.resource ? blockedTime.resource.name : "Todo el negocio"}
                       </h3>
-                      {blockedTime.resource ? (
-                        <span className="rounded-full border px-2.5 py-1 text-xs text-muted-foreground">
-                          {formatResourceType(blockedTime.resource.type)}
-                        </span>
-                      ) : null}
+                      {blockedTime.resource ? <span className={dashboardPillClassName}>{formatResourceType(blockedTime.resource.type)}</span> : null}
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {formatDateTime(blockedTime.startsAt)} - {formatDateTime(blockedTime.endsAt)}
@@ -95,7 +98,7 @@ export default async function BlockedTimesPage({ params }: BlockedTimesPageProps
             ))}
           </div>
         )}
-      </section>
-    </main>
+      </DashboardPanel>
+    </DashboardShell>
   )
 }

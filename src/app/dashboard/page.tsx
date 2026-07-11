@@ -1,7 +1,12 @@
 import Link from "next/link"
 
+import {
+  DashboardHero,
+  DashboardShell,
+  dashboardCardClassName,
+  dashboardMetricClassName,
+} from "@/components/dashboard/dashboard-shell"
 import { Button } from "@/components/ui/button"
-import { CalendarGrid } from "@/components/ui/calendar-grid"
 import { EmptyState } from "@/components/ui/empty-state"
 import { TicketCard } from "@/components/ui/ticket-card"
 import { LogoutButton } from "@/features/auth/logout-button"
@@ -20,58 +25,52 @@ export default async function DashboardPage() {
   const activeBusinesses = businesses.filter((business) => business.status === "ACTIVE").length
 
   return (
-    <main className="min-h-svh bg-[radial-gradient(circle_at_top_right,#fde68a55,transparent_28%),linear-gradient(180deg,#f8fafc,#e2e8f0)] px-6 py-10 text-slate-950">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
-      <section className="relative overflow-hidden rounded-[2rem] border border-slate-800 bg-[#111827] p-6 text-white shadow-sm md:p-8">
-        <CalendarGrid className="opacity-20" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="space-y-3">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Centro de operación</p>
-            <h1 className="font-display text-4xl font-semibold tracking-[-0.045em]">Hola, {session.user.name}</h1>
-            <p className="max-w-2xl text-sm leading-6 text-slate-300">
-              Controla publicaciones, servicios, recursos y reservas desde un solo tablero.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Button asChild className="border-white/20 bg-white/10 text-white hover:bg-white/20" variant="outline">
+    <DashboardShell>
+      <DashboardHero
+        actions={(
+          <>
+            <Button asChild className="border-white/20 bg-white/10 text-[#fffcf6] hover:bg-white/20" variant="outline">
               <Link href="/dashboard/businesses">Mis negocios</Link>
             </Button>
-            <Button asChild className="bg-amber-300 text-slate-950 hover:bg-amber-200">
+            <Button asChild className="bg-[#f2c66d] text-[#1e1b16] hover:bg-[#e7b84d]">
               <Link href="/dashboard/businesses/new">Crear negocio</Link>
             </Button>
-            <LogoutButton />
-          </div>
-        </div>
-
-        <div className="relative mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <LogoutButton className="border-white/20 bg-white/10 text-[#fffcf6] hover:bg-white/20" />
+          </>
+        )}
+        description="Controla publicaciones, servicios, recursos y reservas desde un solo tablero."
+        eyebrow="Centro de operación"
+        title={`Hola, ${session.user.name}`}
+      >
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[
             ["Negocios", businesses.length],
             ["Activos", activeBusinesses],
             ["Servicios", totalServices],
             ["Reservas", totalBookings],
           ].map(([label, value]) => (
-            <div className="rounded-2xl border border-white/10 bg-white/10 p-4" key={label}>
-              <p className="text-xs uppercase tracking-[0.18em] text-slate-300">{label}</p>
+            <div className={dashboardMetricClassName} key={label}>
+              <p className="text-xs uppercase tracking-[0.18em] text-[#d8cfc1]">{label}</p>
               <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{value}</p>
             </div>
           ))}
         </div>
-      </section>
+      </DashboardHero>
 
       <section className="grid gap-4 md:grid-cols-3">
-        <TicketCard className="border-slate-200 bg-white">
+        <TicketCard className={dashboardCardClassName}>
           <p className="text-sm text-muted-foreground">Recursos configurados</p>
           <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{totalResources}</p>
           <p className="mt-2 text-xs text-muted-foreground">Profesionales, espacios o equipos disponibles.</p>
         </TicketCard>
-        <TicketCard className="border-slate-200 bg-white">
+        <TicketCard className={dashboardCardClassName}>
           <p className="text-sm text-muted-foreground">Reservas recibidas</p>
           <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{totalBookings}</p>
           <p className="mt-2 text-xs text-muted-foreground">Historial operativo de todos tus negocios.</p>
         </TicketCard>
-        <TicketCard className="border-slate-200 bg-white">
-          <p className="text-sm text-muted-foreground">Siguiente accion</p>
-          <p className="font-display mt-2 text-xl font-semibold tracking-[-0.025em]">Mantener agenda al dia</p>
+        <TicketCard className={dashboardCardClassName}>
+          <p className="text-sm text-muted-foreground">Siguiente acción</p>
+          <p className="font-display mt-2 text-xl font-semibold tracking-[-0.025em]">Mantener agenda al día</p>
           <Button asChild className="mt-4" size="sm" variant="outline">
             <Link href="/dashboard/businesses">Revisar negocios</Link>
           </Button>
@@ -82,8 +81,8 @@ export default async function DashboardPage() {
         <EmptyState
           actionHref="/dashboard/businesses/new"
           actionLabel="Crear negocio"
-          className="border-slate-200 bg-white"
-          description="El negocio partira como borrador. Despues agrega servicios, recursos y disponibilidad para publicarlo con reservas online."
+          className={dashboardCardClassName}
+          description="El negocio partirá como borrador. Después agrega servicios, recursos y disponibilidad para publicarlo con reservas online."
           eyebrow="Operación inicial"
           marker="0"
           title="Crea tu primer negocio"
@@ -96,9 +95,9 @@ export default async function DashboardPage() {
               <Link href="/dashboard/businesses">Ver todos</Link>
             </Button>
           </div>
-            <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
             {businesses.slice(0, 4).map((business) => (
-              <TicketCard className="border-slate-200 bg-white" key={business.id} contentClassName="space-y-5">
+              <TicketCard className={dashboardCardClassName} key={business.id} contentClassName="space-y-5">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h3 className="text-lg font-semibold">{business.name}</h3>
@@ -106,14 +105,14 @@ export default async function DashboardPage() {
                       {business.category.name} {business.city ? `en ${business.city}` : ""}
                     </p>
                   </div>
-                  <span className="rounded-full border px-2.5 py-1 text-xs font-medium text-muted-foreground">
+                  <span className="rounded-full border border-[#e6d8c5] bg-[#fff8eb] px-2.5 py-1 text-xs font-medium text-[#655b4f]">
                     {formatBusinessStatus(business.status)}
                   </span>
                 </div>
-                <div className="grid grid-cols-3 gap-2 text-xs text-muted-foreground">
-                  <span className="rounded-xl border bg-background px-3 py-2">{business._count.services} servicios</span>
-                  <span className="rounded-xl border bg-background px-3 py-2">{business._count.resources} recursos</span>
-                  <span className="rounded-xl border bg-background px-3 py-2">{business._count.bookings} reservas</span>
+                <div className="grid grid-cols-3 gap-2 text-xs text-[#655b4f]">
+                  <span className="rounded-xl border border-[#e6d8c5] bg-[#fff8eb] px-3 py-2">{business._count.services} servicios</span>
+                  <span className="rounded-xl border border-[#e6d8c5] bg-[#fff8eb] px-3 py-2">{business._count.resources} recursos</span>
+                  <span className="rounded-xl border border-[#e6d8c5] bg-[#fff8eb] px-3 py-2">{business._count.bookings} reservas</span>
                 </div>
                 <Button asChild className="w-full" variant="outline">
                   <Link href={`/dashboard/businesses/${business.id}`}>Abrir operación</Link>
@@ -123,7 +122,6 @@ export default async function DashboardPage() {
           </div>
         </section>
       )}
-      </div>
-    </main>
+    </DashboardShell>
   )
 }

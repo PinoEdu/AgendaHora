@@ -1,14 +1,15 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
+import {
+  DashboardHero,
+  DashboardShell,
+  dashboardCardClassName,
+  dashboardMetricClassName,
+} from "@/components/dashboard/dashboard-shell"
 import { Button } from "@/components/ui/button"
-import { CalendarGrid } from "@/components/ui/calendar-grid"
 import { EmptyState } from "@/components/ui/empty-state"
 import { TicketCard } from "@/components/ui/ticket-card"
-import {
-  getBusinessForOwner,
-  requireBusinessOwnerSession,
-} from "@/features/businesses/business.queries"
 import {
   cancelBookingByBusinessAction,
   markBookingCompletedAction,
@@ -21,6 +22,10 @@ import {
   canMarkBookingCompleted,
   canMarkBookingNoShow,
 } from "@/features/bookings/booking-rules"
+import {
+  getBusinessForOwner,
+  requireBusinessOwnerSession,
+} from "@/features/businesses/business.queries"
 import { BookingStatus } from "@/generated/prisma/enums"
 import { formatUtcDateTimeInTimezone, formatUtcTimeInTimezone } from "@/lib/dates"
 
@@ -47,48 +52,40 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
   const closedBookings = bookings.length - pendingBookings - confirmedBookings
 
   return (
-    <main className="min-h-svh bg-[radial-gradient(circle_at_top_right,#fde68a55,transparent_28%),linear-gradient(180deg,#f8fafc,#e2e8f0)] px-6 py-10 text-slate-950">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
-      <section className="relative overflow-hidden rounded-[2rem] border border-slate-800 bg-[#111827] p-6 text-white shadow-sm md:p-8">
-        <CalendarGrid className="opacity-20" />
-        <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-200">Agenda operativa</p>
-            <h1 className="font-display mt-2 text-4xl font-semibold tracking-[-0.045em]">Reservas recibidas</h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
-              {business.name}. Revisa atenciones pendientes, confirma cierres y marca ausencias.
-            </p>
-          </div>
-          <Button asChild className="border-white/20 bg-white/10 text-white hover:bg-white/20" variant="outline">
+    <DashboardShell>
+      <DashboardHero
+        actions={(
+          <Button asChild className="border-white/20 bg-white/10 text-[#fffcf6] hover:bg-white/20" variant="outline">
             <Link href={`/dashboard/businesses/${business.id}`}>Volver</Link>
           </Button>
+        )}
+        description={`${business.name}. Revisa atenciones pendientes, confirma cierres y marca ausencias.`}
+        eyebrow="Agenda operativa"
+        title="Reservas recibidas"
+      >
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[
+            ["Pendientes", pendingBookings],
+            ["Confirmadas", confirmedBookings],
+            ["Cerradas", closedBookings],
+          ].map(([label, value]) => (
+            <div className={dashboardMetricClassName} key={label}>
+              <p className="text-xs uppercase tracking-[0.18em] text-[#d8cfc1]">{label}</p>
+              <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{value}</p>
+            </div>
+          ))}
         </div>
-
-        <div className="relative mt-6 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Pendientes</p>
-            <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{pendingBookings}</p>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Confirmadas</p>
-            <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{confirmedBookings}</p>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Cerradas</p>
-            <p className="font-display mt-2 text-3xl font-semibold tracking-tight">{closedBookings}</p>
-          </div>
-        </div>
-      </section>
+      </DashboardHero>
 
       {bookings.length === 0 ? (
         <EmptyState
           actionHref={`/businesses/${business.slug}`}
           actionLabel="Ver perfil público"
-          className="border-slate-200 bg-white"
+          className={dashboardCardClassName}
           description="Cuando un cliente reserve online, aparecerá aquí con hora, servicio, recurso y acciones operativas."
           eyebrow="Agenda operativa"
           marker="0"
-          title="Aun no hay reservas"
+          title="Aún no hay reservas"
         />
       ) : (
         <section className="grid gap-4">
@@ -97,11 +94,11 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
             const endsAtTime = formatUtcTimeInTimezone(booking.endsAt, booking.business.timezone)
 
             return (
-              <TicketCard className="border-slate-200 bg-white" key={booking.id} contentClassName="grid gap-5 lg:grid-cols-[8rem_1fr_auto] lg:items-center">
-                <div className="rounded-2xl bg-[#111827] p-4 text-white">
-                  <p className="text-xs uppercase tracking-[0.18em] text-amber-200">Hora</p>
+              <TicketCard className={dashboardCardClassName} key={booking.id} contentClassName="grid gap-5 lg:grid-cols-[8rem_1fr_auto] lg:items-center">
+                <div className="rounded-2xl bg-[#1e1b16] p-4 text-[#fffcf6]">
+                  <p className="text-xs uppercase tracking-[0.18em] text-[#f2c66d]">Hora</p>
                   <p className="font-display mt-2 text-3xl font-semibold leading-none tracking-tight">{startsAtTime}</p>
-                  <p className="mt-1 text-xs text-slate-300">hasta {endsAtTime}</p>
+                  <p className="mt-1 text-xs text-[#d8cfc1]">hasta {endsAtTime}</p>
                 </div>
 
                 <div className="space-y-2">
@@ -111,7 +108,7 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
                   </div>
                   <p className="text-sm text-muted-foreground">
                     Cliente: {booking.customer.name || booking.customerName || "Sin nombre"} ·{" "}
-                    {booking.customer.email || booking.customerEmail || "Sin email"}
+                    {booking.customer.email || booking.customerEmail || "Sin correo"}
                   </p>
                   <p className="text-sm text-muted-foreground">Recurso: {booking.resource.name}</p>
                   <p className="text-sm font-medium">
@@ -161,7 +158,6 @@ export default async function BusinessBookingsPage({ params }: BusinessBookingsP
           })}
         </section>
       )}
-      </div>
-    </main>
+    </DashboardShell>
   )
 }

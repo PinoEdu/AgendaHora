@@ -1,5 +1,6 @@
 import Link from "next/link"
 
+import { DashboardHero, DashboardShell } from "@/components/dashboard/dashboard-shell"
 import { Button } from "@/components/ui/button"
 import { BusinessForm } from "@/features/businesses/business-form"
 import {
@@ -12,18 +13,19 @@ export default async function NewBusinessPage() {
   const categories = await getBusinessCategories()
 
   return (
-    <main className="mx-auto flex min-h-svh w-full max-w-4xl flex-col gap-8 px-6 py-10">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">Nuevo negocio</p>
-          <h1 className="text-3xl font-semibold tracking-tight">Crea tu negocio</h1>
-        </div>
-        <Button asChild variant="outline">
-          <Link href="/dashboard/businesses">Volver</Link>
-        </Button>
-      </div>
+    <DashboardShell size="md">
+      <DashboardHero
+        actions={(
+          <Button asChild className="border-white/20 bg-white/10 text-[#fffcf6] hover:bg-white/20" variant="outline">
+            <Link href="/dashboard/businesses">Volver</Link>
+          </Button>
+        )}
+        description="Parte con los datos públicos del negocio. Después podrás agregar servicios, recursos y disponibilidad."
+        eyebrow="Nuevo negocio"
+        title="Crea tu negocio"
+      />
 
       <BusinessForm categories={categories} />
-    </main>
+    </DashboardShell>
   )
 }

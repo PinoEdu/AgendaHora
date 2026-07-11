@@ -22,7 +22,7 @@ export function BlockedTimeForm({ businessId, resources }: BlockedTimeFormProps)
   )
 
   return (
-    <form action={formAction} className="space-y-6 rounded-2xl border bg-card p-6 shadow-sm">
+    <form action={formAction} className="space-y-6 rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm">
       {state.error ? (
         <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {state.error}
@@ -35,7 +35,7 @@ export function BlockedTimeForm({ businessId, resources }: BlockedTimeFormProps)
             Alcance
           </label>
           <select
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             id="resourceId"
             name="resourceId"
           >
@@ -53,7 +53,7 @@ export function BlockedTimeForm({ businessId, resources }: BlockedTimeFormProps)
             Inicio
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             id="startsAt"
             name="startsAt"
             required
@@ -63,10 +63,10 @@ export function BlockedTimeForm({ businessId, resources }: BlockedTimeFormProps)
 
         <div className="space-y-2">
           <label className="text-sm font-medium" htmlFor="endsAt">
-            Termino
+            Término
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             id="endsAt"
             name="endsAt"
             required
@@ -79,7 +79,7 @@ export function BlockedTimeForm({ businessId, resources }: BlockedTimeFormProps)
             Motivo
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             id="reason"
             name="reason"
             placeholder="Feriado, mantenimiento, vacaciones..."

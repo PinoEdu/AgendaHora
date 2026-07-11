@@ -38,7 +38,7 @@ export function BusinessForm({ categories, values }: BusinessFormProps) {
   const isEditing = Boolean(formValues.id)
 
   return (
-    <form action={formAction} className="space-y-6 rounded-2xl border bg-card p-6 shadow-sm">
+    <form action={formAction} className="space-y-6 rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm">
       {state.error ? (
         <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {state.error}
@@ -51,7 +51,7 @@ export function BusinessForm({ categories, values }: BusinessFormProps) {
             Nombre del negocio
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.name}
             id="name"
             name="name"
@@ -62,16 +62,16 @@ export function BusinessForm({ categories, values }: BusinessFormProps) {
 
         <div className="space-y-2">
           <label className="text-sm font-medium" htmlFor="categoryId">
-            Categoria
+            Categoría
           </label>
           <select
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.categoryId}
             id="categoryId"
             name="categoryId"
             required
           >
-            <option value="">Selecciona una categoria</option>
+            <option value="">Selecciona una categoría</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}
@@ -86,7 +86,7 @@ export function BusinessForm({ categories, values }: BusinessFormProps) {
               Estado
             </label>
             <select
-              className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+              className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
               defaultValue={formValues.status}
               id="status"
               name="status"
@@ -106,7 +106,7 @@ export function BusinessForm({ categories, values }: BusinessFormProps) {
             Ciudad
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.city}
             id="city"
             name="city"
@@ -116,10 +116,10 @@ export function BusinessForm({ categories, values }: BusinessFormProps) {
 
         <div className="space-y-2">
           <label className="text-sm font-medium" htmlFor="country">
-            Pais
+            País
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.country}
             id="country"
             name="country"
@@ -130,10 +130,10 @@ export function BusinessForm({ categories, values }: BusinessFormProps) {
 
         <div className="space-y-2">
           <label className="text-sm font-medium" htmlFor="phone">
-            Telefono
+            Teléfono
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.phone}
             id="phone"
             name="phone"
@@ -143,10 +143,10 @@ export function BusinessForm({ categories, values }: BusinessFormProps) {
 
         <div className="space-y-2">
           <label className="text-sm font-medium" htmlFor="email">
-            Email del negocio
+            Correo del negocio
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.email}
             id="email"
             name="email"
@@ -156,10 +156,10 @@ export function BusinessForm({ categories, values }: BusinessFormProps) {
 
         <div className="space-y-2 md:col-span-2">
           <label className="text-sm font-medium" htmlFor="address">
-            Direccion
+            Dirección
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.address}
             id="address"
             name="address"
@@ -172,7 +172,7 @@ export function BusinessForm({ categories, values }: BusinessFormProps) {
             Zona horaria
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.timezone}
             id="timezone"
             name="timezone"
@@ -180,16 +180,16 @@ export function BusinessForm({ categories, values }: BusinessFormProps) {
             type="text"
           />
           <p className="text-xs text-muted-foreground">
-            Para Chile usa America/Santiago. Esta zona se usara para calcular disponibilidad.
+            Para Chile usa America/Santiago. Esta zona se usará para calcular disponibilidad.
           </p>
         </div>
 
         <div className="space-y-2 md:col-span-2">
           <label className="text-sm font-medium" htmlFor="description">
-            Descripcion
+            Descripción
           </label>
           <textarea
-            className="min-h-28 w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="min-h-28 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 py-2 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.description}
             id="description"
             name="description"

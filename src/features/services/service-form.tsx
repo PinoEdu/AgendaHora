@@ -31,7 +31,7 @@ export function ServiceForm({ businessId, values }: ServiceFormProps) {
   const isEditing = Boolean(formValues.id)
 
   return (
-    <form action={formAction} className="space-y-6 rounded-2xl border bg-card p-6 shadow-sm">
+    <form action={formAction} className="space-y-6 rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm">
       {state.error ? (
         <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {state.error}
@@ -44,7 +44,7 @@ export function ServiceForm({ businessId, values }: ServiceFormProps) {
             Nombre del servicio
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.name}
             id="name"
             name="name"
@@ -55,10 +55,10 @@ export function ServiceForm({ businessId, values }: ServiceFormProps) {
 
         <div className="space-y-2">
           <label className="text-sm font-medium" htmlFor="durationMinutes">
-            Duracion en minutos
+            Duración en minutos
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.durationMinutes}
             id="durationMinutes"
             min={1}
@@ -74,7 +74,7 @@ export function ServiceForm({ businessId, values }: ServiceFormProps) {
             Precio CLP
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.price}
             id="price"
             min={0}
@@ -87,10 +87,10 @@ export function ServiceForm({ businessId, values }: ServiceFormProps) {
 
         <div className="space-y-2 md:col-span-2">
           <label className="text-sm font-medium" htmlFor="description">
-            Descripcion
+            Descripción
           </label>
           <textarea
-            className="min-h-28 w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="min-h-28 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 py-2 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.description}
             id="description"
             name="description"

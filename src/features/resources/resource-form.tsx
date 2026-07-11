@@ -34,7 +34,7 @@ export function ResourceForm({ businessId, services, values }: ResourceFormProps
   const isEditing = Boolean(formValues.id)
 
   return (
-    <form action={formAction} className="space-y-6 rounded-2xl border bg-card p-6 shadow-sm">
+    <form action={formAction} className="space-y-6 rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm">
       {state.error ? (
         <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {state.error}
@@ -47,7 +47,7 @@ export function ResourceForm({ businessId, services, values }: ResourceFormProps
             Nombre del recurso
           </label>
           <input
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.name}
             id="name"
             name="name"
@@ -61,7 +61,7 @@ export function ResourceForm({ businessId, services, values }: ResourceFormProps
             Tipo
           </label>
           <select
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.type}
             id="type"
             name="type"
@@ -77,10 +77,10 @@ export function ResourceForm({ businessId, services, values }: ResourceFormProps
 
         <div className="space-y-2 md:col-span-2">
           <label className="text-sm font-medium" htmlFor="description">
-            Descripcion
+            Descripción
           </label>
           <textarea
-            className="min-h-28 w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="min-h-28 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 py-2 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             defaultValue={formValues.description}
             id="description"
             name="description"
@@ -91,14 +91,14 @@ export function ResourceForm({ businessId, services, values }: ResourceFormProps
       <fieldset className="space-y-3">
         <legend className="text-sm font-medium">Servicios que puede prestar</legend>
         {services.length === 0 ? (
-          <p className="rounded-xl border bg-muted/40 p-4 text-sm text-muted-foreground">
+            <p className="rounded-xl border border-[#e6d8c5] bg-[#fff8eb] p-4 text-sm text-muted-foreground">
             Primero crea servicios activos para asociarlos a este recurso.
           </p>
         ) : (
           <div className="grid gap-2 md:grid-cols-2">
             {services.map((service) => (
               <label
-                className="flex cursor-pointer items-center gap-3 rounded-xl border p-3 text-sm transition-colors hover:bg-muted/60"
+                className="flex cursor-pointer items-center gap-3 rounded-xl border border-[#e6d8c5] bg-white p-3 text-sm transition-colors hover:bg-[#fff8eb]"
                 key={service.id}
               >
                 <input

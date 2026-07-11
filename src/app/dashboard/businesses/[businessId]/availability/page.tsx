@@ -1,9 +1,17 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
+import {
+  DashboardHero,
+  DashboardPanel,
+  DashboardShell,
+  dashboardCardClassName,
+  dashboardPillClassName,
+} from "@/components/dashboard/dashboard-shell"
 import { Button } from "@/components/ui/button"
 import { EmptyState } from "@/components/ui/empty-state"
 import { AvailabilityForm } from "@/features/availability/availability-form"
+import { deleteAvailabilityRuleAction } from "@/features/availability/availability.actions"
 import {
   formatDayOfWeek,
   minutesToTime,
@@ -12,7 +20,6 @@ import {
   getAvailabilityRulesForBusinessOwner,
   getResourcesForAvailabilityForm,
 } from "@/features/availability/availability.queries"
-import { deleteAvailabilityRuleAction } from "@/features/availability/availability.actions"
 import {
   getBusinessForOwner,
   requireBusinessOwnerSession,
@@ -39,22 +46,23 @@ export default async function AvailabilityPage({ params }: AvailabilityPageProps
   }
 
   return (
-    <main className="mx-auto flex min-h-svh w-full max-w-6xl flex-col gap-8 px-6 py-10">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">{business.name}</p>
-          <h1 className="text-3xl font-semibold tracking-tight">Disponibilidad semanal</h1>
-        </div>
-        <Button asChild variant="outline">
-          <Link href={`/dashboard/businesses/${business.id}`}>Volver</Link>
-        </Button>
-      </div>
+    <DashboardShell>
+      <DashboardHero
+        actions={(
+          <Button asChild className="border-white/20 bg-white/10 text-[#fffcf6] hover:bg-white/20" variant="outline">
+            <Link href={`/dashboard/businesses/${business.id}`}>Volver</Link>
+          </Button>
+        )}
+        description="Configura ventanas semanales por recurso para que el motor genere horarios reservables."
+        eyebrow={business.name}
+        title="Disponibilidad semanal"
+      />
 
       {resources.length === 0 ? (
         <EmptyState
           actionHref={`/dashboard/businesses/${business.id}/resources/new`}
           actionLabel="Crear recurso"
-          className="p-5 text-left"
+          className={`${dashboardCardClassName} p-5 text-left`}
           description="La disponibilidad se configura por recurso. Crea al menos un recurso activo antes de definir horarios semanales."
           eyebrow="Requisito"
           marker="--:--"
@@ -64,33 +72,29 @@ export default async function AvailabilityPage({ params }: AvailabilityPageProps
 
       <AvailabilityForm businessId={business.id} resources={resources} />
 
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Horarios configurados</h2>
+      <DashboardPanel className="space-y-4">
+        <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Horarios configurados</h2>
         {rules.length === 0 ? (
           <EmptyState
+            className={dashboardCardClassName}
             description="Agrega reglas semanales para que el motor genere slots disponibles en el flujo público de reserva."
             eyebrow="Disponibilidad"
             marker="0"
-            title="Todavia no hay horarios"
+            title="Todavía no hay horarios"
           />
         ) : (
           <div className="grid gap-4">
             {rules.map((rule) => (
-              <article key={rule.id} className="rounded-2xl border bg-card p-5 shadow-sm">
+              <article key={rule.id} className="rounded-2xl border border-[#e6d8c5] bg-[#fff8eb] p-5 shadow-sm">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                   <div className="space-y-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="font-semibold">{rule.resource.name}</h3>
-                      <span className="rounded-full border px-2.5 py-1 text-xs text-muted-foreground">
-                        {formatResourceType(rule.resource.type)}
-                      </span>
-                      <span className="rounded-full border px-2.5 py-1 text-xs text-muted-foreground">
-                        {rule.isActive ? "Activa" : "Inactiva"}
-                      </span>
+                      <span className={dashboardPillClassName}>{formatResourceType(rule.resource.type)}</span>
+                      <span className={dashboardPillClassName}>{rule.isActive ? "Activa" : "Inactiva"}</span>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {formatDayOfWeek(rule.dayOfWeek)} · {minutesToTime(rule.startMinute)} -{" "}
-                      {minutesToTime(rule.endMinute)}
+                      {formatDayOfWeek(rule.dayOfWeek)} · {minutesToTime(rule.startMinute)} - {minutesToTime(rule.endMinute)}
                     </p>
                   </div>
                   <form action={deleteAvailabilityRuleAction}>
@@ -105,7 +109,7 @@ export default async function AvailabilityPage({ params }: AvailabilityPageProps
             ))}
           </div>
         )}
-      </section>
-    </main>
+      </DashboardPanel>
+    </DashboardShell>
   )
 }

@@ -23,7 +23,7 @@ export function AvailabilityForm({ businessId, resources }: AvailabilityFormProp
   )
 
   return (
-    <form action={formAction} className="space-y-6 rounded-2xl border bg-card p-6 shadow-sm">
+    <form action={formAction} className="space-y-6 rounded-[1.75rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm">
       {state.error ? (
         <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {state.error}
@@ -36,7 +36,7 @@ export function AvailabilityForm({ businessId, resources }: AvailabilityFormProp
             Recurso
           </label>
           <select
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             id="resourceId"
             name="resourceId"
             required
@@ -52,10 +52,10 @@ export function AvailabilityForm({ businessId, resources }: AvailabilityFormProp
 
         <div className="space-y-2">
           <label className="text-sm font-medium" htmlFor="dayOfWeek">
-            Dia
+            Día
           </label>
           <select
-            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+            className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
             id="dayOfWeek"
             name="dayOfWeek"
             required
@@ -74,7 +74,7 @@ export function AvailabilityForm({ businessId, resources }: AvailabilityFormProp
               Inicio
             </label>
             <input
-              className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+              className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
               defaultValue="09:00"
               id="startTime"
               name="startTime"
@@ -84,10 +84,10 @@ export function AvailabilityForm({ businessId, resources }: AvailabilityFormProp
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium" htmlFor="endTime">
-              Termino
+              Término
             </label>
             <input
-              className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/20"
+              className="h-10 w-full rounded-lg border border-[#e6d8c5] bg-white px-3 text-sm outline-none focus:border-[#c85a2e] focus:ring-3 focus:ring-[#c85a2e]/20"
               defaultValue="18:00"
               id="endTime"
               name="endTime"
