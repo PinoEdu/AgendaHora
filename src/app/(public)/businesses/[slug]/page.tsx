@@ -71,16 +71,13 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
     <main className="relative min-h-svh overflow-hidden bg-[#f8f5ef] text-[#1e1b16]">
       <CalendarGrid className="opacity-40 [mask-image:radial-gradient(circle_at_top_right,black,transparent_56%)]" />
       <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
-        <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
-          {canBook ? (
+        {canBook ? (
+          <div className="flex flex-wrap items-center gap-3 text-sm">
             <span className="rounded-full bg-[#c85a2e] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white">
               Reserva online
             </span>
-          ) : null}
-          <Button asChild className="border-[#d6c7b5] bg-[#fffcf6]" variant="outline">
-            <Link href="/">Volver al inicio</Link>
-          </Button>
-        </div>
+          </div>
+        ) : null}
 
         <section className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm md:p-8">
           <CalendarGrid className="bg-[size:44px_44px] opacity-80" />
@@ -132,7 +129,7 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
                   </p>
                 </div>
                 <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.16em] text-[#d8cfc1]">Duracion</p>
+                  <p className="text-xs uppercase tracking-[0.16em] text-[#d8cfc1]">Duración</p>
                   <p className="font-display mt-2 text-2xl font-semibold tracking-tight">
                     {shortestDuration === null ? "Pendiente" : `${shortestDuration}+ min`}
                   </p>
@@ -150,8 +147,8 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
               <dl className="mt-5 divide-y divide-white/15 rounded-2xl bg-white/10 text-sm">
                 {[
                   ["Ciudad", business.city || "No especificada"],
-                  ["Direccion", business.address || "No especificada"],
-                  ["Telefono", business.phone || "No especificado"],
+                  ["Dirección", business.address || "No especificada"],
+                  ["Teléfono", business.phone || "No especificado"],
                   ["Zona", business.timezone],
                 ].map(([label, value]) => (
                   <div className="grid grid-cols-[5.5rem_1fr] gap-3 px-4 py-3" key={label}>

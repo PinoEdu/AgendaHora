@@ -9,7 +9,6 @@ import {
 import { Button } from "@/components/ui/button"
 import { EmptyState } from "@/components/ui/empty-state"
 import { TicketCard } from "@/components/ui/ticket-card"
-import { LogoutButton } from "@/features/auth/logout-button"
 import {
   getBusinessesForOwner,
   requireBusinessOwnerSession,
@@ -35,7 +34,6 @@ export default async function DashboardPage() {
             <Button asChild className="bg-[#f2c66d] text-[#1e1b16] hover:bg-[#e7b84d]">
               <Link href="/dashboard/businesses/new">Crear negocio</Link>
             </Button>
-            <LogoutButton className="border-white/20 bg-white/10 text-[#fffcf6] hover:bg-white/20" />
           </>
         )}
         description="Controla publicaciones, servicios, recursos y reservas desde un solo tablero."

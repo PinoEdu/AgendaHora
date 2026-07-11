@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { redirect } from "next/navigation"
 
 import { auth } from "@/auth"
@@ -6,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { CalendarGrid } from "@/components/ui/calendar-grid"
 import { EmptyState } from "@/components/ui/empty-state"
 import { TicketCard } from "@/components/ui/ticket-card"
-import { LogoutButton } from "@/features/auth/logout-button"
 import { cancelBookingByCustomerAction } from "@/features/bookings/booking.actions"
 import { BookingStatusBadge } from "@/features/bookings/booking-status-badge"
 import { getBookingsForCustomer } from "@/features/bookings/booking.queries"
@@ -50,7 +48,7 @@ function CustomerBookingCard({ booking }: { booking: CustomerBooking }) {
             {formatUtcDateTimeInTimezone(booking.endsAt, booking.business.timezone)}
           </p>
           <p className="text-xs text-muted-foreground">
-            Duracion: {booking.service.durationMinutes} min · Zona horaria: {booking.business.timezone}
+            Duración: {booking.service.durationMinutes} min · Zona horaria: {booking.business.timezone}
           </p>
           {booking.cancelledAt ? (
             <p className="text-xs text-muted-foreground">
@@ -90,21 +88,12 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
   const historyBookings = bookings.filter((booking) => !upcomingBookings.includes(booking))
 
   return (
-    <main className="min-h-svh bg-[radial-gradient(circle_at_top_left,#fff7ed,transparent_34%),linear-gradient(180deg,#fffaf2,#f7efe3)] px-6 py-10 text-[#2d241b]">
+    <main className="px-6 py-10 text-[#2d241b]">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
         <div>
           <p className="text-sm font-medium text-[#8a6240]">Mis reservas</p>
           <h1 className="font-display text-3xl font-semibold tracking-[-0.04em]">Hola, {session.user.name}</h1>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button asChild variant="outline">
-            <Link href="/">Inicio</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/businesses">Explorar negocios</Link>
-          </Button>
-          <LogoutButton />
         </div>
       </div>
 
@@ -124,13 +113,13 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
           description="Explora negocios locales, elige un servicio y confirma un horario disponible para crear tu primera reserva."
           eyebrow="Agenda personal"
           marker="0"
-          title="Aun no hay reservas"
+          title="Aún no hay reservas"
         />
       ) : (
         <div className="space-y-8">
           <section className="space-y-4">
             <div>
-              <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Proximas reservas</h2>
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Próximas reservas</h2>
               <p className="text-sm text-muted-foreground">Horarios pendientes o confirmados.</p>
             </div>
             {upcomingBookings.length === 0 ? (
@@ -138,8 +127,8 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
                 actionHref="/businesses"
                 actionLabel="Reservar un horario"
                 className="border-[#e6d8c5] bg-[#fffcf6] p-5"
-                description="No hay horarios pendientes o confirmados. Reserva un servicio para verlo en esta seccion."
-                eyebrow="Proximas reservas"
+                description="No hay horarios pendientes o confirmados. Reserva un servicio para verlo en esta sección."
+                eyebrow="Próximas reservas"
                 marker="0"
                 title="No tienes próximas reservas activas"
               />
@@ -163,7 +152,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
                 description="Cuando completes o canceles una reserva, quedará registrada aquí para referencia futura."
                 eyebrow="Historial"
                 marker="0"
-                title="Aun no hay reservas en el historial"
+                title="Aún no hay reservas en el historial"
               />
             ) : (
               <div className="grid gap-4">

@@ -513,7 +513,7 @@ export function PublicBookingFlow({ business, services, resources }: PublicBooki
               <dd className="font-medium text-right">{formatDateLabel(selectedDate)}</dd>
             </div>
             <div className="grid grid-cols-[7rem_1fr] gap-3 px-4 py-3">
-              <dt className="text-[#8a7058]">Duracion</dt>
+              <dt className="text-[#8a7058]">Duración</dt>
               <dd className="font-medium text-right">
                 {selectedService ? `${selectedService.durationMinutes} min` : "Pendiente"}
               </dd>

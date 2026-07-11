@@ -3,7 +3,6 @@ import Link from "next/link"
 import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
 import { CalendarGrid } from "@/components/ui/calendar-grid"
-import { LogoutButton } from "@/features/auth/logout-button"
 import { InteractiveBookingPreview } from "@/features/home/interactive-booking-preview"
 import { UserRole } from "@/generated/prisma/enums"
 
@@ -16,29 +15,6 @@ export default async function Home() {
     <main className="relative min-h-svh overflow-hidden bg-[#f8f5ef] text-[#1e1b16]">
       <CalendarGrid className="opacity-45 [mask-image:radial-gradient(circle_at_top_right,black,transparent_58%)]" />
       <section className="relative mx-auto flex min-h-svh w-full max-w-6xl flex-col justify-center gap-14 px-6 py-10 lg:py-16">
-        <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <Link className="text-sm font-semibold tracking-[0.28em] uppercase" href="/">
-            AgendaHora
-          </Link>
-          <nav className="flex flex-wrap gap-2 text-sm">
-            <Button asChild className="border-[#e6d8c5] bg-[#fffcf6]" variant="outline">
-              <Link href="/businesses">Explorar</Link>
-            </Button>
-            {session?.user ? (
-              <>
-                <Button asChild className="bg-[#1e1b16] text-[#fffcf6] hover:bg-[#2d271f]">
-                  <Link href={dashboardHref}>Mi cuenta</Link>
-                </Button>
-                <LogoutButton />
-              </>
-            ) : (
-              <Button asChild className="bg-[#c85a2e] text-white hover:bg-[#a94722]">
-                <Link href="/login">Iniciar sesión</Link>
-              </Button>
-            )}
-          </nav>
-        </header>
-
         <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div className="space-y-8">
             <div className="space-y-5">

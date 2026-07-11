@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Geist, Geist_Mono } from "next/font/google";
+import { AppNavbar } from "@/components/layout/app-navbar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,10 +21,10 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: "AgendaHora",
-  description: "Plataforma de reservas online para pequenos negocios.",
+  description: "Plataforma de reservas online para pequeños negocios.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -33,7 +34,10 @@ export default function RootLayout({
       lang="es"
       className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <AppNavbar />
+        {children}
+      </body>
     </html>
   );
 }

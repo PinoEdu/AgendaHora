@@ -16,7 +16,7 @@ export default async function BusinessesPage() {
       <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
         <div className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm md:p-8">
           <CalendarGrid className="opacity-70" />
-          <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="relative flex flex-col gap-4">
             <div className="space-y-3">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#8a7058]">
                 Explorar
@@ -28,9 +28,6 @@ export default async function BusinessesPage() {
                 Revisa negocios locales activos, compara servicios y entra directo al flujo de reserva cuando tengan disponibilidad configurada.
               </p>
             </div>
-            <Button asChild className="border-[#d6c7b5] bg-white" variant="outline">
-              <Link href="/">Volver al inicio</Link>
-            </Button>
           </div>
 
           <div className="relative mt-6 grid gap-3 text-sm sm:grid-cols-3">
@@ -43,7 +40,7 @@ export default async function BusinessesPage() {
               <p className="font-display mt-2 text-2xl font-semibold tracking-tight">{bookableBusinessesCount}</p>
             </div>
             <div className="rounded-2xl border border-[#e6d8c5] bg-[#fff8eb] p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Confirmacion</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Confirmación</p>
               <p className="font-display mt-2 text-2xl font-semibold tracking-tight">En minutos</p>
             </div>
           </div>
@@ -57,7 +54,7 @@ export default async function BusinessesPage() {
             description="Cuando un dueño active su negocio, aparecerá en este catálogo público con servicios, recursos y horarios disponibles."
             eyebrow="Catálogo público"
             marker="0"
-            title="Aun no hay negocios activos"
+            title="Aún no hay negocios activos"
           />
         ) : (
           <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
