@@ -6,7 +6,6 @@ import { CalendarGrid } from "@/components/ui/calendar-grid"
 import { EmptyState } from "@/components/ui/empty-state"
 import { TicketCard } from "@/components/ui/ticket-card"
 import { getPublicBusinessBySlug } from "@/features/businesses/business-public.queries"
-import { formatResourceType } from "@/features/resources/resource-format"
 
 type BusinessProfilePageProps = {
   params: Promise<{
@@ -47,12 +46,6 @@ function getShortestDuration(services: PublicBusiness["services"]) {
     (shortestDuration, service) => Math.min(shortestDuration, service.durationMinutes),
     services[0]?.durationMinutes ?? 0,
   )
-}
-
-function getCompatibleServiceNames(resource: PublicBusiness["resources"][number], services: PublicBusiness["services"]) {
-  return services
-    .filter((service) => resource.serviceIds.includes(service.id))
-    .map((service) => service.name)
 }
 
 export default async function BusinessProfilePage({ params }: BusinessProfilePageProps) {
@@ -211,72 +204,6 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
           )}
         </section>
 
-        <section className="space-y-4">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#8a7058]">Equipo disponible</p>
-              <h2 className="font-display mt-2 text-3xl font-semibold tracking-[-0.04em]">Profesionales y espacios</h2>
-            </div>
-            <p className="text-sm text-[#655b4f]">Cada recurso atiende solo servicios compatibles.</p>
-          </div>
-          {business.resources.length === 0 ? (
-            <EmptyState
-              className="rounded-[1.75rem] border-[#e6d8c5] bg-[#fffcf6]"
-              description="Falta configurar quién o dónde se prestan los servicios. Sin recursos activos no se pueden mostrar horarios."
-              eyebrow="Equipo"
-              marker="0"
-              title="Este negocio aún no tiene recursos activos"
-            />
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {business.resources.map((resource) => {
-                const compatibleServiceNames = getCompatibleServiceNames(resource, business.services)
-
-                return (
-                  <TicketCard key={resource.id} contentClassName="space-y-5">
-                    <div className="flex items-start gap-4">
-                      <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl bg-[#1e1b16] text-2xl font-semibold text-[#fffcf6]">
-                        {resource.name.slice(0, 1).toUpperCase()}
-                      </span>
-                      <div>
-                        <span className="rounded-full bg-[#fff0d2] px-3 py-1 text-xs font-semibold text-[#7b5d43]">
-                          {formatResourceType(resource.type)}
-                        </span>
-                        <h3 className="font-display mt-3 text-xl font-semibold tracking-[-0.025em]">{resource.name}</h3>
-                        <p className="mt-2 text-sm leading-6 text-[#655b4f]">
-                          {resource.description || "Disponible para servicios compatibles."}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="rounded-2xl border border-[#e6d8c5] bg-[#fff8eb] p-4">
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8a7058]">
-                        Puede atender
-                      </p>
-                      {compatibleServiceNames.length === 0 ? (
-                        <p className="mt-2 text-sm text-[#655b4f]">Sin servicios compatibles activos.</p>
-                      ) : (
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          {compatibleServiceNames.slice(0, 3).map((serviceName) => (
-                            <span className="rounded-full bg-white px-3 py-1 text-xs font-medium text-[#655b4f]" key={serviceName}>
-                              {serviceName}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    {canBook ? (
-                      <Button asChild className="w-full border-[#d6c7b5] bg-white" variant="outline">
-                        <Link href={`/businesses/${business.slug}/book`}>Ver horarios</Link>
-                      </Button>
-                    ) : null}
-                  </TicketCard>
-                )
-              })}
-            </div>
-          )}
-        </section>
       </div>
     </main>
   )
