@@ -61,9 +61,12 @@ AUTH_SECRET="replace-with-a-secure-random-secret"
 AUTH_URL="http://localhost:3000"
 RESEND_API_KEY="re_replace-with-your-resend-api-key"
 EMAIL_FROM="AgendaHora <onboarding@resend.dev>"
+EMAIL_TEST_RECIPIENT=""
 ```
 
 `RESEND_API_KEY` y `EMAIL_FROM` habilitan emails de confirmación de reserva. Si faltan, la app funciona igual y omite el envío en desarrollo local.
+
+Para probar Resend sin dominio verificado, define `EMAIL_TEST_RECIPIENT` con el correo de tu cuenta Resend. Todos los emails se enviarán a ese correo y el asunto mostrará el destinatario original.
 
 3. Levantar Postgres:
 
