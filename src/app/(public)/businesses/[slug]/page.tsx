@@ -71,14 +71,6 @@ export default async function BusinessProfilePage({ params }: BusinessProfilePag
     <main className="relative min-h-svh overflow-hidden bg-[#f8f5ef] text-[#1e1b16]">
       <CalendarGrid className="opacity-40 [mask-image:radial-gradient(circle_at_top_right,black,transparent_56%)]" />
       <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
-        {canBook ? (
-          <div className="flex flex-wrap items-center gap-3 text-sm">
-            <span className="rounded-full bg-[#c85a2e] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white">
-              Reserva online
-            </span>
-          </div>
-        ) : null}
-
         <section className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-6 shadow-sm md:p-8">
           <CalendarGrid className="bg-[size:44px_44px] opacity-80" />
           <div className="relative grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
