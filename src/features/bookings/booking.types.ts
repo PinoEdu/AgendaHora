@@ -25,6 +25,8 @@ export type ValidateBookingAvailabilityOutput = {
 }
 
 export type BookingAvailabilityErrorCode =
+  | "BOOKING_NOT_FOUND"
+  | "BOOKING_NOT_RESCHEDULABLE"
   | "BUSINESS_NOT_FOUND"
   | "BUSINESS_NOT_ACTIVE"
   | "SERVICE_NOT_FOUND"

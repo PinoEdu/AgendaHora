@@ -1,4 +1,4 @@
-import { formatUtcDateTimeInTimezone } from "@/lib/dates"
+import { formatUtcDateTimeInTimezone, formatUtcTimeInTimezone } from "@/lib/dates"
 import { sendEmail } from "@/lib/email"
 import { env } from "@/lib/env"
 import { prisma } from "@/lib/prisma"
@@ -160,6 +160,100 @@ export async function sendBookingConfirmationEmails(bookingId: string) {
   await sendEmail({
     html: buildEmailHtml(businessEmailContent),
     subject: `Nueva reserva: ${booking.service.name} - ${customerName}`,
+    text: buildEmailText(businessEmailContent),
+    to: [businessEmail],
+  })
+}
+
+export async function sendBookingRescheduledEmails({
+  bookingId,
+  previousEndsAt,
+  previousStartsAt,
+}: {
+  bookingId: string
+  previousEndsAt: Date
+  previousStartsAt: Date
+}) {
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: {
+      business: {
+        select: {
+          address: true,
+          city: true,
+          email: true,
+          name: true,
+          owner: { select: { email: true, name: true } },
+          timezone: true,
+        },
+      },
+      customer: { select: { email: true, name: true } },
+      resource: { select: { name: true } },
+      service: { select: { name: true } },
+    },
+  })
+
+  if (!booking) {
+    return
+  }
+
+  const timezone = booking.business.timezone
+  const previousScheduledAt = `${formatUtcDateTimeInTimezone(previousStartsAt, timezone)} - ${formatUtcTimeInTimezone(previousEndsAt, timezone)}`
+  const newScheduledAt = `${formatUtcDateTimeInTimezone(booking.startsAt, timezone)} - ${formatUtcTimeInTimezone(booking.endsAt, timezone)}`
+  const customerEmail = booking.customerEmail || booking.customer.email
+  const businessEmail = booking.business.email || booking.business.owner.email
+  const customerName = booking.customerName || booking.customer.name || "Cliente"
+  const customerBookingsUrl = buildAppUrl("/me/bookings")
+  const businessBookingsUrl = buildAppUrl(`/dashboard/businesses/${booking.businessId}/bookings`)
+  const businessAddress = [booking.business.address, booking.business.city].filter(Boolean).join(", ")
+
+  const customerDetails: Array<[string, string | null | undefined]> = [
+    ["Negocio", booking.business.name],
+    ["Servicio", booking.service.name],
+    ["Con", booking.resource.name],
+    ["Horario anterior", `${previousScheduledAt} (${timezone})`],
+    ["Nuevo horario", `${newScheduledAt} (${timezone})`],
+    ["Dirección", businessAddress || null],
+  ]
+  const businessDetails: Array<[string, string | null | undefined]> = [
+    ["Cliente", customerName],
+    ["Correo", customerEmail],
+    ["Teléfono", booking.customerPhone],
+    ["Servicio", booking.service.name],
+    ["Recurso", booking.resource.name],
+    ["Horario anterior", `${previousScheduledAt} (${timezone})`],
+    ["Nuevo horario", `${newScheduledAt} (${timezone})`],
+  ]
+
+  const customerEmailContent = {
+    actionHref: customerBookingsUrl,
+    actionLabel: "Ver mis reservas",
+    details: customerDetails,
+    intro: `Tu reserva en ${booking.business.name} fue reprogramada.`,
+    title: "Reserva reprogramada",
+  }
+  const businessEmailContent = {
+    actionHref: businessBookingsUrl,
+    actionLabel: "Ver reservas",
+    details: businessDetails,
+    intro: `${customerName} reprogramó una reserva de ${booking.service.name}.`,
+    title: "Reserva reprogramada",
+  }
+
+  await sendEmail({
+    html: buildEmailHtml(customerEmailContent),
+    subject: `Tu reserva en ${booking.business.name} fue reprogramada`,
+    text: buildEmailText(customerEmailContent),
+    to: [customerEmail],
+  })
+
+  if (businessEmail.toLowerCase() === customerEmail.toLowerCase()) {
+    return
+  }
+
+  await sendEmail({
+    html: buildEmailHtml(businessEmailContent),
+    subject: `Reserva reprogramada: ${booking.service.name} - ${customerName}`,
     text: buildEmailText(businessEmailContent),
     to: [businessEmail],
   })

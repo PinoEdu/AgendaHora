@@ -10,7 +10,11 @@ import {
 import { prisma } from "@/lib/prisma"
 
 import { BOOKING_CONFLICT_STATUSES, DEFAULT_BOOKING_STATUS } from "./booking.constants"
-import { hasRangeConflict, isWithinAvailabilityWindow } from "./booking-rules"
+import {
+  canCustomerRescheduleBooking,
+  hasRangeConflict,
+  isWithinAvailabilityWindow,
+} from "./booking-rules"
 import type {
   BookingAvailabilityErrorCode,
   CreateBookingInput,
@@ -190,6 +194,61 @@ export async function createBooking(input: CreateBookingInput) {
         customerEmail: input.customerEmail,
         customerPhone: input.customerPhone,
         notes: input.notes,
+      },
+    })
+  })
+}
+
+export async function rescheduleBooking({
+  bookingId,
+  customerId,
+  startsAt,
+}: {
+  bookingId: string
+  customerId: string
+  startsAt: Date
+}) {
+  return prisma.$transaction(async (tx) => {
+    const booking = await tx.booking.findFirst({
+      where: { id: bookingId, customerId },
+      select: {
+        businessId: true,
+        customerId: true,
+        id: true,
+        resourceId: true,
+        serviceId: true,
+        startsAt: true,
+        status: true,
+      },
+    })
+
+    if (!booking) {
+      throw new BookingAvailabilityError("La reserva no existe.", "BOOKING_NOT_FOUND")
+    }
+
+    if (!canCustomerRescheduleBooking(booking.status, booking.startsAt)) {
+      throw new BookingAvailabilityError(
+        "Solo puedes reprogramar reservas activas con más de 4 horas de anticipación.",
+        "BOOKING_NOT_RESCHEDULABLE",
+      )
+    }
+
+    const availability = await validateBookingAvailability(
+      {
+        businessId: booking.businessId,
+        customerId: booking.customerId,
+        resourceId: booking.resourceId,
+        serviceId: booking.serviceId,
+        startsAt,
+      },
+      tx,
+    )
+
+    return tx.booking.update({
+      where: { id: booking.id },
+      data: {
+        endsAt: availability.endsAt,
+        startsAt: availability.startsAt,
       },
     })
   })

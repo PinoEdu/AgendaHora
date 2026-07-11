@@ -23,3 +23,18 @@ export const createBookingSchema = z.object({
 })
 
 export type CreateBookingRequest = z.infer<typeof createBookingSchema>
+
+export const rescheduleBookingSchema = z.object({
+  startsAt: z
+    .string()
+    .datetime("startsAt debe ser una fecha ISO valida.")
+    .transform((value) => new Date(value)),
+})
+
+export type RescheduleBookingRequest = z.infer<typeof rescheduleBookingSchema>
+
+export const rescheduleAvailabilitySchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "date debe tener formato yyyy-MM-dd."),
+})
+
+export type RescheduleAvailabilityQuery = z.infer<typeof rescheduleAvailabilitySchema>

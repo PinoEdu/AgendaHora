@@ -3,6 +3,8 @@ import { BookingStatus } from "@/generated/prisma/enums"
 
 import type { AvailabilityWindow } from "./booking.types"
 
+export const CUSTOMER_RESCHEDULE_NOTICE_HOURS = 4
+
 export function isWithinAvailabilityWindow(
   startMinute: number,
   endMinute: number,
@@ -21,6 +23,16 @@ export function hasRangeConflict(
 
 export function canCustomerCancelBooking(status: BookingStatus) {
   return status === BookingStatus.PENDING || status === BookingStatus.CONFIRMED
+}
+
+export function canCustomerRescheduleBooking(status: BookingStatus, startsAt: Date, now = new Date()) {
+  if (status !== BookingStatus.PENDING && status !== BookingStatus.CONFIRMED) {
+    return false
+  }
+
+  const minimumStartsAt = new Date(now.getTime() + CUSTOMER_RESCHEDULE_NOTICE_HOURS * 60 * 60_000)
+
+  return startsAt > minimumStartsAt
 }
 
 export function canBusinessCancelBooking(status: BookingStatus) {

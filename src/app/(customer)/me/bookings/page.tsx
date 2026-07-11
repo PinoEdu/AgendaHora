@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { redirect } from "next/navigation"
 
 import { auth } from "@/auth"
@@ -8,13 +9,14 @@ import { TicketCard } from "@/components/ui/ticket-card"
 import { cancelBookingByCustomerAction } from "@/features/bookings/booking.actions"
 import { BookingStatusBadge } from "@/features/bookings/booking-status-badge"
 import { getBookingsForCustomer } from "@/features/bookings/booking.queries"
-import { canCustomerCancelBooking } from "@/features/bookings/booking-rules"
+import { canCustomerCancelBooking, canCustomerRescheduleBooking } from "@/features/bookings/booking-rules"
 import { BookingStatus } from "@/generated/prisma/enums"
 import { formatUtcDateTimeInTimezone, formatUtcTimeInTimezone } from "@/lib/dates"
 
 type MyBookingsPageProps = {
   searchParams: Promise<{
     created?: string
+    rescheduled?: string
   }>
 }
 
@@ -58,13 +60,23 @@ function CustomerBookingCard({ booking }: { booking: CustomerBooking }) {
         </div>
       </div>
 
-      {canCustomerCancelBooking(booking.status) ? (
-        <form action={cancelBookingByCustomerAction} className="md:justify-self-end">
-          <input name="bookingId" type="hidden" value={booking.id} />
-          <Button size="sm" type="submit" variant="outline">
-            Cancelar
-          </Button>
-        </form>
+      {canCustomerRescheduleBooking(booking.status, booking.startsAt) || canCustomerCancelBooking(booking.status) ? (
+        <div className="flex flex-wrap gap-2 md:justify-self-end">
+          {canCustomerRescheduleBooking(booking.status, booking.startsAt) ? (
+            <Button asChild size="sm" variant="outline">
+              <Link href={`/me/bookings/${booking.id}/reschedule`}>Reprogramar</Link>
+            </Button>
+          ) : null}
+
+          {canCustomerCancelBooking(booking.status) ? (
+            <form action={cancelBookingByCustomerAction}>
+              <input name="bookingId" type="hidden" value={booking.id} />
+              <Button size="sm" type="submit" variant="outline">
+                Cancelar
+              </Button>
+            </form>
+          ) : null}
+        </div>
       ) : null}
     </TicketCard>
   )
@@ -77,7 +89,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
     redirect("/login")
   }
 
-  const [{ created }, bookings] = await Promise.all([
+  const [{ created, rescheduled }, bookings] = await Promise.all([
     searchParams,
     getBookingsForCustomer(session.user.id),
   ])
@@ -102,6 +114,14 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
           <CalendarGrid className="opacity-35" />
           <h2 className="relative font-semibold">Reserva confirmada</h2>
           <p className="relative mt-1 text-sm">Tu horario quedó reservado. Puedes revisarlo o cancelarlo desde aquí.</p>
+        </section>
+      ) : null}
+
+      {rescheduled === "1" ? (
+        <section className="relative overflow-hidden rounded-2xl border border-emerald-200 bg-emerald-50/90 p-5 text-emerald-800 shadow-sm">
+          <CalendarGrid className="opacity-35" />
+          <h2 className="relative font-semibold">Reserva reprogramada</h2>
+          <p className="relative mt-1 text-sm">Actualizamos tu horario y enviaremos la notificación correspondiente.</p>
         </section>
       ) : null}
 

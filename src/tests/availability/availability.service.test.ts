@@ -33,6 +33,61 @@ describe("buildAvailableSlotsForRules", () => {
     expect(slots.some((slot) => slot.localStartTime === "09:45")).toBe(false)
   })
 
+  it("generates 60-minute slots using 15-minute starts", () => {
+    const slots = buildAvailableSlotsForRules({
+      date,
+      timezone,
+      durationMinutes: 60,
+      rules: [{ startMinute: 9 * 60, endMinute: 11 * 60 }],
+      now: new Date("2099-01-01T00:00:00.000Z"),
+    })
+
+    expect(slots.map((slot) => `${slot.localStartTime}-${slot.localEndTime}`)).toEqual([
+      "09:00-10:00",
+      "09:15-10:15",
+      "09:30-10:30",
+      "09:45-10:45",
+      "10:00-11:00",
+    ])
+  })
+
+  it("keeps the current booking range blocked while rescheduling", () => {
+    const slots = buildAvailableSlotsForRules({
+      date,
+      timezone,
+      durationMinutes: 60,
+      rules: [{ startMinute: 9 * 60, endMinute: 12 * 60 }],
+      conflicts: [
+        {
+          startsAt: localDateTimeToUtc(date, 10 * 60, timezone),
+          endsAt: localDateTimeToUtc(date, 11 * 60, timezone),
+        },
+      ],
+      now: new Date("2099-01-01T00:00:00.000Z"),
+    })
+
+    expect(slots.map((slot) => slot.localStartTime)).toEqual(["09:00", "11:00"])
+  })
+
+  it("frees the previous range after the booking moves to a new range", () => {
+    const slots = buildAvailableSlotsForRules({
+      date,
+      timezone,
+      durationMinutes: 60,
+      rules: [{ startMinute: 9 * 60, endMinute: 12 * 60 }],
+      conflicts: [
+        {
+          startsAt: localDateTimeToUtc(date, 11 * 60, timezone),
+          endsAt: localDateTimeToUtc(date, 12 * 60, timezone),
+        },
+      ],
+      now: new Date("2099-01-01T00:00:00.000Z"),
+    })
+
+    expect(slots.map((slot) => slot.localStartTime)).toContain("10:00")
+    expect(slots.map((slot) => slot.localStartTime)).not.toContain("11:00")
+  })
+
   it("excludes slots that overlap conflicts", () => {
     const slots = buildAvailableSlotsForRules({
       date,

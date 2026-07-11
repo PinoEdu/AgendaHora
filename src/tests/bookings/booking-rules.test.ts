@@ -5,6 +5,7 @@ import { BOOKING_CONFLICT_STATUSES } from "@/features/bookings/booking.constants
 import {
   canBusinessCancelBooking,
   canCustomerCancelBooking,
+  canCustomerRescheduleBooking,
   canMarkBookingCompleted,
   canMarkBookingNoShow,
   hasRangeConflict,
@@ -74,6 +75,21 @@ describe("booking state transitions", () => {
   it("allows customers to cancel pending and confirmed bookings", () => {
     expect(canCustomerCancelBooking(BookingStatus.PENDING)).toBe(true)
     expect(canCustomerCancelBooking(BookingStatus.CONFIRMED)).toBe(true)
+  })
+
+  it("allows customers to reschedule active bookings more than 4 hours ahead", () => {
+    const now = new Date("2099-01-01T10:00:00.000Z")
+
+    expect(canCustomerRescheduleBooking(BookingStatus.PENDING, new Date("2099-01-01T14:01:00.000Z"), now)).toBe(true)
+    expect(canCustomerRescheduleBooking(BookingStatus.CONFIRMED, new Date("2099-01-01T14:01:00.000Z"), now)).toBe(true)
+  })
+
+  it("blocks customer rescheduling within 4 hours or for final statuses", () => {
+    const now = new Date("2099-01-01T10:00:00.000Z")
+
+    expect(canCustomerRescheduleBooking(BookingStatus.CONFIRMED, new Date("2099-01-01T14:00:00.000Z"), now)).toBe(false)
+    expect(canCustomerRescheduleBooking(BookingStatus.COMPLETED, new Date("2099-01-01T18:00:00.000Z"), now)).toBe(false)
+    expect(canCustomerRescheduleBooking(BookingStatus.CANCELLED_BY_CUSTOMER, new Date("2099-01-01T18:00:00.000Z"), now)).toBe(false)
   })
 
   it("does not allow customers to cancel final bookings", () => {
