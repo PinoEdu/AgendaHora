@@ -14,13 +14,10 @@ export default async function Home() {
   return (
     <main className="relative min-h-svh overflow-hidden bg-[#f8f5ef] text-[#1e1b16]">
       <CalendarGrid className="opacity-45 [mask-image:radial-gradient(circle_at_top_right,black,transparent_58%)]" />
-      <section className="relative mx-auto flex min-h-svh w-full max-w-6xl flex-col justify-center gap-14 px-6 py-10 lg:py-16">
+      <section className="relative mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-8 lg:py-10">
         <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div className="space-y-8">
             <div className="space-y-5">
-              <p className="w-fit rounded-full border border-[#e6d8c5] bg-[#fffcf6] px-4 py-2 text-xs font-semibold tracking-[0.22em] uppercase text-[#7b5d43]">
-                Reservas locales sin doble agenda
-              </p>
               <h1 className="font-display max-w-3xl text-5xl font-semibold leading-[0.92] tracking-[-0.055em] sm:text-7xl">
                 Encuentra un horario, no solo un negocio.
               </h1>

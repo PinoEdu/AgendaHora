@@ -50,7 +50,7 @@ export async function AppNavbar() {
 
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
           <AppNavbarLinks links={links} />
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2 md:justify-start">
             {session?.user ? (
               <LogoutButton className="border-[#d6c7b5] bg-white text-[#1e1b16] hover:bg-[#fff0d2]" />
             ) : (

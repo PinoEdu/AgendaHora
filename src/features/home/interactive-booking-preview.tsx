@@ -118,20 +118,20 @@ export function InteractiveBookingPreview() {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-5 shadow-[0_24px_80px_rgba(66,48,28,0.12)] transition-transform duration-300 hover:-translate-y-1">
+    <div className="relative mx-auto w-full max-w-[22rem] overflow-hidden rounded-[2rem] border border-[#e6d8c5] bg-[#fffcf6] p-3.5 shadow-[0_18px_56px_rgba(66,48,28,0.10)] transition-transform duration-300 hover:-translate-y-0.5 lg:max-w-[21rem]">
       <CalendarGrid />
-      <div className="relative space-y-4">
-        <div className="flex items-start justify-between gap-4 rounded-3xl bg-[#1e1b16] p-5 text-[#fffcf6]">
+      <div className="relative space-y-2.5">
+        <div className="flex items-start justify-between gap-3 rounded-3xl bg-[#1e1b16] p-3.5 text-[#fffcf6]">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-[#f2c66d]">Flujo</p>
-            <h2 className="font-display mt-3 text-2xl font-semibold tracking-[-0.035em]">Reserva en 3 pasos</h2>
+            <p className="text-[0.68rem] uppercase tracking-[0.2em] text-[#f2c66d]">Flujo</p>
+            <h2 className="font-display mt-2 text-xl font-semibold tracking-[-0.035em]">Reserva en 3 pasos</h2>
             {/* <p className="mt-1 text-sm text-[#d8cfc1]">Cambia las opciones y mira como queda el comprobante.</p> */}
           </div>
-          <span className="inline-flex items-center gap-2 rounded-full bg-[#f2c66d] px-3 py-1 text-xs font-semibold text-[#1e1b16]">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#f2c66d] px-2.5 py-1 text-[0.68rem] font-semibold text-[#1e1b16]">
             <span
               aria-hidden="true"
               className={cn(
-                "h-2 w-2 rounded-full",
+                "h-1.5 w-1.5 rounded-full",
                 isAutoRunning ? "animate-pulse bg-emerald-600" : "bg-[#8a6240]",
               )}
             />
@@ -139,11 +139,11 @@ export function InteractiveBookingPreview() {
           </span>
         </div>
 
-        <div className="grid gap-2 text-sm sm:grid-cols-3">
+        <div className="grid gap-1.5 text-xs sm:grid-cols-3">
           {steps.map(({ id, label }) => (
             <button
               className={cn(
-                "relative overflow-hidden rounded-2xl border px-3 py-2 text-left font-medium transition-all duration-300",
+                "relative overflow-hidden rounded-xl border px-2.5 py-1.5 text-left font-medium transition-all duration-300",
                 activeStep === id
                   ? "-translate-y-0.5 border-[#1e1b16] bg-[#1e1b16] text-[#fffcf6] shadow-lg"
                   : "border-[#e6d8c5] bg-white text-[#655b4f] hover:bg-[#fff8eb]",
@@ -159,35 +159,35 @@ export function InteractiveBookingPreview() {
               }}
               type="button"
             >
-              {activeStep === id ? <span className="absolute inset-x-3 bottom-1 h-0.5 rounded-full bg-[#f2c66d]" /> : null}
+              {activeStep === id ? <span className="absolute inset-x-2.5 bottom-1 h-0.5 rounded-full bg-[#f2c66d]" /> : null}
               {label}
             </button>
           ))}
         </div>
 
-        <div className="grid gap-3">
+        <div className="grid gap-2">
           <section
             className={cn(
-              "rounded-3xl border border-[#e6d8c5] bg-[#fff8eb]/95 p-4 transition-all duration-300",
+              "rounded-3xl border border-[#e6d8c5] bg-[#fff8eb]/95 p-3 transition-all duration-300",
               activeStep === "service" ? "-translate-y-0.5 border-[#c85a2e] shadow-[0_16px_34px_rgba(200,90,46,0.14)]" : null,
             )}
           >
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Servicio</p>
-                <p className="mt-1 font-semibold">{selectedService?.name}</p>
+                <p className="text-[0.68rem] uppercase tracking-[0.18em] text-[#8a7058]">Servicio</p>
+                <p className="mt-0.5 text-sm font-semibold">{selectedService?.name}</p>
               </div>
-              <p className="text-right text-sm font-medium text-[#655b4f]">
+              <p className="text-right text-xs font-medium text-[#655b4f]">
                 {selectedService?.duration}
                 <br />
                 {selectedService?.price}
               </p>
             </div>
-            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <div className="mt-2 grid gap-1.5 sm:grid-cols-2">
               {services.map((service) => (
                 <button
                   className={cn(
-                    "rounded-2xl border px-3 py-2 text-left text-sm transition-colors",
+                    "rounded-xl border px-2.5 py-1.5 text-left text-xs transition-colors",
                     selectedServiceId === service.id
                       ? "border-[#c85a2e] bg-[#c85a2e] text-white"
                       : "border-[#eadccb] bg-white text-[#655b4f] hover:bg-[#fff0d2]",
@@ -212,22 +212,22 @@ export function InteractiveBookingPreview() {
 
           <section
             className={cn(
-              "rounded-3xl border border-[#e6d8c5] bg-[#fffcf6]/95 p-4 transition-all duration-300",
+              "rounded-3xl border border-[#e6d8c5] bg-[#fffcf6]/95 p-3 transition-all duration-300",
               activeStep === "professional" ? "-translate-y-0.5 border-[#1e1b16] shadow-[0_16px_34px_rgba(30,27,22,0.12)]" : null,
             )}
           >
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Profesional</p>
-                <p className="mt-1 font-semibold">{selectedProfessional?.name}</p>
+                <p className="text-[0.68rem] uppercase tracking-[0.18em] text-[#8a7058]">Profesional</p>
+                <p className="mt-0.5 text-sm font-semibold">{selectedProfessional?.name}</p>
               </div>
-              <p className="text-right text-sm text-[#655b4f]">{selectedProfessional?.specialty}</p>
+              <p className="text-right text-xs text-[#655b4f]">{selectedProfessional?.specialty}</p>
             </div>
-            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <div className="mt-2 grid gap-1.5 sm:grid-cols-2">
               {professionals.map((professional) => (
                 <button
                   className={cn(
-                    "rounded-2xl border px-3 py-2 text-left text-sm transition-colors",
+                    "rounded-xl border px-2.5 py-1.5 text-left text-xs transition-colors",
                     selectedProfessionalId === professional.id
                       ? "border-[#1e1b16] bg-[#1e1b16] text-[#fffcf6]"
                       : "border-[#eadccb] bg-white text-[#655b4f] hover:bg-[#fff0d2]",
@@ -252,24 +252,24 @@ export function InteractiveBookingPreview() {
 
           <section
             className={cn(
-              "rounded-3xl border border-[#e6d8c5] bg-[#fff8eb]/95 p-4 transition-all duration-300",
+              "rounded-3xl border border-[#e6d8c5] bg-[#fff8eb]/95 p-3 transition-all duration-300",
               activeStep === "time" ? "-translate-y-0.5 border-[#c85a2e] shadow-[0_16px_34px_rgba(200,90,46,0.14)]" : null,
             )}
           >
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Disponibilidad de hoy</p>
-                <p className="mt-1 font-semibold">Horarios visibles antes de reservar.</p>
+                <p className="text-[0.68rem] uppercase tracking-[0.18em] text-[#8a7058]">Disponibilidad de hoy</p>
+                <p className="mt-0.5 text-sm font-semibold">Horarios visibles antes de reservar.</p>
               </div>
-              <span className="rounded-full bg-[#c85a2e] px-3 py-1 text-xs font-semibold text-white">
+              <span className="rounded-full bg-[#c85a2e] px-2.5 py-1 text-[0.68rem] font-semibold text-white">
                 Online
               </span>
             </div>
-            <div className="mt-4 grid grid-cols-3 gap-2 text-center text-sm font-medium">
+            <div className="mt-3 grid grid-cols-3 gap-1.5 text-center text-xs font-medium">
               {slots.map((slot) => (
                 <button
                   className={cn(
-                    "rounded-xl px-3 py-2 transition-colors",
+                    "rounded-lg px-2.5 py-1.5 transition-colors",
                     selectedSlot === slot
                       ? "bg-[#1e1b16] text-white"
                       : "bg-white text-[#655b4f] hover:bg-[#fff0d2]",
@@ -296,12 +296,12 @@ export function InteractiveBookingPreview() {
         <div
           aria-live="polite"
           className={cn(
-            "rounded-3xl border border-[#e6d8c5] bg-white/95 p-4 transition-all duration-300",
+            "rounded-3xl border border-[#e6d8c5] bg-white/95 p-3 transition-all duration-300",
             activeStep === "confirm" ? "-translate-y-0.5 border-emerald-300 shadow-[0_16px_34px_rgba(16,185,129,0.14)]" : null,
           )}
         >
-          <p className="text-xs uppercase tracking-[0.18em] text-[#8a7058]">Comprobante</p>
-          <div className="mt-3 grid gap-3 text-sm sm:grid-cols-3">
+          <p className="text-[0.68rem] uppercase tracking-[0.18em] text-[#8a7058]">Comprobante</p>
+          <div className="mt-2 grid gap-2 text-xs sm:grid-cols-3">
             <div>
               <p className="text-[#8a7058]">Servicio</p>
               <p className="font-semibold">{selectedService?.name}</p>
