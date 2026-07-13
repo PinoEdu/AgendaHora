@@ -19,10 +19,12 @@ export function BookingStatusBadge({
   return (
     <span className={cn("inline-flex flex-col gap-1", className)}>
       <span
+        aria-label={`${meta.label}: ${meta.description}`}
         className={cn(
           "inline-flex w-fit items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold",
           meta.badgeClassName,
         )}
+        title={meta.description}
       >
         <span aria-hidden="true" className={cn("h-1.5 w-1.5 rounded-full", meta.dotClassName)} />
         {meta.label}

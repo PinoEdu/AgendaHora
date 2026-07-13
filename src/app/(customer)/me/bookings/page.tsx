@@ -8,25 +8,67 @@ import { EmptyState } from "@/components/ui/empty-state"
 import { TicketCard } from "@/components/ui/ticket-card"
 import { cancelBookingByCustomerAction } from "@/features/bookings/booking.actions"
 import { BookingStatusBadge } from "@/features/bookings/booking-status-badge"
-import { getBookingsForCustomer } from "@/features/bookings/booking.queries"
+import {
+  getBookingHistoryForCustomer,
+  getUpcomingBookingsForCustomer,
+} from "@/features/bookings/booking.queries"
 import { canCustomerCancelBooking, canCustomerRescheduleBooking } from "@/features/bookings/booking-rules"
-import { BookingStatus } from "@/generated/prisma/enums"
-import { formatUtcDateTimeInTimezone, formatUtcTimeInTimezone } from "@/lib/dates"
+import { formatUtcDisplayDateInTimezone, formatUtcTimeInTimezone } from "@/lib/dates"
 
 type MyBookingsPageProps = {
   searchParams: Promise<{
     created?: string
+    historyPage?: string
     rescheduled?: string
   }>
 }
 
-type CustomerBooking = Awaited<ReturnType<typeof getBookingsForCustomer>>[number]
+type CustomerBooking = Awaited<ReturnType<typeof getUpcomingBookingsForCustomer>>[number]
 
-const upcomingStatuses = new Set<BookingStatus>([BookingStatus.PENDING, BookingStatus.CONFIRMED])
+const HISTORY_PAGE_SIZE = 10
+
+function parseHistoryPage(value: string | undefined) {
+  const page = Number(value)
+
+  if (!Number.isInteger(page) || page < 1) {
+    return 1
+  }
+
+  return page
+}
+
+function buildHistoryPageHref({
+  created,
+  page,
+  rescheduled,
+}: {
+  created?: string
+  page: number
+  rescheduled?: string
+}) {
+  const searchParams = new URLSearchParams()
+
+  if (created) {
+    searchParams.set("created", created)
+  }
+
+  if (rescheduled) {
+    searchParams.set("rescheduled", rescheduled)
+  }
+
+  if (page > 1) {
+    searchParams.set("historyPage", String(page))
+  }
+
+  const queryString = searchParams.toString()
+
+  return queryString ? `/me/bookings?${queryString}` : "/me/bookings"
+}
 
 function CustomerBookingCard({ booking }: { booking: CustomerBooking }) {
   const startsAtTime = formatUtcTimeInTimezone(booking.startsAt, booking.business.timezone)
   const endsAtTime = formatUtcTimeInTimezone(booking.endsAt, booking.business.timezone)
+  const bookingDate = formatUtcDisplayDateInTimezone(booking.startsAt, booking.business.timezone)
 
   return (
     <TicketCard className="bg-[#fffcf6]" contentClassName="grid gap-4 md:grid-cols-[8rem_1fr_auto] md:items-center">
@@ -40,23 +82,15 @@ function CustomerBookingCard({ booking }: { booking: CustomerBooking }) {
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="font-display text-xl font-semibold tracking-[-0.025em]">{booking.business.name}</h3>
-            <BookingStatusBadge perspective="customer" showDescription status={booking.status} />
+            <BookingStatusBadge perspective="customer" status={booking.status} />
           </div>
           <p className="text-sm text-muted-foreground">
             {booking.service.name} con {booking.resource.name}
           </p>
-          <p className="text-sm font-medium">
-            {formatUtcDateTimeInTimezone(booking.startsAt, booking.business.timezone)} -{" "}
-            {formatUtcDateTimeInTimezone(booking.endsAt, booking.business.timezone)}
-          </p>
+          <p className="text-sm font-medium">Fecha: {bookingDate}</p>
           <p className="text-xs text-muted-foreground">
             Duración: {booking.service.durationMinutes} min · Zona horaria: {booking.business.timezone}
           </p>
-          {booking.cancelledAt ? (
-            <p className="text-xs text-muted-foreground">
-              Cancelada: {booking.cancellationReason || "Sin motivo"}
-            </p>
-          ) : null}
         </div>
       </div>
 
@@ -89,15 +123,19 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
     redirect("/login")
   }
 
-  const [{ created, rescheduled }, bookings] = await Promise.all([
-    searchParams,
-    getBookingsForCustomer(session.user.id),
-  ])
+  const { created, historyPage, rescheduled } = await searchParams
+  const requestedHistoryPage = parseHistoryPage(historyPage)
   const now = new Date()
-  const upcomingBookings = bookings.filter(
-    (booking) => upcomingStatuses.has(booking.status) && booking.startsAt >= now,
-  )
-  const historyBookings = bookings.filter((booking) => !upcomingBookings.includes(booking))
+  const [upcomingBookings, history] = await Promise.all([
+    getUpcomingBookingsForCustomer(session.user.id, now),
+    getBookingHistoryForCustomer({
+      customerId: session.user.id,
+      now,
+      page: requestedHistoryPage,
+      pageSize: HISTORY_PAGE_SIZE,
+    }),
+  ])
+  const hasAnyBookings = upcomingBookings.length > 0 || history.total > 0
 
   return (
     <main className="px-6 py-10 text-[#2d241b]">
@@ -125,21 +163,11 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
         </section>
       ) : null}
 
-      {bookings.length === 0 ? (
-        <EmptyState
-          actionHref="/businesses"
-          actionLabel="Buscar negocios"
-          className="border-[#e6d8c5] bg-[#fffcf6]"
-          description="Explora negocios locales, elige un servicio y confirma un horario disponible para crear tu primera reserva."
-          eyebrow="Agenda personal"
-          marker="0"
-          title="Aún no hay reservas"
-        />
-      ) : (
+      {hasAnyBookings ? (
         <div className="space-y-8">
           <section className="space-y-4">
             <div>
-            <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Próximas reservas</h2>
+              <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Próximas reservas</h2>
               <p className="text-sm text-muted-foreground">Horarios pendientes o confirmados.</p>
             </div>
             {upcomingBookings.length === 0 ? (
@@ -166,7 +194,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
               <h2 className="font-display text-2xl font-semibold tracking-[-0.035em]">Historial</h2>
               <p className="text-sm text-muted-foreground">Reservas pasadas, completadas o canceladas.</p>
             </div>
-            {historyBookings.length === 0 ? (
+            {history.bookings.length === 0 ? (
               <EmptyState
                 className="border-[#e6d8c5] bg-[#fffcf6] p-5"
                 description="Cuando completes o canceles una reserva, quedará registrada aquí para referencia futura."
@@ -175,14 +203,52 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
                 title="Aún no hay reservas en el historial"
               />
             ) : (
-              <div className="grid gap-4">
-                {historyBookings.map((booking) => (
-                  <CustomerBookingCard booking={booking} key={booking.id} />
-                ))}
+              <div className="space-y-4">
+                <div className="grid gap-4">
+                  {history.bookings.map((booking) => (
+                    <CustomerBookingCard booking={booking} key={booking.id} />
+                  ))}
+                </div>
+
+                {history.totalPages > 1 ? (
+                  <nav className="flex flex-col gap-3 rounded-2xl border border-[#e6d8c5] bg-[#fffcf6] p-4 text-sm sm:flex-row sm:items-center sm:justify-between">
+                    {history.page > 1 ? (
+                      <Button asChild size="sm" variant="outline">
+                        <Link href={buildHistoryPageHref({ created, page: history.page - 1, rescheduled })}>Anterior</Link>
+                      </Button>
+                    ) : (
+                      <Button disabled size="sm" variant="outline">
+                        Anterior
+                      </Button>
+                    )}
+                    <p className="text-center text-muted-foreground">
+                      Página {history.page} de {history.totalPages}
+                    </p>
+                    {history.page < history.totalPages ? (
+                      <Button asChild size="sm" variant="outline">
+                        <Link href={buildHistoryPageHref({ created, page: history.page + 1, rescheduled })}>Siguiente</Link>
+                      </Button>
+                    ) : (
+                      <Button disabled size="sm" variant="outline">
+                        Siguiente
+                      </Button>
+                    )}
+                  </nav>
+                ) : null}
               </div>
             )}
           </section>
         </div>
+      ) : (
+        <EmptyState
+          actionHref="/businesses"
+          actionLabel="Buscar negocios"
+          className="border-[#e6d8c5] bg-[#fffcf6]"
+          description="Explora negocios locales, elige un servicio y confirma un horario disponible para crear tu primera reserva."
+          eyebrow="Agenda personal"
+          marker="0"
+          title="Aún no hay reservas"
+        />
       )}
       </div>
     </main>

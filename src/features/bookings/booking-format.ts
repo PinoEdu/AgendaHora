@@ -30,7 +30,7 @@ const bookingStatusMeta: Record<string, BookingStatusMeta> = {
     badgeClassName: "border-stone-200 bg-stone-50 text-stone-700",
     businessDescription: "El cliente cancelo; el horario vuelve a estar disponible.",
     businessLabel: "Cancelada por cliente",
-    customerDescription: "Cancelaste esta reserva; ya no ocupa agenda.",
+    customerDescription: "Cancelaste esta reserva.",
     customerLabel: "Cancelada por ti",
     dotClassName: "bg-stone-400",
   },

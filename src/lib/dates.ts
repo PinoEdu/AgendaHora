@@ -61,6 +61,10 @@ export function formatUtcDateInTimezone(date: Date, timezone: string) {
   return formatInTimeZone(date, timezone, "yyyy-MM-dd")
 }
 
+export function formatUtcDisplayDateInTimezone(date: Date, timezone: string) {
+  return formatInTimeZone(date, timezone, "dd-MM-yyyy")
+}
+
 export function getMinuteOfDayInTimezone(date: Date, timezone: string) {
   const [hours = "0", minutes = "0"] = formatUtcTimeInTimezone(date, timezone).split(":")
 
