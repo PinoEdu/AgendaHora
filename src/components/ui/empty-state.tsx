@@ -8,11 +8,12 @@ type EmptyStateProps = {
   actionHref?: string
   actionLabel?: string
   className?: string
-  description: string
+  description?: string
   eyebrow?: string
   marker?: string
   secondaryHref?: string
   secondaryLabel?: string
+  showMarker?: boolean
   title: string
 }
 
@@ -25,6 +26,7 @@ export function EmptyState({
   marker = "--:--",
   secondaryHref,
   secondaryLabel,
+  showMarker = true,
   title,
 }: EmptyStateProps) {
   return (
@@ -36,14 +38,16 @@ export function EmptyState({
     >
       <CalendarGrid className="opacity-35" />
       <div className="relative mx-auto flex max-w-2xl flex-col items-center">
-        <div className="rounded-3xl border bg-background px-4 py-3 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            {eyebrow}
-          </p>
-          <p className="font-display mt-1 text-2xl font-semibold tracking-tight">{marker}</p>
-        </div>
-        <h2 className="font-display mt-5 text-2xl font-semibold tracking-[-0.035em]">{title}</h2>
-        <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
+        {showMarker ? (
+          <div className="rounded-3xl border bg-background px-4 py-3 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              {eyebrow}
+            </p>
+            <p className="font-display mt-1 text-2xl font-semibold tracking-tight">{marker}</p>
+          </div>
+        ) : null}
+        <h2 className={cn("font-display text-2xl font-semibold tracking-[-0.035em]", showMarker ? "mt-5" : "")}>{title}</h2>
+        {description ? <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p> : null}
         {actionHref && actionLabel ? (
           <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
             <Button asChild>

@@ -69,7 +69,7 @@ function getSlotHour(slot: AvailableSlot) {
 
 function groupAvailableSlots(slots: AvailableSlot[]) {
   const slotGroups = [
-    { id: "morning", title: "Manana", description: "Antes de las 12:00", slots: [] as AvailableSlot[] },
+    { id: "morning", title: "Mañana", description: "Antes de las 12:00", slots: [] as AvailableSlot[] },
     { id: "afternoon", title: "Tarde", description: "12:00 a 18:59", slots: [] as AvailableSlot[] },
     { id: "evening", title: "Noche", description: "Desde las 19:00", slots: [] as AvailableSlot[] },
   ]

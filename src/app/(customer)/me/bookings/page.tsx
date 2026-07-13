@@ -139,11 +139,10 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
 
   return (
     <main className="px-6 py-10 text-[#2d241b]">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-4">
       <div>
         <div>
           <p className="text-sm font-medium text-[#8a6240]">Mis reservas</p>
-          <h1 className="font-display text-3xl font-semibold tracking-[-0.04em]">Hola, {session.user.name}</h1>
         </div>
       </div>
 
@@ -175,9 +174,7 @@ export default async function MyBookingsPage({ searchParams }: MyBookingsPagePro
                 actionHref="/businesses"
                 actionLabel="Reservar un horario"
                 className="border-[#e6d8c5] bg-[#fffcf6] p-5"
-                description="No hay horarios pendientes o confirmados. Reserva un servicio para verlo en esta sección."
-                eyebrow="Próximas reservas"
-                marker="0"
+                showMarker={false}
                 title="No tienes próximas reservas activas"
               />
             ) : (
