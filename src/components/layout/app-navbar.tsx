@@ -33,6 +33,12 @@ export async function AppNavbar() {
   const session = await auth()
   const role = session?.user.role
   const links = getNavbarLinks(role)
+  const roleLabel =
+    role === UserRole.BUSINESS_OWNER
+      ? "Dueño de negocio"
+      : role === UserRole.CUSTOMER
+        ? "Cliente"
+        : null
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#e6d8c5] bg-[#fffcf6]/95 px-4 py-3 text-[#1e1b16] shadow-sm backdrop-blur md:px-6">
@@ -42,9 +48,16 @@ export async function AppNavbar() {
             AgendaHora
           </Link>
           {session?.user ? (
-            <span className="max-w-48 truncate rounded-full border border-[#e6d8c5] bg-[#fff8eb] px-3 py-1 text-xs font-medium text-[#655b4f]">
-              {session.user.name || session.user.email}
-            </span>
+            <>
+              <span className="max-w-48 truncate rounded-full border border-[#e6d8c5] bg-[#fff8eb] px-3 py-1 text-xs font-medium text-[#655b4f]">
+                {session.user.name || session.user.email}
+              </span>
+              {roleLabel ? (
+                <span className="rounded-full bg-[#fff0d2] px-3 py-1 text-xs font-semibold text-[#7b5d43]">
+                  {roleLabel}
+                </span>
+              ) : null}
+            </>
           ) : null}
         </div>
 
