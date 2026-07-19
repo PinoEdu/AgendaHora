@@ -8,17 +8,13 @@ import { UserRole } from "@/generated/prisma/enums"
 import { AppNavbarLinks, type AppNavbarLink } from "./app-navbar-links"
 
 function getNavbarLinks(role?: UserRole): AppNavbarLink[] {
-  const baseLinks: AppNavbarLink[] = [
-    { exact: true, href: "/", label: "Inicio" },
-    { href: "/businesses", label: "Explorar" },
-  ]
+  const baseLinks: AppNavbarLink[] = [{ href: "/businesses", label: "Explorar" }]
 
   if (role === UserRole.BUSINESS_OWNER) {
     return [
       ...baseLinks,
       { exact: true, href: "/dashboard", label: "Dashboard" },
       { href: "/dashboard/businesses", label: "Mis negocios" },
-      { exact: true, href: "/dashboard/businesses/new", label: "Crear negocio" },
     ]
   }
 
@@ -48,16 +44,10 @@ export async function AppNavbar() {
             AgendaHora
           </Link>
           {session?.user ? (
-            <>
-              <span className="max-w-48 truncate rounded-full border border-[#e6d8c5] bg-[#fff8eb] px-3 py-1 text-xs font-medium text-[#655b4f]">
-                {session.user.name || session.user.email}
-              </span>
-              {roleLabel ? (
-                <span className="rounded-full bg-[#fff0d2] px-3 py-1 text-xs font-semibold text-[#7b5d43]">
-                  {roleLabel}
-                </span>
-              ) : null}
-            </>
+            <span className="max-w-72 truncate rounded-full border border-[#e6d8c5] bg-[#fff8eb] px-3 py-1 text-xs font-medium text-[#655b4f]">
+              {session.user.name || session.user.email}
+              {roleLabel ? ` · ${roleLabel}` : null}
+            </span>
           ) : null}
         </div>
 
